@@ -14,3 +14,14 @@ footprint=icsp
 T 44400 47100 5 10 1 1 0 0 1
 refdes=CONN1
 }
+C 43100 43900 1 0 0 battery-1.sym
+{
+T 43400 44800 5 10 0 0 0 0 1
+device=BATTERY
+T 43400 44400 5 10 1 1 0 0 1
+refdes=B1
+T 43400 45200 5 10 0 0 0 0 1
+symversion=0.1
+T 43300 43900 5 10 0 1 0 0 1
+footprint=CR2032-BAT-HLD.fp
+}
