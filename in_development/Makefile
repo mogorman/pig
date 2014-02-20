@@ -1,5 +1,6 @@
 PCBNAME=pig
 REV=11.0
+STACK=-
 
 all: get_submodule
 
