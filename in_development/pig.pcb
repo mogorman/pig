@@ -6,7 +6,7 @@ FileVersion[20070407]
 PCB["" 600000 500000]
 
 Grid[500.0 0 0 0]
-Cursor[199500 201500 0.000000]
+Cursor[147500 135000 0.000000]
 PolyArea[200000000.000000]
 Thermal[0.500000]
 DRC[600 600 600 600 1500 600]
@@ -1218,7 +1218,6 @@ Via[248700 96500 6500 2000 6400 5500 "" "hole"]
 Via[248700 190500 6500 2000 6400 5500 "" "hole"]
 Via[178000 116000 3600 2000 0 2000 "" ""]
 Via[216964 185142 3600 2000 0 2000 "" ""]
-Via[185142 188035 3600 2000 0 2000 "" ""]
 Via[92000 142000 3600 2000 0 2000 "" ""]
 Via[236000 127000 3600 2000 0 2000 "" ""]
 Via[99106 140097 3600 2000 0 2000 "" ""]
@@ -1230,9 +1229,7 @@ Via[173500 121000 3600 2000 0 2000 "" ""]
 Via[158112 138348 3600 2000 0 2000 "" ""]
 Via[202200 118624 3600 2000 0 2000 "" ""]
 Via[210288 140192 3600 2000 0 2000 "" ""]
-Via[176464 188035 3600 2000 0 2000 "" ""]
 Via[204000 174000 3600 2000 0 2000 "" ""]
-Via[194000 181000 3600 2000 0 2000 "" ""]
 Via[95000 149500 3600 2000 0 2000 "" ""]
 Via[254500 123500 3600 2000 0 2000 "" ""]
 Via[236000 164000 3600 2000 0 2000 "" ""]
@@ -1241,6 +1238,9 @@ Via[85713 138673 3600 2000 0 2000 "" ""]
 Via[282921 105224 3600 2000 0 2000 "" ""]
 Via[237248 110536 3600 2000 0 2000 "" ""]
 Via[123000 123500 3600 2000 0 2000 "" ""]
+Via[190500 183000 3600 2000 0 2000 "" ""]
+Via[198500 183000 3600 2000 0 2000 "" ""]
+Via[184500 183000 3600 2000 0 2000 "" ""]
 
 Element["hidename" "SuperSurfaceButton" "S1" "unknown" 262288 140516 -1000 -16500 0 100 ""]
 (
@@ -1509,16 +1509,6 @@ Element["hidename" "icsp" "CONN1" "unknown" 261500 184000 -5000 -22500 0 100 ""]
 
 	)
 
-Element["hidename,onsolder" "CR2032-BAT-HLD.fp" "B1" "unknown" 177936 145584 40440 -24264 2 100 "auto"]
-(
-	Pad[-45000 -3000 -45000 3000 14000 2000 15000 "Positive" "1" "onsolder,square"]
-	Pad[0 0 0 0 30000 2000 31000 "Negative" "2" "onsolder,square"]
-	Pad[45000 -3000 45000 3000 14000 2000 15000 "Positive" "1" "onsolder,square"]
-	ElementLine [-5000 -40000 5000 -40000 1000]
-	ElementLine [-5000 40000 5000 40000 1000]
-
-	)
-
 Element["" "0805" "C8" "4.7uF" 111914 154500 -17693 -3150 0 100 ""]
 (
 	Pad[-3543 -393 -3543 393 5118 2000 5718 "1" "1" "square"]
@@ -1755,6 +1745,16 @@ Element["" "0805" "R8" "10k" 225504 143376 -15193 -2650 0 100 ""]
 	ElementLine [-393 2755 393 2755 800]
 
 	)
+
+Element["hidename,onsolder" "CR2032-BAT-HLD.fp" "B1" "unknown" 177936 145584 40440 -24264 2 100 "auto"]
+(
+	Pad[-45000 -3000 -45000 3000 14000 2000 15000 "Positive" "1" "onsolder,square"]
+	Pad[0 0 0 0 30000 2000 31000 "Negative" "2" "onsolder,square"]
+	Pad[45000 -3000 45000 3000 14000 2000 15000 "Positive" "1" "onsolder,square"]
+	ElementLine [-5000 -40000 5000 -40000 1500]
+	ElementLine [-5000 40000 5000 40000 1500]
+
+	)
 Layer(1 "component")
 (
 	Line[131914 104000 126000 104000 1500 2000 ""]
@@ -1847,14 +1847,12 @@ Layer(1 "component")
 	Line[195449 162890 195449 163449 1000 2000 "clearline"]
 	Line[199024 167024 195449 163449 1000 2000 "clearline"]
 	Line[267000 154327 280673 154327 1000 2000 "clearline"]
-	Line[187576 173576 187576 178424 1000 2000 "clearline"]
 	Line[184426 174426 184426 177574 1000 2000 "clearline"]
 	Line[184426 177574 178000 184000 1000 2000 "clearline"]
 	Line[178000 184000 161000 184000 1000 2000 "clearline"]
 	Line[161000 184000 157500 180500 1000 2000 "clearline"]
 	Line[77432 135890 84110 135890 1000 2000 ""]
 	Line[190726 169726 190000 169000 1000 2000 "clearline"]
-	Line[190726 169726 190726 179274 1000 2000 "clearline"]
 	Line[77432 146126 93874 146126 1000 2000 "clearline"]
 	Line[199024 167024 207024 167024 1000 2000 "clearline"]
 	Line[207024 167024 210000 170000 1000 2000 "clearline"]
@@ -1894,13 +1892,6 @@ Layer(1 "component")
 	Line[214071 185142 211178 182250 1000 2000 "clearline"]
 	Line[211178 182250 211178 171178 1000 2000 "clearline"]
 	Line[211178 171178 208285 168285 1000 2000 "clearline"]
-	Line[193876 173516 193876 182195 1000 2000 "clearline"]
-	Line[193876 182195 193821 182250 1000 2000 "clearline"]
-	Line[176464 188035 177965 188035 1000 2000 "clearline"]
-	Line[177965 188035 187576 178424 1000 2000 "clearline"]
-	Line[190726 179155 190726 179559 1000 2000 "clearline"]
-	Line[190726 179559 185142 185142 1000 2000 "clearline"]
-	Line[185142 185142 185142 188035 1000 2000 "clearline"]
 	Line[261500 184000 229678 184000 1000 2000 "clearline"]
 	Line[229678 184000 222749 190928 1000 2000 "clearline"]
 	Line[222749 190928 214042 190928 1000 2000 "clearline"]
@@ -2009,6 +2000,13 @@ Layer(1 "component")
 	Line[184426 123902 196272 112056 1000 2000 "clearline"]
 	Line[196272 112056 221898 112056 1000 2000 "clearline"]
 	Line[221898 112056 221961 111993 1000 2000 "clearline"]
+	Line[187576 174076 187576 179924 1000 2000 "clearline"]
+	Line[187576 179924 184500 183000 1000 2000 "clearline"]
+	Line[190726 173912 190726 169726 1000 2000 "clearline"]
+	Line[190726 174000 190726 182774 1000 2000 "clearline"]
+	Line[190726 182774 190500 183000 1000 2000 "clearline"]
+	Line[193876 173500 193876 178376 1000 2000 "clearline"]
+	Line[193876 178376 198500 183000 1000 2000 "clearline"]
 	Polygon("clearpoly,lock")
 	(
 		[63000 85000] [299500 85000] [299500 202500] [63000 202500] 
@@ -2066,35 +2064,15 @@ Layer(2 "solder")
 	Line[170552 110536 169092 111996 1000 2000 "clearline"]
 	Line[153858 111858 168954 111858 1000 2000 "clearline"]
 	Line[168954 111858 169092 111996 1000 2000 "clearline"]
-	Line[204000 174000 197500 167500 1000 2000 "clearline"]
-	Line[197500 167500 126509 167500 1000 2000 "clearline"]
-	Line[99106 140097 126509 167500 1000 2000 "clearline"]
-	Line[181571 170000 99500 170000 1000 2000 "clearline"]
-	Line[99500 170000 90000 160500 1000 2000 "clearline"]
-	Line[90000 160500 90000 154000 1000 2000 "clearline"]
-	Line[98500 172500 86000 160000 1000 2000 "clearline"]
-	Line[86000 160000 86000 152500 1000 2000 "clearline"]
 	Line[86000 152500 89500 149000 1000 2000 "clearline"]
 	Line[89500 149000 94500 149000 1000 2000 "clearline"]
 	Line[94500 149000 95000 149500 1000 2000 "clearline"]
-	Line[185142 188035 172107 175000 1000 2000 "clearline"]
-	Line[172107 175000 97500 175000 1000 2000 "clearline"]
-	Line[97500 175000 83500 161000 1000 2000 "clearline"]
 	Line[83500 161000 83500 142516 1000 2000 "clearline"]
-	Line[176464 188035 165929 177500 1000 2000 "clearline"]
-	Line[165929 177500 96500 177500 1000 2000 "clearline"]
-	Line[96500 177500 81000 162000 1000 2000 "clearline"]
 	Line[81000 162000 81000 139500 1000 2000 "clearline"]
 	Line[236000 164000 236000 158648 1000 2000 "clearline"]
 	Line[217544 140192 236000 158648 1000 2000 "clearline"]
 	Line[271500 174000 266000 168500 1000 2000 "clearline"]
 	Line[266000 168500 225000 168500 1000 2000 "clearline"]
-	Line[211250 182250 195750 182250 1000 2000 "clearline"]
-	Line[195750 182250 183500 170000 1000 2000 "clearline"]
-	Line[183500 170000 181500 170000 1000 2000 "clearline"]
-	Line[98500 172500 180000 172500 1000 2000 "clearline"]
-	Line[180000 172500 193000 185500 1000 2000 "clearline"]
-	Line[193000 185500 216606 185500 1000 2000 "clearline"]
 	Line[216606 185500 216964 185142 1000 2000 "clearline"]
 	Line[216964 185142 253358 185142 1000 2000 "clearline"]
 	Line[271500 184000 264000 191500 1000 2000 "clearline"]
@@ -2107,7 +2085,7 @@ Layer(2 "solder")
 	Line[81000 137114 81000 150685 1000 2000 "clearline"]
 	Line[282921 105224 282921 122838 1000 2000 "clearline"]
 	Line[282921 122838 276630 129130 1000 2000 "clearline"]
-	Line[225000 168500 211250 182250 1000 2000 "clearline"]
+	Line[225000 168500 210500 183000 1000 2000 "clearline"]
 	Line[92000 139386 87106 134492 1000 2000 "clearline"]
 	Line[92000 142000 92000 139386 1000 2000 "clearline"]
 	Line[99106 140000 99500 140000 1000 2000 "clearline"]
@@ -2116,6 +2094,38 @@ Layer(2 "solder")
 	Line[99106 140097 99106 141106 1000 2000 "clearline"]
 	Line[123000 123500 118280 128220 1000 2000 "clearline"]
 	Line[118280 128220 91984 128220 1000 2000 "clearline"]
+	Line[194500 181500 194500 185000 1000 2000 "clearline"]
+	Line[194500 185000 196500 187000 1000 2000 "clearline"]
+	Line[196500 187000 215106 187000 1000 2000 "clearline"]
+	Line[215106 187000 216964 185142 1000 2000 "clearline"]
+	Line[198500 183000 210500 183000 1000 2000 "clearline"]
+	Line[88500 169500 81000 162000 1000 2000 "clearline"]
+	Line[89500 167000 83500 161000 1000 2000 "clearline"]
+	Line[88500 169500 141500 169500 1000 2000 "clearline"]
+	Line[184500 183000 155000 183000 1000 2000 "clearline"]
+	Line[155000 183000 141500 169500 1000 2000 "clearline"]
+	Line[89500 167000 142500 167000 1000 2000 "clearline"]
+	Line[142500 167000 155000 179500 1000 2000 "clearline"]
+	Line[155000 179500 187000 179500 1000 2000 "clearline"]
+	Line[187000 179500 190500 183000 1000 2000 "clearline"]
+	Line[86000 152500 86000 160500 1000 2000 "clearline"]
+	Line[86000 160500 90000 164500 1000 2000 "clearline"]
+	Line[90000 164500 143500 164500 1000 2000 "clearline"]
+	Line[143500 164500 156000 177000 1000 2000 "clearline"]
+	Line[156000 177000 190000 177000 1000 2000 "clearline"]
+	Line[190000 177000 194500 181500 1000 2000 "clearline"]
+	Line[90000 154000 98000 154000 1000 2000 "clearline"]
+	Line[98000 154000 106000 162000 1000 2000 "clearline"]
+	Line[106000 162000 144500 162000 1000 2000 "clearline"]
+	Line[144500 162000 157000 174500 1000 2000 "clearline"]
+	Line[157000 174500 190000 174500 1000 2000 "clearline"]
+	Line[190000 174500 198500 183000 1000 2000 "clearline"]
+	Line[99106 140394 99106 151606 1000 2000 "clearline"]
+	Line[99106 151606 107000 159500 1000 2000 "clearline"]
+	Line[107000 159500 145500 159500 1000 2000 "clearline"]
+	Line[145500 159500 158000 172000 1000 2000 "clearline"]
+	Line[158000 172000 202000 172000 1000 2000 "clearline"]
+	Line[202000 172000 204000 174000 1000 2000 "clearline"]
 	Polygon("clearpoly,lock")
 	(
 		[63000 85000] [299500 85000] [299500 202500] [63000 202500] 
@@ -2153,9 +2163,9 @@ Layer(8 "signal3")
 )
 Layer(9 "silk")
 (
-	Text[141560 179438 2 100 "Matt O'Gorman" "clearline,onsolder"]
-	Text[141960 184846 2 100 "Tim Heath" "clearline,onsolder"]
-	Text[141984 172608 2 100 "Copyright 2014" "clearline,onsolder"]
+	Text[140060 177938 2 100 "Matt O'Gorman" "clearline,onsolder"]
+	Text[139960 183846 2 100 "Tim Heath" "clearline,onsolder"]
+	Text[140484 171108 2 100 "Copyright 2014" "clearline,onsolder"]
 	Text[273528 139896 2 100 "calm" "clearline,onsolder"]
 	Polygon("clearpoly")
 	(
@@ -2239,8 +2249,8 @@ Layer(10 "silk")
 	Line[293500 117500 293500 169500 1000 2000 "clearline"]
 	Line[293500 169500 235500 169500 1000 2000 "clearline"]
 	Line[235500 169500 235500 117500 1000 2000 "clearline"]
-	Text[87156 184140 0 100 "XXX" "clearline"]
-	Text[82488 168612 0 300 "Pig" "clearline"]
+	Text[109656 184640 0 100 "XXX" "clearline"]
+	Text[81488 168612 0 305 "Pig" "clearline"]
 	Text[239046 123562 0 100 "this one goes to..." "clearline"]
 	Text[280488 163560 0 100 "G" "clearline"]
 	Text[269352 163560 0 100 "O" "clearline"]
@@ -2257,192 +2267,192 @@ Layer(10 "silk")
 	Text[216000 170000 0 100 "This board is" "clearline"]
 	Text[206000 175500 0 100 "GPLv3 Licensed" "clearline"]
 	Text[94000 135500 0 100 "K5" "clearline"]
-	Text[158000 184500 0 100 "http://meatstand.com/pig" "clearline"]
+	Text[160500 185500 0 100 "http://meatstand.com/pig" "clearline"]
 )
 NetList()
 (
-	Net("unnamed_net14" "(unknown)")
-	(
-		Connect("CONN3-1")
-		Connect("C9-1")
-	)
-	Net("unnamed_net13" "(unknown)")
-	(
-		Connect("Q1-B")
-		Connect("R6-2")
-	)
-	Net("unnamed_net12" "(unknown)")
-	(
-		Connect("C7-1")
-		Connect("DISP1-15")
-	)
-	Net("unnamed_net11" "(unknown)")
-	(
-		Connect("C8-1")
-		Connect("DISP1-14")
-	)
-	Net("unnamed_net10" "(unknown)")
-	(
-		Connect("R7-2")
-		Connect("DISP1-13")
-	)
-	Net("unnamed_net9" "(unknown)")
-	(
-		Connect("DISP1-7")
-		Connect("C6-1")
-		Connect("Q1-C")
-		Connect("C5-2")
-		Connect("DISP1-5")
-	)
-	Net("unnamed_net8" "(unknown)")
-	(
-		Connect("C3-2")
-		Connect("DISP1-4")
-	)
-	Net("unnamed_net7" "(unknown)")
-	(
-		Connect("C3-1")
-		Connect("DISP1-3")
-	)
-	Net("unnamed_net6" "(unknown)")
-	(
-		Connect("C4-2")
-		Connect("DISP1-2")
-	)
-	Net("unnamed_net5" "(unknown)")
-	(
-		Connect("C4-1")
-		Connect("DISP1-1")
-	)
-	Net("unnamed_net4" "(unknown)")
-	(
-		Connect("CONN3-4")
-		Connect("C2-2")
-	)
-	Net("unnamed_net3" "(unknown)")
-	(
-		Connect("R5-2")
-		Connect("LED1-2")
-	)
-	Net("Serial_reset" "(unknown)")
-	(
-		Connect("CONN2-6")
-		Connect("C1-2")
-	)
 	Net("Button" "(unknown)")
 	(
-		Connect("S1-1")
 		Connect("R2-1")
+		Connect("S1-1")
 		Connect("U1-32")
-	)
-	Net("Uart_Tx" "(unknown)")
-	(
-		Connect("CONN2-5")
-		Connect("U1-31")
-	)
-	Net("Uart_Rx" "(unknown)")
-	(
-		Connect("CONN2-4")
-		Connect("U1-30")
-	)
-	Net("Reset" "(unknown)")
-	(
-		Connect("C9-2")
-		Connect("R9-2")
-		Connect("R8-1")
-		Connect("C1-1")
-		Connect("R1-1")
-		Connect("CONN1-5")
-		Connect("U1-29")
-	)
-	Net("Sck" "(unknown)")
-	(
-		Connect("DISP1-11")
-		Connect("CONN1-3")
-		Connect("U1-17")
-	)
-	Net("Miso" "(unknown)")
-	(
-		Connect("DISP1-10")
-		Connect("CONN1-1")
-		Connect("U1-16")
-	)
-	Net("Mosi" "(unknown)")
-	(
-		Connect("DISP1-12")
-		Connect("CONN1-4")
-		Connect("U1-15")
 	)
 	Net("CS" "(unknown)")
 	(
 		Connect("DISP1-8")
 		Connect("U1-14")
 	)
-	Net("Disp_reset" "(unknown)")
-	(
-		Connect("DISP1-9")
-		Connect("U1-13")
-	)
 	Net("Disp_on" "(unknown)")
 	(
 		Connect("R6-1")
 		Connect("U1-12")
 	)
-	Net("unnamed_net2" "(unknown)")
+	Net("Disp_reset" "(unknown)")
 	(
-		Connect("U2-2")
-		Connect("U1-8")
-	)
-	Net("unnamed_net1" "(unknown)")
-	(
-		Connect("U2-1")
-		Connect("U1-7")
-	)
-	Net("Vcc" "(unknown)")
-	(
-		Connect("S1-2")
-		Connect("Q1-E")
-		Connect("R9-1")
-		Connect("R4-1")
-		Connect("CONN2-3")
-		Connect("R1-2")
-		Connect("B1-1")
-		Connect("CONN1-2")
-		Connect("U1-18")
-		Connect("U1-6")
-		Connect("U1-4")
+		Connect("DISP1-9")
+		Connect("U1-13")
 	)
 	Net("GND" "(unknown)")
 	(
-		Connect("CONN3-5")
-		Connect("R8-2")
-		Connect("C8-2")
-		Connect("C7-2")
-		Connect("R7-1")
-		Connect("C6-2")
+		Connect("B1-2")
 		Connect("C5-1")
-		Connect("DISP1-6")
-		Connect("R5-1")
-		Connect("R3-2")
-		Connect("R2-2")
+		Connect("C6-2")
+		Connect("C7-2")
+		Connect("C8-2")
+		Connect("CONN1-6")
 		Connect("CONN2-1")
 		Connect("CONN2-2")
-		Connect("B1-2")
-		Connect("CONN1-6")
+		Connect("CONN3-5")
+		Connect("DISP1-6")
+		Connect("R2-2")
+		Connect("R3-2")
+		Connect("R5-1")
+		Connect("R7-1")
+		Connect("R8-2")
+		Connect("U1-3")
 		Connect("U1-5")
 		Connect("U1-21")
-		Connect("U1-3")
 	)
 	Net("Indicator" "(unknown)")
 	(
 		Connect("LED1-1")
 		Connect("U1-2")
 	)
+	Net("Miso" "(unknown)")
+	(
+		Connect("CONN1-1")
+		Connect("DISP1-10")
+		Connect("U1-16")
+	)
+	Net("Mosi" "(unknown)")
+	(
+		Connect("CONN1-4")
+		Connect("DISP1-12")
+		Connect("U1-15")
+	)
+	Net("Reset" "(unknown)")
+	(
+		Connect("C1-1")
+		Connect("C9-2")
+		Connect("CONN1-5")
+		Connect("R1-1")
+		Connect("R8-1")
+		Connect("R9-2")
+		Connect("U1-29")
+	)
+	Net("Sck" "(unknown)")
+	(
+		Connect("CONN1-3")
+		Connect("DISP1-11")
+		Connect("U1-17")
+	)
+	Net("Serial_reset" "(unknown)")
+	(
+		Connect("C1-2")
+		Connect("CONN2-6")
+	)
 	Net("Tip" "(unknown)")
 	(
 		Connect("C2-1")
-		Connect("R4-2")
 		Connect("R3-1")
+		Connect("R4-2")
 		Connect("U1-1")
+	)
+	Net("Uart_Rx" "(unknown)")
+	(
+		Connect("CONN2-4")
+		Connect("U1-30")
+	)
+	Net("Uart_Tx" "(unknown)")
+	(
+		Connect("CONN2-5")
+		Connect("U1-31")
+	)
+	Net("unnamed_net1" "(unknown)")
+	(
+		Connect("U1-7")
+		Connect("U2-1")
+	)
+	Net("unnamed_net2" "(unknown)")
+	(
+		Connect("U1-8")
+		Connect("U2-2")
+	)
+	Net("unnamed_net3" "(unknown)")
+	(
+		Connect("LED1-2")
+		Connect("R5-2")
+	)
+	Net("unnamed_net4" "(unknown)")
+	(
+		Connect("C2-2")
+		Connect("CONN3-4")
+	)
+	Net("unnamed_net5" "(unknown)")
+	(
+		Connect("C4-1")
+		Connect("DISP1-1")
+	)
+	Net("unnamed_net6" "(unknown)")
+	(
+		Connect("C4-2")
+		Connect("DISP1-2")
+	)
+	Net("unnamed_net7" "(unknown)")
+	(
+		Connect("C3-1")
+		Connect("DISP1-3")
+	)
+	Net("unnamed_net8" "(unknown)")
+	(
+		Connect("C3-2")
+		Connect("DISP1-4")
+	)
+	Net("unnamed_net9" "(unknown)")
+	(
+		Connect("C5-2")
+		Connect("C6-1")
+		Connect("DISP1-5")
+		Connect("DISP1-7")
+		Connect("Q1-C")
+	)
+	Net("unnamed_net10" "(unknown)")
+	(
+		Connect("DISP1-13")
+		Connect("R7-2")
+	)
+	Net("unnamed_net11" "(unknown)")
+	(
+		Connect("C8-1")
+		Connect("DISP1-14")
+	)
+	Net("unnamed_net12" "(unknown)")
+	(
+		Connect("C7-1")
+		Connect("DISP1-15")
+	)
+	Net("unnamed_net13" "(unknown)")
+	(
+		Connect("Q1-B")
+		Connect("R6-2")
+	)
+	Net("unnamed_net14" "(unknown)")
+	(
+		Connect("C9-1")
+		Connect("CONN3-1")
+	)
+	Net("Vcc" "(unknown)")
+	(
+		Connect("B1-1")
+		Connect("CONN1-2")
+		Connect("CONN2-3")
+		Connect("Q1-E")
+		Connect("R1-2")
+		Connect("R4-1")
+		Connect("R9-1")
+		Connect("S1-2")
+		Connect("U1-4")
+		Connect("U1-6")
+		Connect("U1-18")
 	)
 )

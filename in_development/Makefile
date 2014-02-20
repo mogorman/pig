@@ -1,6 +1,7 @@
 PCBNAME=pig
 REV=11.0
 STACK=-
+SOLDERMASK="green"
 
 all: get_submodule
 
