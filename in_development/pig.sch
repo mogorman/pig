@@ -495,15 +495,6 @@ device=none
 T 65300 48500 5 10 1 1 0 1 1
 value=Disp_on
 }
-C 47000 45800 1 0 1 output-2.sym
-{
-T 46100 46000 5 10 0 0 0 6 1
-net=Disp_on:1
-T 46800 46500 5 10 0 0 0 6 1
-device=none
-T 46100 45900 5 10 1 1 0 7 1
-value=Disp_on
-}
 C 62500 47000 1 90 0 capacitor-1.sym
 {
 T 61800 47200 5 10 0 0 90 0 1
@@ -739,4 +730,76 @@ T 53900 54400 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 53900 54000 5 10 0 1 0 0 1
 footprint=SuperSurfaceButton
+}
+C 47900 50800 1 0 0 connector3-1.sym
+{
+T 49700 51700 5 10 0 0 0 0 1
+device=CONNECTOR_3
+T 47900 51900 5 10 1 1 0 0 1
+refdes=CONN4
+T 49100 52100 5 10 0 1 0 0 1
+footprint=JUMPER3
+}
+C 47000 48100 1 0 1 output-2.sym
+{
+T 46100 48300 5 10 0 0 0 6 1
+net=Disp_on:1
+T 46800 48800 5 10 0 0 0 6 1
+device=none
+T 46100 48200 5 10 1 1 0 7 1
+value=Disp_on
+}
+C 51000 50900 1 0 1 input-2.sym
+{
+T 51000 51100 5 10 0 0 0 6 1
+net=PB0:1
+T 50400 51600 5 10 0 0 0 6 1
+device=none
+T 50500 51000 5 10 1 1 0 1 1
+value=PB0
+}
+C 47000 45800 1 0 1 output-2.sym
+{
+T 46100 46000 5 10 0 0 0 6 1
+net=PB0:1
+T 46800 46500 5 10 0 0 0 6 1
+device=none
+T 46100 45900 5 10 1 1 0 7 1
+value=PB0
+}
+C 47000 47900 1 0 1 output-2.sym
+{
+T 46100 48100 5 10 0 0 0 6 1
+net=PD6:1
+T 46800 48600 5 10 0 0 0 6 1
+device=none
+T 46100 48000 5 10 1 1 0 7 1
+value=PD6
+}
+C 47000 47700 1 0 1 output-2.sym
+{
+T 46100 47900 5 10 0 0 0 6 1
+net=PD7:1
+T 46800 48400 5 10 0 0 0 6 1
+device=none
+T 46100 47800 5 10 1 1 0 7 1
+value=PD7
+}
+C 51000 51200 1 0 1 input-2.sym
+{
+T 51000 51400 5 10 0 0 0 6 1
+net=PD7:1
+T 50400 51900 5 10 0 0 0 6 1
+device=none
+T 50500 51300 5 10 1 1 0 1 1
+value=PD7
+}
+C 51000 51500 1 0 1 input-2.sym
+{
+T 51000 51700 5 10 0 0 0 6 1
+net=PD6:1
+T 50400 52200 5 10 0 0 0 6 1
+device=none
+T 50500 51600 5 10 1 1 0 1 1
+value=PD6
 }
