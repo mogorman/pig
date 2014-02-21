@@ -1,8 +1,10 @@
 PCBNAME=pig
 REV=11.0
 STACK=-
-SOLDERMASK="green"
-
+SOLDERMASK=red
+SILKSCREEN=white
+#CUSTOMPCB=/home/mog/nonapt/pcb/src/pcb
+#CUSTOMPCB_ARGS=--photo-mask-colour $(SOLDERMASK) --photo-silk-colour $(SILKSCREEN)
 all: get_submodule
 
 get_submodule:
