@@ -803,3 +803,26 @@ device=none
 T 50500 51600 5 10 1 1 0 1 1
 value=PD6
 }
+C 53600 46600 1 270 0 capacitor-1.sym
+{
+T 54300 46400 5 10 0 0 270 0 1
+device=CAPACITOR
+T 53500 46300 5 10 1 1 0 0 1
+refdes=C10
+T 54500 46400 5 10 0 0 270 0 1
+symversion=0.1
+T 53900 45900 5 10 1 1 0 0 1
+value=100uF
+T 53600 46600 5 10 0 1 0 0 1
+footprint=0805
+}
+C 54000 45400 1 0 1 ground.sym
+C 53700 48000 1 270 0 input-2.sym
+{
+T 53900 48000 5 10 0 0 90 8 1
+net=Vcc:1
+T 54400 47400 5 10 0 0 90 8 1
+device=none
+T 53300 47200 5 10 1 1 180 7 1
+value=Vcc
+}
