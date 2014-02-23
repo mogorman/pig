@@ -768,3 +768,12 @@ device=none
 T 53300 47200 5 10 1 1 180 7 1
 value=Vcc
 }
+C 53000 47100 1 0 1 input-2.sym
+{
+T 53000 47300 5 10 0 0 0 6 1
+net=Vcc:1
+T 52400 47800 5 10 0 0 0 6 1
+device=none
+T 52500 47200 5 10 1 1 0 1 1
+value=Vcc
+}
