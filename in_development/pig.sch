@@ -790,3 +790,12 @@ footprint=35RASMT2BHNTRX
 }
 C 63600 53100 1 270 0 ground.sym
 N 59100 48900 59000 48900 4
+C 55400 44000 1 0 0 include-1.sym
+{
+T 55500 44100 5 10 1 1 0 0 1
+device=include
+T 56100 44100 5 10 1 1 0 0 1
+footprint=oshw
+T 55500 44400 5 10 1 1 0 0 1
+refdes=ICO1
+}
