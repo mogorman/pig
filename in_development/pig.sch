@@ -777,3 +777,15 @@ device=none
 T 52500 47200 5 10 1 1 0 1 1
 value=Vcc
 }
+T 59200 43500 14 10 1 0 0 0 1
+Pig
+T 59100 43200 14 8 1 0 0 0 1
+http://dev.meatstand.com/meatstand/pig.git
+T 59200 42900 14 10 1 0 0 0 1
+1
+T 60700 42900 14 10 1 0 0 0 1
+1
+T 63000 43200 14 10 1 0 0 0 1
+12
+T 63100 42900 14 10 1 0 0 0 1
+Matthew O'Gorman <mog@rldn.net>
