@@ -390,7 +390,6 @@ T 61900 53300 5 10 0 1 0 0 1
 footprint=0805
 }
 N 63900 53500 62800 53500 4
-C 63600 53400 1 270 0 ground.sym
 C 51900 51100 1 0 0 resistor-1.sym
 {
 T 52200 51500 5 10 0 0 0 0 1
@@ -646,15 +645,6 @@ refdes=Q1
 T 60900 49400 5 10 0 1 0 0 1
 footprint=SOT23
 }
-C 65600 53000 1 0 1 connector5-1.sym
-{
-T 63800 54500 5 10 0 0 0 6 1
-device=CONNECTOR_5
-T 65500 54700 5 10 1 1 0 6 1
-refdes=CONN3
-T 65000 54300 5 10 0 1 0 0 1
-footprint=35RASMT2BHNTRX
-}
 C 47700 56500 1 0 1 input-2.sym
 {
 T 47700 56700 5 10 0 0 0 6 1
@@ -789,3 +779,13 @@ T 63000 43200 14 10 1 0 0 0 1
 12
 T 63100 42900 14 10 1 0 0 0 1
 Matthew O'Gorman <mog@rldn.net>
+T 63400 43500 14 10 1 0 0 0 1
+This schematic is licensed GPLv3
+C 63900 52700 1 0 0 phone.sym
+{
+T 64095 53700 5 10 1 1 0 0 1
+refdes=CONN3
+T 65000 53500 5 10 0 1 0 0 1
+footprint=35RASMT2BHNTRX
+}
+C 63600 53100 1 270 0 ground.sym
