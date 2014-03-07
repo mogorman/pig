@@ -1,4 +1,5 @@
 PCBNAME=pig
+AUTHOR="Matthew O'Gorman <mog@rldn.net>  , Tim Heath <crashcartpro@gmail.com>"
 REV=12.0
 STACK=-
 SOLDERMASK=red
