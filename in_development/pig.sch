@@ -799,3 +799,5 @@ footprint=oshw
 T 55500 44400 5 10 1 1 0 0 1
 refdes=ICO1
 }
+T 64600 43200 14 10 1 0 0 0 1
+GIT_REV
