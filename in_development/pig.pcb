@@ -1305,7 +1305,7 @@ Element["hidename" "ftdi" "CONN2" "unknown" 122500 33000 -2804 6568 0 100 ""]
 
 	)
 
-Element["" "0805" "R6" "10K" 79457 102000 -14064 -2650 0 100 ""]
+Element["" "0805" "R6" "10k" 79457 102000 -14064 -2650 0 100 ""]
 (
 	Pad[3543 -393 3543 393 5118 2000 5718 "1" "1" "square"]
 	Pad[-3543 -393 -3543 393 5118 2000 5718 "2" "2" "square"]
@@ -1484,7 +1484,7 @@ Element["hidename" "0805" "C5" "1uF" 64000 70500 -17435 -2650 0 100 ""]
 
 	)
 
-Element["hidename,onsolder" "oshw" "ICO1" "unknown" 221535 39022 -787 98 2 100 "auto"]
+Element["hidename,onsolder" "oshw" "ICO1" "dnp" 221535 39022 -787 98 2 100 "auto"]
 (
 	Pad[4921 -5315 6299 -7283 600 1200 1800 "" "325" "onsolder,nopaste"]
 	Pad[4528 -9055 6299 -7283 600 1200 1800 "" "326" "onsolder,nopaste"]
