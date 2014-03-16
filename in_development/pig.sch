@@ -75,7 +75,7 @@ refdes=R1
 T 52000 47100 5 10 1 1 0 0 1
 value=10k
 T 51800 47700 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 51900 47500 1 0 0 capacitor-1.sym
 {
@@ -88,7 +88,7 @@ symversion=0.1
 T 52500 48000 5 10 1 1 0 0 1
 value=10uF
 T 51900 47500 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 45300 53600 1 0 1 output-2.sym
 {
@@ -258,16 +258,16 @@ C 55000 57800 1 90 0 ground.sym
 N 54700 58000 54100 58000 4
 N 54500 58000 54500 57700 4
 N 54500 57700 54100 57700 4
-C 54400 52200 1 0 1 led-1.sym
+C 53300 49200 1 0 1 led-1.sym
 {
-T 53600 52800 5 10 0 0 0 6 1
+T 52500 49800 5 10 0 0 0 6 1
 device=LED
-T 53600 52600 5 10 1 1 0 6 1
+T 52500 49600 5 10 1 1 0 6 1
 refdes=LED1
-T 53600 53000 5 10 0 0 0 6 1
+T 52500 50000 5 10 0 0 0 6 1
 symversion=0.1
-T 54300 52500 5 10 0 1 0 0 1
-footprint=0805
+T 53200 49500 5 10 0 1 0 0 1
+footprint=0603
 }
 C 44600 52800 1 0 0 crystal-1.sym
 {
@@ -280,7 +280,7 @@ symversion=0.1
 T 44500 52600 5 10 1 1 0 0 1
 value=32.768khz
 T 45000 52800 5 10 0 1 0 0 1
-footprint=ABS07crystal
+footprint=abs07_crystal
 }
 N 45300 53500 44600 53500 4
 N 44600 53500 44600 52900 4
@@ -313,7 +313,7 @@ refdes=R2
 T 60000 51900 5 10 1 1 0 0 1
 value=10k
 T 59800 52500 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 59700 51300 1 0 0 ground.sym
 C 62700 52400 1 0 1 input-2.sym
@@ -324,15 +324,6 @@ T 62100 53100 5 10 0 0 0 6 1
 device=none
 T 62200 52500 5 10 1 1 0 1 1
 value=Vcc
-}
-C 45300 57300 1 0 1 output-2.sym
-{
-T 44400 57500 5 10 0 0 0 6 1
-net=Tip:1
-T 45100 58000 5 10 0 0 0 6 1
-device=none
-T 44400 57400 5 10 1 1 0 7 1
-value=Tip
 }
 C 57800 54700 1 0 0 input-2.sym
 {
@@ -353,7 +344,7 @@ refdes=R3
 T 59900 54200 5 10 1 1 0 0 1
 value=10k
 T 59700 54800 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 N 59200 54800 60300 54800 4
 C 59700 55700 1 270 0 resistor-1.sym
@@ -365,7 +356,7 @@ refdes=R4
 T 59900 55100 5 10 1 1 0 0 1
 value=10k
 T 59700 55700 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 59900 57100 1 90 1 input-2.sym
 {
@@ -387,38 +378,29 @@ symversion=0.1
 T 60900 55100 5 10 1 1 0 0 1
 value=100uF
 T 60300 54600 5 10 0 1 0 0 1
-footprint=0805
+footprint=5mm_EL_Cap
 }
 N 62300 54800 61200 54800 4
-C 52200 52300 1 0 0 resistor-1.sym
+C 51100 49300 1 0 0 resistor-1.sym
 {
-T 52500 52700 5 10 0 0 0 0 1
+T 51400 49700 5 10 0 0 0 0 1
 device=RESISTOR
-T 52500 52700 5 10 1 1 180 0 1
+T 51400 49700 5 10 1 1 180 0 1
 refdes=R5
-T 53000 52700 5 10 1 1 180 0 1
+T 51900 49700 5 10 1 1 180 0 1
 value=330
-T 52200 52300 5 10 0 1 0 0 1
-footprint=0805
+T 51100 49300 5 10 0 1 0 0 1
+footprint=0603
 }
-N 53100 52400 53500 52400 4
-C 51900 52200 1 270 1 ground.sym
-C 45300 57100 1 0 1 output-2.sym
+N 52000 49400 52400 49400 4
+C 50800 49200 1 270 1 ground.sym
+C 54700 49300 1 0 1 input-2.sym
 {
-T 44400 57300 5 10 0 0 0 6 1
+T 54700 49500 5 10 0 0 0 6 1
 net=Indicator:1
-T 45100 57800 5 10 0 0 0 6 1
+T 54100 50000 5 10 0 0 0 6 1
 device=none
-T 44400 57200 5 10 1 1 0 7 1
-value=Indicator
-}
-C 55800 52300 1 0 1 input-2.sym
-{
-T 55800 52500 5 10 0 0 0 6 1
-net=Indicator:1
-T 55200 53000 5 10 0 0 0 6 1
-device=none
-T 55300 52400 5 10 1 1 0 1 1
+T 54200 49400 5 10 1 1 0 1 1
 value=Indicator
 }
 C 57100 46500 1 0 0 LY091WG15.sym
@@ -439,7 +421,7 @@ symversion=0.1
 T 59900 48800 5 10 1 1 0 0 1
 value=1uF
 T 59300 48300 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 59300 49200 1 0 0 capacitor-1.sym
 {
@@ -452,7 +434,7 @@ symversion=0.1
 T 59900 49700 5 10 1 1 0 0 1
 value=1uF
 T 59300 49200 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 N 59300 48500 59000 48500 4
 N 59000 48300 59400 48300 4
@@ -474,7 +456,7 @@ refdes=R6
 T 63600 48800 5 10 1 1 180 6 1
 value=10k
 T 64400 48400 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 62800 50400 1 270 0 input-2.sym
 {
@@ -505,7 +487,7 @@ symversion=0.1
 T 62800 47300 5 10 1 1 180 0 1
 value=1uF
 T 62500 47000 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 61300 47700 1 270 0 capacitor-1.sym
 {
@@ -518,7 +500,7 @@ symversion=0.1
 T 61600 47000 5 10 1 1 0 0 1
 value=1uF
 T 61300 47700 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 N 59000 47900 62900 47900 4
 N 62900 48000 62900 47900 4
@@ -572,15 +554,6 @@ device=none
 T 56300 48500 5 10 1 1 0 7 1
 value=CS
 }
-C 45300 54400 1 0 1 output-2.sym
-{
-T 44400 54600 5 10 0 0 0 6 1
-net=Disp_reset:1
-T 45100 55100 5 10 0 0 0 6 1
-device=none
-T 44400 54500 5 10 1 1 0 7 1
-value=Disp_reset
-}
 C 55800 48200 1 0 0 input-2.sym
 {
 T 55800 48400 5 10 0 0 0 0 1
@@ -599,7 +572,7 @@ refdes=R7
 T 59100 45900 5 10 1 1 180 6 1
 value=390K
 T 58900 45600 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 N 59000 46500 59000 47100 4
 C 59200 45300 1 0 1 ground.sym
@@ -614,7 +587,7 @@ symversion=0.1
 T 60900 45800 5 10 1 1 0 0 1
 value=2.2uF
 T 60600 46500 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 59700 46500 1 270 0 capacitor-1.sym
 {
@@ -627,7 +600,7 @@ symversion=0.1
 T 60000 45800 5 10 1 1 0 0 1
 value=4.7uF
 T 59700 46500 5 10 0 1 0 0 1
-footprint=0805
+footprint=0603
 }
 C 61000 45300 1 0 1 ground.sym
 C 60100 45300 1 0 1 ground.sym
@@ -661,24 +634,6 @@ T 60700 53100 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 60700 52700 5 10 0 1 0 0 1
 footprint=SuperSurfaceButton
-}
-C 52400 54100 1 0 0 connector3-1.sym
-{
-T 54200 55000 5 10 0 0 0 0 1
-device=CONNECTOR_3
-T 52400 55200 5 10 1 1 0 0 1
-refdes=CONN4
-T 53600 55400 5 10 0 1 0 0 1
-footprint=JUMPER3
-}
-C 45300 56900 1 0 1 output-2.sym
-{
-T 44400 57100 5 10 0 0 0 6 1
-net=Disp_on:1
-T 45100 57600 5 10 0 0 0 6 1
-device=none
-T 44400 57000 5 10 1 1 0 7 1
-value=Disp_on
 }
 C 55500 54200 1 0 1 input-2.sym
 {
@@ -738,14 +693,14 @@ C 50100 54200 1 270 0 capacitor-1.sym
 {
 T 50800 54000 5 10 0 0 270 0 1
 device=CAPACITOR
-T 50000 53900 5 10 1 1 0 0 1
+T 49800 53900 5 10 1 1 0 0 1
 refdes=C10
 T 51000 54000 5 10 0 0 270 0 1
 symversion=0.1
 T 50400 53500 5 10 1 1 0 0 1
 value=100uF
 T 50100 54200 5 10 0 1 0 0 1
-footprint=0805
+footprint=5mm_EL_Cap
 }
 C 50500 53000 1 0 1 ground.sym
 C 50200 55600 1 270 0 input-2.sym
@@ -946,3 +901,111 @@ B 58600 42800 7600 1400 15 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
 L 62100 43400 62100 42800 15 0 0 0 -1 -1
 B 43100 42600 23300 16500 15 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
 ]
+C 45300 56000 1 0 1 output-2.sym
+{
+T 44400 56200 5 10 0 0 0 6 1
+net=Indicator:1
+T 45100 56700 5 10 0 0 0 6 1
+device=none
+T 44400 56100 5 10 1 1 0 7 1
+value=Indicator
+}
+C 45300 56200 1 0 1 output-2.sym
+{
+T 44400 56400 5 10 0 0 0 6 1
+net=Tip:1
+T 45100 56900 5 10 0 0 0 6 1
+device=none
+T 44400 56300 5 10 1 1 0 7 1
+value=Tip
+}
+C 45300 57100 1 0 1 output-2.sym
+{
+T 44400 57300 5 10 0 0 0 6 1
+net=Disp_reset:1
+T 45100 57800 5 10 0 0 0 6 1
+device=none
+T 44400 57200 5 10 1 1 0 7 1
+value=Disp_reset
+}
+C 45300 57300 1 0 1 output-2.sym
+{
+T 44400 57500 5 10 0 0 0 6 1
+net=Disp_on:1
+T 45100 58000 5 10 0 0 0 6 1
+device=none
+T 44400 57400 5 10 1 1 0 7 1
+value=Disp_on
+}
+C 45300 55400 1 0 1 output-2.sym
+{
+T 44400 55600 5 10 0 0 0 6 1
+net=SDA:1
+T 45100 56100 5 10 0 0 0 6 1
+device=none
+T 44400 55500 5 10 1 1 0 7 1
+value=SDA
+}
+C 45300 55200 1 0 1 output-2.sym
+{
+T 44400 55400 5 10 0 0 0 6 1
+net=SCL:1
+T 45100 55900 5 10 0 0 0 6 1
+device=none
+T 44400 55300 5 10 1 1 0 7 1
+value=SCL
+}
+C 52400 52800 1 0 0 connector2-1.sym
+{
+T 52600 53800 5 10 0 0 0 0 1
+device=CONNECTOR_2
+T 52400 53600 5 10 1 1 0 0 1
+refdes=CONN5
+T 52800 53400 5 10 0 1 0 0 1
+footprint=JUMPER2
+}
+C 55500 52900 1 0 1 input-2.sym
+{
+T 55500 53100 5 10 0 0 0 6 1
+net=SDA:1
+T 54900 53600 5 10 0 0 0 6 1
+device=none
+T 55000 53000 5 10 1 1 0 1 1
+value=SDA
+}
+C 55500 53200 1 0 1 input-2.sym
+{
+T 55500 53400 5 10 0 0 0 6 1
+net=SCL:1
+T 54900 53900 5 10 0 0 0 6 1
+device=none
+T 55000 53300 5 10 1 1 0 1 1
+value=SCL
+}
+C 52400 54100 1 0 0 connector4-1.sym
+{
+T 54200 55000 5 10 0 0 0 0 1
+device=CONNECTOR_4
+T 52400 55500 5 10 1 1 0 0 1
+refdes=CONN6
+T 55000 57700 5 10 0 1 0 0 1
+footprint=JUMPER4
+}
+C 45300 56900 1 0 1 output-2.sym
+{
+T 44400 57100 5 10 0 0 0 6 1
+net=PD5:1
+T 45100 57600 5 10 0 0 0 6 1
+device=none
+T 44400 57000 5 10 1 1 0 7 1
+value=PD5
+}
+C 55500 55100 1 0 1 input-2.sym
+{
+T 55500 55300 5 10 0 0 0 6 1
+net=PD5:1
+T 54900 55800 5 10 0 0 0 6 1
+device=none
+T 55000 55200 5 10 1 1 0 1 1
+value=PD5
+}
