@@ -6,11 +6,11 @@ FileVersion[20070407]
 PCB["pig" 300000 250000]
 
 Grid[500.0 0 0 0]
-Cursor[202054 91566 0.000000]
+Cursor[167500 60500 0.000000]
 PolyArea[200000000.000000]
 Thermal[0.500000]
 DRC[600 600 600 600 1500 600]
-Flags("showdrc,nameonpcb,clearnew,snappin,showmask")
+Flags("showdrc,nameonpcb,clearnew,snappin")
 Groups("1,c:2,s:3:4:5:6:7:8")
 Styles["Signal,1000,3600,2000,1000:Power,2500,6000,3500,1000:Fat,4000,6000,3500,1000:Skinny,600,2402,1181,600"]
 
@@ -1226,7 +1226,7 @@ Via[100700 118500 9000 2000 8800 7000 "" "hole,lock"]
 Via[200700 28500 6500 2000 6400 5500 "" "hole,lock"]
 Via[200700 122500 6500 2000 6400 5500 "" "hole,lock"]
 Via[217500 93000 3600 2000 0 2000 "" ""]
-Via[208000 54000 3600 2000 0 2000 "" ""]
+Via[212500 49500 3600 2000 0 2000 "" ""]
 Via[53500 63500 3600 2000 0 2000 "" ""]
 Via[53500 69000 3600 2000 0 2000 "" ""]
 Via[90000 94500 3600 2000 0 2000 "" ""]
@@ -1244,8 +1244,7 @@ Via[152000 47000 3600 2000 0 2000 "" ""]
 Via[158000 106000 3600 2000 0 2000 "" ""]
 Via[62000 79500 3600 2000 0 2000 "" ""]
 Via[80500 85500 3600 2000 0 2000 "" ""]
-Via[200000 53500 3600 2000 0 2000 "" ""]
-Via[193000 83500 3600 2000 0 2000 "" ""]
+Via[192500 83500 3600 2000 0 2000 "" ""]
 Via[80500 72000 3600 2000 0 2000 "" ""]
 Via[87000 41000 3600 2000 0 2000 "" ""]
 Via[146500 106500 3600 2000 0 2000 "" ""]
@@ -1253,6 +1252,7 @@ Via[154000 99000 3600 2000 0 2000 "" ""]
 Via[80500 100500 3600 2000 0 2000 "" ""]
 Via[129000 49500 3600 2000 0 2000 "" ""]
 Via[159000 50000 3600 2000 0 2000 "" ""]
+Via[206500 49500 3600 2000 0 2000 "" ""]
 
 Element["hidename" "SuperSurfaceButton" "S1" "unknown" 214288 72516 -1000 -16500 0 100 ""]
 (
@@ -1596,21 +1596,6 @@ Element["hidename" "JUMPER2" "CONN5" "unknown" 171000 33000 -5000 -11000 0 100 "
 
 	)
 
-Element["hidename" "JUMPER4" "CONN6" "unknown" 160104 121028 -5000 -11000 0 100 ""]
-(
-	Pin[0 0 6000 3000 6600 3800 "1" "1" "square,edge2"]
-	Pin[10000 0 6000 3000 6600 3800 "2" "2" "edge2"]
-	Pin[20000 0 6000 3000 6600 3800 "3" "3" "edge2"]
-	Pin[30000 0 6000 3000 6600 3800 "4" "4" "edge2"]
-	ElementLine [-5000 5000 35000 5000 1000]
-	ElementLine [35000 -5000 35000 5000 1000]
-	ElementLine [-5000 -5000 35000 -5000 1000]
-	ElementLine [-5000 -5000 -5000 5000 1000]
-	ElementLine [5000 -5000 5000 5000 1000]
-	ElementLine [-5000 -5000 5000 -5000 1000]
-
-	)
-
 Element["hidename" "0805" "LED1" "unknown" 196671 36547 -19405 -3150 0 100 ""]
 (
 	Pad[-3543 -393 -3543 393 5118 2000 5718 "1" "1" "square"]
@@ -1781,6 +1766,21 @@ Element["" "0805" "C3" "1uF" 67000 67500 -13150 -1650 0 80 ""]
 	ElementLine [-393 2755 393 2755 800]
 
 	)
+
+Element["hidename" "JUMPER4" "CONN6" "unknown" 162000 121000 -5000 -11000 0 100 ""]
+(
+	Pin[0 0 6000 3000 6600 3800 "1" "1" "square,edge2"]
+	Pin[10000 0 6000 3000 6600 3800 "2" "2" "edge2"]
+	Pin[20000 0 6000 3000 6600 3800 "3" "3" "edge2"]
+	Pin[30000 0 6000 3000 6600 3800 "4" "4" "edge2"]
+	ElementLine [-5000 5000 35000 5000 1000]
+	ElementLine [35000 -5000 35000 5000 1000]
+	ElementLine [-5000 -5000 35000 -5000 1000]
+	ElementLine [-5000 -5000 -5000 5000 1000]
+	ElementLine [5000 -5000 5000 5000 1000]
+	ElementLine [-5000 -5000 5000 -5000 1000]
+
+	)
 Layer(1 "component")
 (
 	Line[152500 33000 152500 34500 1000 2000 "clearline"]
@@ -1914,7 +1914,6 @@ Layer(1 "component")
 	Line[139250 87639 140444 86444 1000 2000 "clearline"]
 	Line[132974 91026 132974 116974 1000 2000 "clearline"]
 	Line[132974 116974 137000 121000 1000 2000 "clearline"]
-	Line[160104 121028 137028 121028 1000 2000 "clearline"]
 	Line[137028 121028 134500 118500 1000 2000 "clearline"]
 	Line[155000 91827 155000 87499 1000 2000 "clearline"]
 	Line[155000 87499 154250 86750 1000 2000 "clearline"]
@@ -1927,7 +1926,6 @@ Layer(1 "component")
 	Line[150864 64466 151534 64466 1000 2000 "clearline"]
 	Line[151534 64466 153000 63000 1000 2000 "clearline"]
 	Line[213000 106000 235000 84000 1000 2000 "clearline"]
-	Line[208000 54000 225000 37000 1000 2000 "clearline"]
 	Line[202440 53389 212926 42903 1000 2000 "clearline"]
 	Line[212926 42903 212926 36547 1000 2000 "clearline"]
 	Line[200214 44857 200214 36547 1000 2000 "clearline"]
@@ -2012,15 +2010,12 @@ Layer(1 "component")
 	Line[148700 97300 146500 99500 1000 2000 "clearline"]
 	Line[146500 99500 146500 105500 1000 2000 "clearline"]
 	Line[135974 91526 135974 110474 1000 2000 "clearline"]
-	Line[170104 121028 164576 115500 1000 2000 "clearline"]
 	Line[164576 115500 138500 115500 1000 2000 "clearline"]
 	Line[138500 115500 135974 112974 1000 2000 "clearline"]
 	Line[135974 112974 135974 109526 1000 2000 "clearline"]
-	Line[180104 121028 172076 113000 1000 2000 "clearline"]
 	Line[172076 113000 141500 113000 1000 2000 "clearline"]
 	Line[141500 113000 139250 110750 1000 2000 "clearline"]
 	Line[139250 110750 139250 106500 1000 2000 "clearline"]
-	Line[190104 121028 179576 110500 1000 2000 "clearline"]
 	Line[179576 110500 144000 110500 1000 2000 "clearline"]
 	Line[142400 91827 142400 87521 1000 2000 "clearline"]
 	Line[142400 91000 142400 109400 1000 2000 "clearline"]
@@ -2068,9 +2063,18 @@ Layer(1 "component")
 	Line[142400 56400 142400 45600 1000 2000 "clearline"]
 	Line[142400 45600 144500 43500 1000 2000 "clearline"]
 	Line[165914 48000 159250 48000 1000 2000 "clearline"]
+	Line[162000 121000 137000 121000 1000 2000 "clearline"]
+	Line[137000 121000 135500 119500 1000 2000 "clearline"]
+	Line[172000 121000 166500 115500 1000 2000 "clearline"]
+	Line[166500 115500 163500 115500 1000 2000 "clearline"]
+	Line[182000 121000 174000 113000 1000 2000 "clearline"]
+	Line[174000 113000 169500 113000 1000 2000 "clearline"]
+	Line[192000 121000 181500 110500 1000 2000 "clearline"]
+	Line[181500 110500 177500 110500 1000 2000 "clearline"]
+	Line[212500 49500 225000 37000 1000 2000 "clearline"]
 	Polygon("clearpoly,lock")
 	(
-		[15000 17000] [251500 17000] [251500 134500] [15000 134500] 
+		[46500 21500] [249500 21500] [249500 130000] [46500 130000] 
 	)
 )
 Layer(2 "solder")
@@ -2078,7 +2082,6 @@ Layer(2 "solder")
 	Line[236110 89870 228130 89870 2500 2000 ""]
 	Line[234370 89870 242870 89870 2500 2000 ""]
 	Line[217500 57500 217500 93000 1000 2000 "clearline"]
-	Line[208000 54000 213000 59000 1000 2000 "clearline"]
 	Line[213000 59000 213000 87000 1000 2000 "clearline"]
 	Line[202054 91566 208434 91566 1000 2000 "clearline"]
 	Line[208434 91566 213000 87000 1000 2000 "clearline"]
@@ -2102,7 +2105,6 @@ Layer(2 "solder")
 	Line[64000 54000 64000 48000 1000 2000 "clearline"]
 	Line[59000 48000 59000 53000 1000 2000 "clearline"]
 	Line[59000 53000 66358 60358 1000 2000 "clearline"]
-	Line[209000 49000 217500 57500 1000 2000 "clearline"]
 	Line[135000 44000 140000 44000 1000 2000 "clearline"]
 	Line[140000 44000 151000 33000 1000 2000 "clearline"]
 	Line[87000 54000 110000 54000 1000 2000 "clearline"]
@@ -2133,7 +2135,6 @@ Layer(2 "solder")
 	Line[60788 75712 58500 78000 1000 2000 "clearline"]
 	Line[58500 78000 58500 83500 1000 2000 "clearline"]
 	Line[193000 83500 200000 76500 1000 2000 "clearline"]
-	Line[200000 76500 200000 53500 1000 2000 "clearline"]
 	Line[212000 116000 207000 116000 1000 2000 "clearline"]
 	Line[207000 116000 203000 112000 1000 2000 "clearline"]
 	Line[203000 112000 164000 112000 1000 2000 "clearline"]
@@ -2185,12 +2186,19 @@ Layer(2 "solder")
 	Line[82000 102000 88500 102000 1000 2000 "clearline"]
 	Line[129000 49500 137000 57500 1000 2000 "clearline"]
 	Line[137000 57500 143500 57500 1000 2000 "clearline"]
-	Line[196000 49000 209000 49000 1000 2000 "clearline"]
 	Line[159000 50000 160000 49000 1000 2000 "clearline"]
-	Line[160000 49000 201000 49000 1000 2000 "clearline"]
+	Line[212500 49500 213000 50000 1000 2000 "clearline"]
+	Line[213000 50000 213000 61500 1000 2000 "clearline"]
+	Line[206500 49500 200000 56000 1000 2000 "clearline"]
+	Line[200000 56000 200000 76500 1000 2000 "clearline"]
+	Line[159000 50000 199500 50000 1000 2000 "clearline"]
+	Line[199500 50000 204500 45000 1000 2000 "clearline"]
+	Line[204500 45000 214000 45000 1000 2000 "clearline"]
+	Line[214000 45000 217500 48500 1000 2000 "clearline"]
+	Line[217500 48500 217500 93500 1000 2000 "clearline"]
 	Polygon("clearpoly,lock")
 	(
-		[15000 17000] [251500 17000] [251500 134500] [15000 134500] 
+		[46500 21500] [249500 21500] [249500 130000] [46500 130000] 
 	)
 )
 Layer(3 "outline")
@@ -2237,11 +2245,6 @@ Layer(8 "signal3")
 )
 Layer(9 "silk")
 (
-	Line[195000 116000 155000 116000 1000 2000 "clearline"]
-	Line[155000 116000 155000 126000 1000 2000 "clearline"]
-	Line[155000 126000 195000 126000 1000 2000 "clearline"]
-	Line[195000 126000 195000 116000 1000 2000 "clearline"]
-	Line[165000 116000 165000 126000 1000 2000 "clearline"]
 	Line[237000 101000 207000 101000 1000 2000 "clearline"]
 	Line[207000 101000 207000 121000 1000 2000 "clearline"]
 	Line[207000 121000 237000 121000 1000 2000 "clearline"]
@@ -2255,16 +2258,15 @@ Layer(9 "silk")
 	Line[176000 28000 176000 38000 1000 2000 "clearline"]
 	Line[166000 28000 166000 38000 1000 2000 "clearline"]
 	Line[116000 28000 116000 38000 1000 2000 "clearline"]
-	Text[79000 27000 2 290 "Pig" "clearline,onsolder"]
-	Text[80000 43000 2 100 "XXX" "clearline,onsolder"]
+	Line[197000 116000 157000 116000 1000 2000 "clearline"]
+	Line[157000 116000 157000 126000 1000 2000 "clearline"]
+	Line[157000 126000 197000 126000 1000 2000 "clearline"]
+	Line[197000 126000 197000 116000 1000 2000 "clearline"]
+	Line[167000 116000 167000 126000 1000 2000 "clearline"]
 	Text[245000 84000 3 100 "Calm" "clearline,onsolder"]
 	Text[95000 117000 2 100 "Tim Heath" "clearline,onsolder"]
 	Text[95000 111000 2 100 "Matt O'Gorman" "clearline,onsolder"]
 	Text[95000 105000 2 100 "Copyright 2014" "clearline,onsolder"]
-	Text[192000 110000 2 100 "8" "clearline,onsolder"]
-	Text[161500 110000 2 100 "5" "clearline,onsolder"]
-	Text[171500 110000 2 100 "6" "clearline,onsolder"]
-	Text[181000 110000 2 100 "7" "clearline,onsolder"]
 	Text[224000 95000 2 100 "11" "clearline,onsolder"]
 	Text[224500 121500 2 100 "12" "clearline,onsolder"]
 	Text[214500 121500 2 100 "13" "clearline,onsolder"]
@@ -2275,7 +2277,7 @@ Layer(9 "silk")
 	Text[120500 38500 2 100 "Gnd" "clearline,onsolder"]
 	Text[133000 39000 2 100 "V" "clearline,onsolder"]
 	Text[233500 96000 2 85 "G" "clearline,onsolder"]
-	Text[213500 94500 2 100 "V" "clearline,onsolder"]
+	Text[213000 96000 2 80 "V" "clearline,onsolder"]
 	Text[233500 121500 2 100 "R" "clearline,onsolder"]
 	Text[229000 88500 2 100 "S" "clearline,onsolder"]
 	Text[195000 88000 2 100 "T" "clearline,onsolder"]
@@ -2283,6 +2285,12 @@ Layer(9 "silk")
 	Text[135000 98000 0 100 "-" "clearline,onsolder"]
 	Text[180000 65500 0 100 "+" "clearline,onsolder"]
 	Text[90500 65500 0 100 "+" "clearline,onsolder"]
+	Text[75000 27000 2 290 "Pig" "clearline,onsolder"]
+	Text[76000 42500 2 100 "XXX" "clearline,onsolder"]
+	Text[194000 110000 2 100 "8" "clearline,onsolder"]
+	Text[163500 110000 2 100 "5" "clearline,onsolder"]
+	Text[173500 110000 2 100 "6" "clearline,onsolder"]
+	Text[183000 110000 2 100 "7" "clearline,onsolder"]
 )
 Layer(10 "silk")
 (
@@ -2308,26 +2316,19 @@ Layer(10 "silk")
 	Text[160240 38988 0 100 "D" "clearline"]
 	Text[167000 39000 0 70 "Sda" "clearline"]
 	Text[178000 39000 0 70 "Scl" "clearline"]
-	Text[157000 110000 0 100 "D5" "clearline"]
-	Text[187000 110000 0 100 "B0" "clearline"]
-	Text[177000 110000 0 100 "D7" "clearline"]
-	Text[167000 110000 0 100 "D6" "clearline"]
-	Text[106510 117638 0 54 "http://meatstand.com/pig" "clearline"]
+	Text[106510 117638 0 59 "http://meatstand.com/pig" "clearline"]
 	Text[190500 50500 0 100 "this one goes to..." "clearline"]
 	Text[191259 25578 0 100 "L" "clearline"]
-	Text[129000 103000 0 85 "This board is GPLv3 Licensed." "clearline"]
 	Text[129616 38988 0 100 "V" "clearline"]
-	Text[57000 117500 0 75 "git:GIT_REV" "clearline"]
-	Text[58500 90500 0 390 "Pig" "clearline"]
-	Text[57500 111000 0 100 "XXX" "clearline"]
-	Polygon("clearpoly")
-	(
-		[56783 88841] [56382 88624] [56512 88776] 
-	)
-	Polygon("clearpoly")
-	(
-		[56946 87560] [56610 87387] [56740 87539] 
-	)
+	Text[61500 93000 0 370 "Pig" "clearline"]
+	Text[160500 100000 0 70 "This board is " "clearline"]
+	Text[160500 104500 0 65 "GPLv3 Licensed." "clearline"]
+	Text[60500 117500 0 75 "git:GIT_REV" "clearline"]
+	Text[60500 112500 0 85 "XXX" "clearline"]
+	Text[158896 109972 0 100 "D5" "clearline"]
+	Text[188896 109972 0 100 "B0" "clearline"]
+	Text[178896 109972 0 100 "D7" "clearline"]
+	Text[168896 109972 0 100 "D6" "clearline"]
 )
 NetList()
 (
