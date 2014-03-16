@@ -5,8 +5,8 @@ FileVersion[20070407]
 
 PCB["pig" 300000 250000]
 
-Grid[1196.9 0 0 0]
-Cursor[90961 83780 0.000000]
+Grid[1589.7 0 0 0]
+Cursor[131945 130355 0.000000]
 PolyArea[200000000.000000]
 Thermal[0.500000]
 DRC[600 600 600 600 1500 600]
@@ -2241,6 +2241,7 @@ Layer(10 "silk")
 	Text[187000 110000 0 100 "B0" "clearline"]
 	Text[177000 110000 0 100 "D7" "clearline"]
 	Text[167000 110000 0 100 "D6" "clearline"]
+	Text[106510 117638 0 54 "http://meatstand.com/pig" "clearline"]
 	Polygon("clearpoly")
 	(
 		[56783 88841] [56382 88624] [56512 88776] 
