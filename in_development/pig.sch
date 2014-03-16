@@ -75,7 +75,7 @@ refdes=R1
 T 52000 47100 5 10 1 1 0 0 1
 value=10k
 T 51800 47700 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 51900 47500 1 0 0 capacitor-1.sym
 {
@@ -88,7 +88,7 @@ symversion=0.1
 T 52500 48000 5 10 1 1 0 0 1
 value=10uF
 T 51900 47500 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 45300 53600 1 0 1 output-2.sym
 {
@@ -267,7 +267,7 @@ refdes=LED1
 T 52500 50000 5 10 0 0 0 6 1
 symversion=0.1
 T 53200 49500 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 44600 52800 1 0 0 crystal-1.sym
 {
@@ -313,7 +313,7 @@ refdes=R2
 T 60000 51900 5 10 1 1 0 0 1
 value=10k
 T 59800 52500 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 59700 51300 1 0 0 ground.sym
 C 62700 52400 1 0 1 input-2.sym
@@ -344,7 +344,7 @@ refdes=R3
 T 59900 54200 5 10 1 1 0 0 1
 value=10k
 T 59700 54800 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 N 59200 54800 60300 54800 4
 C 59700 55700 1 270 0 resistor-1.sym
@@ -356,7 +356,7 @@ refdes=R4
 T 59900 55100 5 10 1 1 0 0 1
 value=10k
 T 59700 55700 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 59900 57100 1 90 1 input-2.sym
 {
@@ -390,7 +390,7 @@ refdes=R5
 T 51900 49700 5 10 1 1 180 0 1
 value=330
 T 51100 49300 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 N 52000 49400 52400 49400 4
 C 50800 49200 1 270 1 ground.sym
@@ -421,7 +421,7 @@ symversion=0.1
 T 59900 48800 5 10 1 1 0 0 1
 value=1uF
 T 59300 48300 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 59300 49200 1 0 0 capacitor-1.sym
 {
@@ -434,7 +434,7 @@ symversion=0.1
 T 59900 49700 5 10 1 1 0 0 1
 value=1uF
 T 59300 49200 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 N 59300 48500 59000 48500 4
 N 59000 48300 59400 48300 4
@@ -456,7 +456,7 @@ refdes=R6
 T 63600 48800 5 10 1 1 180 6 1
 value=10k
 T 64400 48400 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 62800 50400 1 270 0 input-2.sym
 {
@@ -487,7 +487,7 @@ symversion=0.1
 T 62800 47300 5 10 1 1 180 0 1
 value=1uF
 T 62500 47000 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 61300 47700 1 270 0 capacitor-1.sym
 {
@@ -500,7 +500,7 @@ symversion=0.1
 T 61600 47000 5 10 1 1 0 0 1
 value=1uF
 T 61300 47700 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 N 59000 47900 62900 47900 4
 N 62900 48000 62900 47900 4
@@ -572,7 +572,7 @@ refdes=R7
 T 59100 45900 5 10 1 1 180 6 1
 value=390K
 T 58900 45600 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 N 59000 46500 59000 47100 4
 C 59200 45300 1 0 1 ground.sym
@@ -587,7 +587,7 @@ symversion=0.1
 T 60900 45800 5 10 1 1 0 0 1
 value=2.2uF
 T 60600 46500 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 59700 46500 1 270 0 capacitor-1.sym
 {
@@ -600,7 +600,7 @@ symversion=0.1
 T 60000 45800 5 10 1 1 0 0 1
 value=4.7uF
 T 59700 46500 5 10 0 1 0 0 1
-footprint=0603
+footprint=0805
 }
 C 61000 45300 1 0 1 ground.sym
 C 60100 45300 1 0 1 ground.sym
