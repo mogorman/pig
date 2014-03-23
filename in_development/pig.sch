@@ -5,6 +5,8 @@ T 45600 58300 5 10 1 1 0 0 1
 footprint=atmega328_combo.fp
 T 49400 58300 5 10 1 1 0 0 1
 refdes=U1
+T 47800 54400 5 10 0 1 0 0 1
+manufacturer-part=556-ATMEGA328P-AU
 }
 C 60200 57400 1 0 0 icsp.sym
 {
@@ -12,6 +14,8 @@ T 60400 58200 5 10 1 1 0 0 1
 footprint=icsp_edge
 T 61600 58200 5 10 1 1 0 0 1
 refdes=CONN1
+T 60200 57400 5 10 0 1 0 0 1
+nobom=1
 }
 C 46900 46900 1 0 0 battery-1.sym
 {
@@ -23,6 +27,8 @@ T 47200 48200 5 10 0 0 0 0 1
 symversion=0.1
 T 47100 46900 5 10 0 1 0 0 1
 footprint=CR2032-BAT-HLD.fp
+T 47200 47100 5 10 0 1 0 0 1
+manufacturer-part=658-CR2032 + 712-BAT-HLD-001
 }
 C 47900 46900 1 90 0 ground.sym
 C 46900 47000 1 0 1 output-2.sym
@@ -76,6 +82,8 @@ T 52000 47100 5 10 1 1 0 0 1
 value=10k
 T 51800 47700 5 10 0 1 0 0 1
 footprint=0805
+T 51800 47700 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805J-10K-E3
 }
 C 51900 47500 1 0 0 capacitor-1.sym
 {
@@ -89,6 +97,8 @@ T 52500 48000 5 10 1 1 0 0 1
 value=0.1uF
 T 51900 47500 5 10 0 1 0 0 1
 footprint=0805
+T 52300 47700 5 10 0 1 0 0 1
+manufacturer-part=80-C0805C104Z5V
 }
 C 45300 53600 1 0 1 output-2.sym
 {
@@ -208,6 +218,8 @@ T 52500 58300 5 10 1 1 0 0 1
 refdes=CONN2
 T 52700 58000 5 10 0 1 0 0 1
 footprint=ftdi
+T 52900 54000 5 10 1 1 0 0 1
+nobom=1
 }
 C 54100 56400 1 0 0 output-2.sym
 {
@@ -268,6 +280,8 @@ T 52500 50000 5 10 0 0 0 6 1
 symversion=0.1
 T 53200 49500 5 10 0 1 0 0 1
 footprint=0805
+T 52700 49300 5 10 0 1 0 0 1
+manufacturer-part=720-LGR971-KN-1
 }
 C 44600 52800 1 0 0 crystal-1.sym
 {
@@ -281,6 +295,8 @@ T 44500 52600 5 10 1 1 0 0 1
 value=32.768khz
 T 45000 52800 5 10 0 1 0 0 1
 footprint=abs07_crystal
+T 45000 52900 5 10 0 1 0 0 1
+manufacturer-part=815-ABS07-32.7K-1-T
 }
 N 45300 53500 44600 53500 4
 N 44600 53500 44600 52900 4
@@ -314,6 +330,8 @@ T 60000 51900 5 10 1 1 0 0 1
 value=10k
 T 59800 52500 5 10 0 1 0 0 1
 footprint=0805
+T 59800 52500 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805J-10K-E3
 }
 C 59700 51300 1 0 0 ground.sym
 C 62700 52400 1 0 1 input-2.sym
@@ -345,6 +363,8 @@ T 59900 54200 5 10 1 1 0 0 1
 value=10k
 T 59700 54800 5 10 0 1 0 0 1
 footprint=0805
+T 59700 54800 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805J-10K-E3
 }
 N 59200 54800 60300 54800 4
 C 59700 55700 1 270 0 resistor-1.sym
@@ -357,6 +377,8 @@ T 59900 55100 5 10 1 1 0 0 1
 value=10k
 T 59700 55700 5 10 0 1 0 0 1
 footprint=0805
+T 59700 55700 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805J-10K-E3
 }
 C 59900 57100 1 90 1 input-2.sym
 {
@@ -379,6 +401,8 @@ T 60900 55100 5 10 1 1 0 0 1
 value=100uF
 T 60300 54600 5 10 0 1 0 0 1
 footprint=5mm_EL_Cap
+T 60300 54600 5 10 0 1 0 0 1
+manufacturer-part=140-VZS101M0JTR0506
 }
 N 62300 54800 61200 54800 4
 C 51100 49300 1 0 0 resistor-1.sym
@@ -391,6 +415,8 @@ T 51900 49700 5 10 1 1 180 0 1
 value=330
 T 51100 49300 5 10 0 1 0 0 1
 footprint=0805
+T 51500 49400 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805-330-E3
 }
 N 52000 49400 52400 49400 4
 C 50800 49200 1 270 1 ground.sym
@@ -409,6 +435,8 @@ T 57400 46500 5 10 1 1 0 0 1
 footprint=LY091WG15
 T 57400 49200 5 10 1 1 0 0 1
 refdes=DISP1
+T 57900 48100 5 10 0 1 0 0 1
+manufacturer-part=LY091WG15-128032
 }
 C 59300 48300 1 0 0 capacitor-1.sym
 {
@@ -422,6 +450,8 @@ T 59900 48800 5 10 1 1 0 0 1
 value=1uF
 T 59300 48300 5 10 0 1 0 0 1
 footprint=0805
+T 59300 48300 5 10 0 1 0 0 1
+manufacturer-part=77-VJ0805V105ZXJCBC
 }
 C 59300 49200 1 0 0 capacitor-1.sym
 {
@@ -435,6 +465,8 @@ T 59900 49700 5 10 1 1 0 0 1
 value=1uF
 T 59300 49200 5 10 0 1 0 0 1
 footprint=0805
+T 59300 49200 5 10 0 1 0 0 1
+manufacturer-part=77-VJ0805V105ZXJCBC
 }
 N 59300 48500 59000 48500 4
 N 59000 48300 59400 48300 4
@@ -457,6 +489,8 @@ T 63600 48800 5 10 1 1 180 6 1
 value=10k
 T 64400 48400 5 10 0 1 0 0 1
 footprint=0805
+T 64400 48400 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805J-10K-E3
 }
 C 62800 50400 1 270 0 input-2.sym
 {
@@ -488,6 +522,8 @@ T 62800 47300 5 10 1 1 180 0 1
 value=1uF
 T 62500 47000 5 10 0 1 0 0 1
 footprint=0805
+T 62500 47000 5 10 0 1 0 0 1
+manufacturer-part=77-VJ0805V105ZXJCBC
 }
 C 61300 47700 1 270 0 capacitor-1.sym
 {
@@ -501,6 +537,8 @@ T 61600 47000 5 10 1 1 0 0 1
 value=1uF
 T 61300 47700 5 10 0 1 0 0 1
 footprint=0805
+T 61300 47700 5 10 0 1 0 0 1
+manufacturer-part=77-VJ0805V105ZXJCBC
 }
 N 59000 47900 62900 47900 4
 N 62900 48000 62900 47900 4
@@ -573,6 +611,8 @@ T 59100 45900 5 10 1 1 180 6 1
 value=390K
 T 58900 45600 5 10 0 1 0 0 1
 footprint=0805
+T 59000 46100 5 10 0 1 0 0 1
+manufacturer-part=71-CRCW0805390KFKEA
 }
 N 59000 46500 59000 47100 4
 C 59200 45300 1 0 1 ground.sym
@@ -588,6 +628,8 @@ T 60900 45800 5 10 1 1 0 0 1
 value=2.2uF
 T 60600 46500 5 10 0 1 0 0 1
 footprint=0805
+T 60900 46000 5 10 0 1 0 0 1
+manufacturer-part=77-VJ0805V225MXJTBC
 }
 C 59700 46500 1 270 0 capacitor-1.sym
 {
@@ -601,6 +643,8 @@ T 60000 45800 5 10 1 1 0 0 1
 value=4.7uF
 T 59700 46500 5 10 0 1 0 0 1
 footprint=0805
+T 59700 46000 5 10 0 1 0 0 1
+manufacturer-part=80-C0805C475K4P
 }
 C 61000 45300 1 0 1 ground.sym
 C 60100 45300 1 0 1 ground.sym
@@ -616,6 +660,8 @@ T 62600 48500 5 10 1 1 180 0 1
 refdes=Q1
 T 60900 49400 5 10 0 1 0 0 1
 footprint=SOT23
+T 59000 51200 5 10 0 1 0 0 1
+manufacturer-part=512-MMBT3906
 }
 C 55500 57300 1 0 1 input-2.sym
 {
@@ -634,6 +680,8 @@ T 60700 53100 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 60700 52700 5 10 0 1 0 0 1
 footprint=SuperSurfaceButton
+T 60800 52600 5 10 0 1 0 0 1
+manufacturer-part=693-1301.9318
 }
 C 55500 54200 1 0 1 input-2.sym
 {
@@ -701,6 +749,8 @@ T 50400 53500 5 10 1 1 0 0 1
 value=100uF
 T 50100 54200 5 10 0 1 0 0 1
 footprint=5mm_EL_Cap
+T 50100 54200 5 10 0 1 0 0 1
+manufacturer-part=140-VZS101M0JTR0506
 }
 C 50500 53000 1 0 1 ground.sym
 C 50200 55600 1 270 0 input-2.sym
@@ -741,6 +791,8 @@ T 62495 55000 5 10 1 1 0 0 1
 refdes=CONN3
 T 63400 54800 5 10 0 1 0 0 1
 footprint=35RASMT2BHNTRX
+T 63500 54700 5 10 0 1 0 0 1
+manufacturer-part=502-35RASMT2BHNTRX
 }
 C 62000 54400 1 270 0 ground.sym
 N 59100 48900 59000 48900 4
@@ -754,6 +806,8 @@ T 43500 43400 5 10 1 1 0 0 1
 refdes=ICO1
 T 43800 43000 5 10 0 1 0 0 1
 value=dnp
+T 43400 43000 5 10 0 1 0 0 1
+nobom=1
 }
 T 64600 43200 14 10 1 0 0 0 1
 @git@
@@ -919,24 +973,6 @@ device=none
 T 44400 56300 5 10 1 1 0 7 1
 value=Tip
 }
-C 45300 57100 1 0 1 output-2.sym
-{
-T 44400 57300 5 10 0 0 0 6 1
-net=Disp_reset:1
-T 45100 57800 5 10 0 0 0 6 1
-device=none
-T 44400 57200 5 10 1 1 0 7 1
-value=Disp_reset
-}
-C 45300 57300 1 0 1 output-2.sym
-{
-T 44400 57500 5 10 0 0 0 6 1
-net=Disp_on:1
-T 45100 58000 5 10 0 0 0 6 1
-device=none
-T 44400 57400 5 10 1 1 0 7 1
-value=Disp_on
-}
 C 45300 55400 1 0 1 output-2.sym
 {
 T 44400 55600 5 10 0 0 0 6 1
@@ -963,6 +999,8 @@ T 52400 53600 5 10 1 1 0 0 1
 refdes=CONN5
 T 52800 53400 5 10 0 1 0 0 1
 footprint=JUMPER2
+T 52400 52800 5 10 0 1 0 0 1
+nobom=1
 }
 C 55500 52900 1 0 1 input-2.sym
 {
@@ -990,6 +1028,8 @@ T 52400 55500 5 10 1 1 0 0 1
 refdes=CONN6
 T 55000 57700 5 10 0 1 0 0 1
 footprint=JUMPER4
+T 52400 54100 5 10 0 1 0 0 1
+nobom=1
 }
 C 45300 56900 1 0 1 output-2.sym
 {
@@ -1008,4 +1048,40 @@ T 54900 55800 5 10 0 0 0 6 1
 device=none
 T 55000 55200 5 10 1 1 0 1 1
 value=PD5
+}
+C 45300 57100 1 0 1 output-2.sym
+{
+T 44400 57300 5 10 0 0 0 6 1
+net=Disp_on:1
+T 45100 57800 5 10 0 0 0 6 1
+device=none
+T 44400 57200 5 10 1 1 0 7 1
+value=Disp_on
+}
+C 45300 55800 1 0 1 output-2.sym
+{
+T 44400 56000 5 10 0 0 0 6 1
+net=Disp_reset:1
+T 45100 56500 5 10 0 0 0 6 1
+device=none
+T 44400 55900 5 10 1 1 0 7 1
+value=Disp_reset
+}
+C 60900 54400 1 0 0 input-2.sym
+{
+T 60900 54600 5 10 0 0 0 0 1
+net=Ring:1
+T 61500 55100 5 10 0 0 0 0 1
+device=none
+T 61400 54500 5 10 1 1 0 7 1
+value=Ring
+}
+C 45300 57300 1 0 1 output-2.sym
+{
+T 44400 57500 5 10 0 0 0 6 1
+net=Ring:1
+T 45100 58000 5 10 0 0 0 6 1
+device=none
+T 44400 57400 5 10 1 1 0 7 1
+value=Ring
 }
