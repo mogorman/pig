@@ -1,4 +1,4 @@
-v 20110115 2
+v 20130925 2
 C 45300 52900 1 0 0 atmega168pa.sym
 {
 T 45600 58300 5 10 1 1 0 0 1
@@ -964,15 +964,6 @@ device=none
 T 44400 56100 5 10 1 1 0 7 1
 value=Indicator
 }
-C 45300 56200 1 0 1 output-2.sym
-{
-T 44400 56400 5 10 0 0 0 6 1
-net=Tip:1
-T 45100 56900 5 10 0 0 0 6 1
-device=none
-T 44400 56300 5 10 1 1 0 7 1
-value=Tip
-}
 C 45300 55400 1 0 1 output-2.sym
 {
 T 44400 55600 5 10 0 0 0 6 1
@@ -1067,21 +1058,12 @@ device=none
 T 44400 55900 5 10 1 1 0 7 1
 value=Disp_reset
 }
-C 60900 54400 1 0 0 input-2.sym
-{
-T 60900 54600 5 10 0 0 0 0 1
-net=Ring:1
-T 61500 55100 5 10 0 0 0 0 1
-device=none
-T 61400 54500 5 10 1 1 0 7 1
-value=Ring
-}
 C 45300 57300 1 0 1 output-2.sym
 {
 T 44400 57500 5 10 0 0 0 6 1
-net=Ring:1
+net=Tip:1
 T 45100 58000 5 10 0 0 0 6 1
 device=none
 T 44400 57400 5 10 1 1 0 7 1
-value=Ring
+value=Tip
 }
