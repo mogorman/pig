@@ -1,5 +1,11 @@
 #!/bin/bash
- ~/nonapt/arduino-1.5.6-r2/arduino --pref build.path=`pwd`/application_build  --verify `pwd`/application/application.ino
+~/nonapt/arduino-1.5.6-r2/arduino \
+ --verbose-build \
+ --board arduino:avr:fio \
+ --pref build.path=`pwd`/application_build \
+ --pref sketchbook.path=`pwd` \
+ --verify `pwd`/application/application.ino
+
 cp application_build/application.cpp.hex ./application.hex
 reboot_avr
 sleep 1
