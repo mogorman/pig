@@ -10,4 +10,4 @@ in_development/*.ps
 in_development/*.zip
 in_development/*.pdf
 in_development/xy
-firmware/application_build/*
+firmware/build/*
