@@ -11,3 +11,4 @@ in_development/*.zip
 in_development/*.pdf
 in_development/xy
 firmware/build/*
+boards/rev_11.1
