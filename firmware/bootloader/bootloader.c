@@ -1,3 +1,8 @@
+//OPTIBOOT
+#include "boot.h"
+//OPTIBOOT
+
+//AUDIOBOOT
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -6,93 +11,13 @@
 #include <util/delay.h>
 
 #include <stdlib.h>
-#include <avr/boot.h>
+//AUDIOBOOT
 
-/* Use the F_CPU defined in Makefile */
+//OPTIBOOT
+#include "pin_defs.h"
+#include "stk500.h"
 
-/* 20060803: hacked by DojoCorp */
-/* 20070626: hacked by David A. Mellis to decrease waiting time for auto-reset */
-/* set the waiting time for the bootloader */
-/* get this from the Makefile instead */
-/* #define MAX_TIME_COUNT (F_CPU>>4) */
-
-/* 20070707: hacked by David A. Mellis - after this many errors give up and launch application */
-#define MAX_ERROR_COUNT 5
-
-/* set the UART baud rate */
-/* 20060803: hacked by DojoCorp */
-//#define BAUD_RATE   115200
-//#define BAUD_RATE   19200
-#define BAUD_RATE   9600
-
-/* SW_MAJOR and MINOR needs to be updated from time to time to avoid warning message from AVR Studio */
-/* never allow AVR Studio to do an update !!!! */
-#define HW_VER	 0x02
-#define SW_MAJOR 0x01
-#define SW_MINOR 0x10
-
-#define SIG1	0x1E	// Yep, Atmel is the only manufacturer of AVR micros.  Single source :(
-
-#if defined __AVR_ATmega168__
-#define SIG2	0x94
-#define SIG3	0x06
-#define PAGE_SIZE	0x40U	//64 words
-
-#elif defined __AVR_ATmega328P__
-#define SIG2	0x95
-#define SIG3	0x0F
-#define PAGE_SIZE	0x40U	//64 words
-#endif
-
-
-//MOG
-/* onboard LED is used to indicate, that the bootloader was entered (3x flashing) */
-/* if monitor functions are included, LED goes on after monitor was entered */
-
-/* Onboard LED is connected to pin PB2 (e.g. Crumb8, Crumb168) */
-#define LED_DDR  DDRD
-#define LED_PORT PORTD
-#define LED_PIN  PIND
-/* 20060803: hacked by DojoCorp, LED pin is B5 in Arduino */
-/* #define LED      PINB2 */
-#define LED      PIND4
-
-
-/* other ATmegas have only one UART, so only one pin is defined to enter bootloader */
-#define BL_DDR  DDRD
-#define BL_PORT PORTD
-#define BL_PIN  PIND
-#define BL      PIND6
-
-#define LEDPORT (1<<PD4);
-#define INITLED {DDRD|=LEDPORT;}
-#define LEDON {PORTD|=LEDPORT;}
-#define LEDOFF {PORTD&=~LEDPORT;}
-#define TOGGLELED {PORTD^=LEDPORT;}
-
-	// use TxD ( PD1 ) as audio input	
-#define INPUTAUDIOPIN (1<<PD3)
-#define PINVALUE (PIND&INPUTAUDIOPIN)
-#define INITPORT {PORTD|=INPUTAUDIOPIN; } //turn on pull up 
-
-#define PINLOW (PINVALUE==0)
-#define PINHIGH (!PINLOW)
-
-
-#define true (1==1)
-#define false !true
-
-
-/* function prototypes */
-/* void putch(char); */
-/* char getch(void); */
-/* void getNch(uint8_t); */
-/* void byte_response(uint8_t); */
-/* void nothing_response(void); */
-/* char gethex(void); */
-/* void puthex(char); */
-/* void flash_led(uint8_t); */
-/* void u_main(); */
+//AUDIOBOOT
 void a_main();
 uint8_t receiveFrame();
 
@@ -143,471 +68,438 @@ uint8_t error_count = 0;
 uint8_t FrameData[FRAMESIZE];
 
 
-void (*app_start)(void) = 0x0000;
 
 
 
-int main()
+//OPTIBOOT
+
+//AUDIOBOOT
+#define LEDPORT (1<<PD4);
+#define INITLED {DDRD|=LEDPORT;}
+#define LEDON {PORTD|=LEDPORT;}
+#define LEDOFF {PORTD&=~LEDPORT;}
+#define TOGGLELED {PORTD^=LEDPORT;}
+
+// use TxD ( PD1 ) as audio input	
+#define INPUTAUDIOPIN (1<<PD3)
+#define PINVALUE (PIND&INPUTAUDIOPIN)
+#define INITPORT {PORTD|=INPUTAUDIOPIN; } //turn on pull up 
+
+#define PINLOW (PINVALUE==0)
+#define PINHIGH (!PINLOW)
+
+#define true (1==1)
+#define false !true
+//AUDIOBOOT
+
+//OPTIBOOT
+#define OPTIBOOT_MAJVER 5
+#define OPTIBOOT_MINVER 0
+
+#define MAKESTR(a) #a
+#define MAKEVER(a, b) MAKESTR(a*256+b)
+
+asm("  .section .version\n"
+    "optiboot_version:  .word " MAKEVER(OPTIBOOT_MAJVER, OPTIBOOT_MINVER) "\n"
+    "  .section .text\n");
+
+#define BAUD_RATE 9600L
+#define LED_START_FLASHES 2
+#define F_CPU 8000000L
+#define VIRTUAL_BOOT 1
+
+#ifndef UART
+#define UART 0
+#endif
+
+#define WATCHDOG_OFF    (0)
+#define WATCHDOG_16MS   (_BV(WDE))
+#define WATCHDOG_32MS   (_BV(WDP0) | _BV(WDE))
+#define WATCHDOG_64MS   (_BV(WDP1) | _BV(WDE))
+#define WATCHDOG_125MS  (_BV(WDP1) | _BV(WDP0) | _BV(WDE))
+#define WATCHDOG_250MS  (_BV(WDP2) | _BV(WDE))
+#define WATCHDOG_500MS  (_BV(WDP2) | _BV(WDP0) | _BV(WDE))
+#define WATCHDOG_1S     (_BV(WDP2) | _BV(WDP1) | _BV(WDE))
+#define WATCHDOG_2S     (_BV(WDP2) | _BV(WDP1) | _BV(WDP0) | _BV(WDE))
+#ifndef __AVR_ATmega8__
+#define WATCHDOG_4S     (_BV(WDP3) | _BV(WDE))
+#define WATCHDOG_8S     (_BV(WDP3) | _BV(WDP0) | _BV(WDE))
+#endif
+
+
+/* Function Prototypes */
+/* The main function is in init9, which removes the interrupt vector table */
+/* we don't need. It is also 'naked', which means the compiler does not    */
+/* generate any entry or exit code itself. */
+int main(void) __attribute__ ((OS_main)) __attribute__ ((section (".init9")));
+void putch(char);
+uint8_t getch(void);
+static inline void getNch(uint8_t); /* "static inline" is a compiler hint to reduce code size */
+void verifySpace();
+static inline void flash_led(uint8_t);
+uint8_t getLen();
+static inline void watchdogReset();
+void watchdogConfig(uint8_t x);
+#ifdef SOFT_UART
+void uartDelay() __attribute__ ((naked));
+#endif
+void appStart(uint8_t rstFlags) __attribute__ ((naked));
+
+/*
+ * NRWW memory
+ * Addresses below NRWW (Non-Read-While-Write) can be programmed while
+ * continuing to run code from flash, slightly speeding up programming
+ * time.  Beware that Atmel data sheets specify this as a WORD address,
+ * while optiboot will be comparing against a 16-bit byte address.  This
+ * means that on a part with 128kB of memory, the upper part of the lower
+ * 64k will get NRWW processing as well, even though it doesn't need it.
+ * That's OK.  In fact, you can disable the overlapping processing for
+ * a part entirely by setting NRWWSTART to zero.  This reduces code
+ * space a bit, at the expense of being slightly slower, overall.
+ *
+ * RAMSTART should be self-explanatory.  It's bigger on parts with a
+ * lot of peripheral registers.
+ */
+#if defined(__AVR_ATmega168__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0x3800)
+#elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega32__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0x7000)
+#elif defined (__AVR_ATmega644P__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0xE000)
+// correct for a bug in avr-libc
+#undef SIGNATURE_2
+#define SIGNATURE_2 0x0A
+#elif defined (__AVR_ATmega1284P__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0xE000)
+#elif defined(__AVR_ATtiny84__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0x0000)
+#elif defined(__AVR_ATmega1280__)
+#define RAMSTART (0x200)
+#define NRWWSTART (0xE000)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega88__)
+#define RAMSTART (0x100)
+#define NRWWSTART (0x1800)
+#endif
+
+/* C zero initialises all global variables. However, that requires */
+/* These definitions are NOT zero initialised, but that doesn't matter */
+/* This allows us to drop the zero init code, saving us memory */
+#define buff    ((uint8_t*)(RAMSTART))
+#ifdef VIRTUAL_BOOT_PARTITION
+#define rstVect (*(uint16_t*)(RAMSTART+SPM_PAGESIZE*2+4))
+#define wdtVect (*(uint16_t*)(RAMSTART+SPM_PAGESIZE*2+6))
+#endif
+
+/*
+ * Handle devices with up to 4 uarts (eg m1280.)  Rather inelegantly.
+ * Note that mega8/m32 still needs special handling, because ubrr is handled
+ * differently.
+ */
+#if UART == 0
+# define UART_SRA UCSR0A
+# define UART_SRB UCSR0B
+# define UART_SRC UCSR0C
+# define UART_SRL UBRR0L
+# define UART_UDR UDR0
+#elif UART == 1
+#if !defined(UDR1)
+#error UART == 1, but no UART1 on device
+#endif
+# define UART_SRA UCSR1A
+# define UART_SRB UCSR1B
+# define UART_SRC UCSR1C
+# define UART_SRL UBRR1L
+# define UART_UDR UDR1
+#elif UART == 2
+#if !defined(UDR2)
+#error UART == 2, but no UART2 on device
+#endif
+# define UART_SRA UCSR2A
+# define UART_SRB UCSR2B
+# define UART_SRC UCSR2C
+# define UART_SRL UBRR2L
+# define UART_UDR UDR2
+#elif UART == 3
+#if !defined(UDR1)
+#error UART == 3, but no UART3 on device
+#endif
+# define UART_SRA UCSR3A
+# define UART_SRB UCSR3B
+# define UART_SRC UCSR3C
+# define UART_SRL UBRR3L
+# define UART_UDR UDR3
+#endif
+
+
+//OPTIBOOT
+
+
+int main(void)
 {
-  INITLED;
-  INITPORT;
-  //u_main();
-  a_main(); // start the main function
-  return 0;
+  uint8_t ch;
+
+  /*
+   * Making these local and in registers prevents the need for initializing
+   * them, and also saves space because code no longer stores to memory.
+   * (initializing address keeps the compiler happy, but isn't really
+   *  necessary, and uses 4 bytes of flash.)
+   */
+  register uint16_t address = 0;
+  register uint8_t  length;
+
+  // After the zero init loop, this is the first code to run.
+  //
+  // This code makes the following assumptions:
+  //  No interrupts will execute
+  //  SP points to RAMEND
+  //  r1 contains zero
+  //
+  // If not, uncomment the following instructions:
+  // cli();
+  asm volatile ("clr __zero_reg__");
+#if defined(__AVR_ATmega8__) || defined (__AVR_ATmega32__)
+  SP=RAMEND;  // This is done by hardware reset
+#endif
+
+
+  // Adaboot no-wait mod
+  ch = MCUSR;
+  MCUSR = 0;
+  //WAIT
+  if ((ch & _BV(WDRF))) appStart(ch);
+  //NOWAIT
+  //if (!(ch & _BV(EXTRF))) appStart(ch);
+
+
+#if LED_START_FLASHES > 0
+  // Set up Timer 1 for timeout counter
+  TCCR1B = _BV(CS12) | _BV(CS10); // div 1024
+#endif
+#ifndef SOFT_UART
+#if defined(__AVR_ATmega8__) || defined (__AVR_ATmega32__)
+  UCSRA = _BV(U2X); //Double speed mode USART
+  UCSRB = _BV(RXEN) | _BV(TXEN);  // enable Rx & Tx
+  UCSRC = _BV(URSEL) | _BV(UCSZ1) | _BV(UCSZ0);  // config USART; 8N1
+  UBRRL = (uint8_t)( (F_CPU + BAUD_RATE * 4L) / (BAUD_RATE * 8L) - 1 );
+#else
+  UART_SRA = _BV(U2X0); //Double speed mode USART0
+  UART_SRB = _BV(RXEN0) | _BV(TXEN0);
+  UART_SRC = _BV(UCSZ00) | _BV(UCSZ01);
+  UART_SRL = (uint8_t)( (F_CPU + BAUD_RATE * 4L) / (BAUD_RATE * 8L) - 1 );
+#endif
+#endif
+
+
+  // Set up watchdog to trigger after 500ms
+  //this says 500ms changing it back
+  //MOG
+   DDRD &= ~(1 << PD2);        // see comment #1
+   if (PIND & (1<<PD2))    // see comment #2
+     {
+  DDRD|=(1<<PD4);
+  PORTD |= (1<<PD4);          // turn on the LED to indicate receiving data
+  a_main();
+  watchdogConfig(WATCHDOG_500MS);
+       
+     }
+             watchdogConfig(WATCHDOG_500MS);
+
+#if (LED_START_FLASHES > 0) || defined(LED_DATA_FLASH)
+  /* Set LED pin as output */
+  LED_DDR |= _BV(LED);
+#endif
+
+#ifdef SOFT_UART
+  /* Set TX pin as output */
+  UART_DDR |= _BV(UART_TX_BIT);
+#endif
+
+#if LED_START_FLASHES > 0
+  /* Flash onboard LED to signal entering of bootloader */
+  flash_led(LED_START_FLASHES * 2);
+
+#endif
+
+  /* Forever loop */
+  for (;;) {
+    /* get character from UART */
+
+    ch = getch();
+
+    if(ch == STK_GET_PARAMETER) {
+      unsigned char which = getch();
+      verifySpace();
+      if (which == 0x82) {
+	/*
+	 * Send optiboot version as "minor SW version"
+	 */
+	putch(OPTIBOOT_MINVER);
+      } else if (which == 0x81) {
+	  putch(OPTIBOOT_MAJVER);
+      } else {
+	/*
+	 * GET PARAMETER returns a generic 0x03 reply for
+         * other parameters - enough to keep Avrdude happy
+	 */
+	putch(0x03);
+      }
+    }
+    else if(ch == STK_SET_DEVICE) {
+      // SET DEVICE is ignored
+      getNch(20);
+    }
+    else if(ch == STK_SET_DEVICE_EXT) {
+      // SET DEVICE EXT is ignored
+      getNch(5);
+    }
+    else if(ch == STK_LOAD_ADDRESS) {
+      // LOAD ADDRESS
+      uint16_t newAddress;
+      newAddress = getch();
+      newAddress = (newAddress & 0xff) | (getch() << 8);
+#ifdef RAMPZ
+      // Transfer top bit to RAMPZ
+      RAMPZ = (newAddress & 0x8000) ? 1 : 0;
+#endif
+      newAddress += newAddress; // Convert from word address to byte address
+      address = newAddress;
+      verifySpace();
+    }
+    else if(ch == STK_UNIVERSAL) {
+      // UNIVERSAL command is ignored
+      getNch(4);
+      putch(0x00);
+    }
+    /* Write memory, length is big endian and is in bytes */
+    else if(ch == STK_PROG_PAGE) {
+      // PROGRAM PAGE - we support flash programming only, not EEPROM
+      uint8_t *bufPtr;
+      uint16_t addrPtr;
+
+      getch();			/* getlen() */
+      length = getch();
+      getch();
+
+      // If we are in RWW section, immediately start page erase
+      if (address < NRWWSTART) __boot_page_erase_short((uint16_t)(void*)address);
+
+      // While that is going on, read in page contents
+      bufPtr = buff;
+      do *bufPtr++ = getch();
+      while (--length);
+
+      // If we are in NRWW section, page erase has to be delayed until now.
+      // Todo: Take RAMPZ into account (not doing so just means that we will
+      //  treat the top of both "pages" of flash as NRWW, for a slight speed
+      //  decrease, so fixing this is not urgent.)
+      if (address >= NRWWSTART) __boot_page_erase_short((uint16_t)(void*)address);
+
+      // Read command terminator, start reply
+      verifySpace();
+
+      // If only a partial page is to be programmed, the erase might not be complete.
+      // So check that here
+      boot_spm_busy_wait();
+
+#ifdef VIRTUAL_BOOT_PARTITION
+      if ((uint16_t)(void*)address == 0) {
+        // This is the reset vector page. We need to live-patch the code so the
+        // bootloader runs.
+        //
+        // Move RESET vector to WDT vector
+        uint16_t vect = buff[0] | (buff[1]<<8);
+        rstVect = vect;
+        wdtVect = buff[8] | (buff[9]<<8);
+        vect -= 4; // Instruction is a relative jump (rjmp), so recalculate.
+        buff[8] = vect & 0xff;
+        buff[9] = vect >> 8;
+
+        // Add jump to bootloader at RESET vector
+        buff[0] = 0x7f;
+        buff[1] = 0xce; // rjmp 0x1d00 instruction
+      }
+#endif
+
+      // Copy buffer into programming buffer
+      bufPtr = buff;
+      addrPtr = (uint16_t)(void*)address;
+      ch = SPM_PAGESIZE / 2;
+      do {
+        uint16_t a;
+        a = *bufPtr++;
+        a |= (*bufPtr++) << 8;
+        __boot_page_fill_short((uint16_t)(void*)addrPtr,a);
+        addrPtr += 2;
+      } while (--ch);
+
+      // Write from programming buffer
+      __boot_page_write_short((uint16_t)(void*)address);
+      boot_spm_busy_wait();
+
+#if defined(RWWSRE)
+      // Reenable read access to flash
+      boot_rww_enable();
+#endif
+
+    }
+    /* Read memory block mode, length is big endian.  */
+    else if(ch == STK_READ_PAGE) {
+      // READ PAGE - we only read flash
+      getch();			/* getlen() */
+      length = getch();
+      getch();
+
+      verifySpace();
+      do {
+#ifdef VIRTUAL_BOOT_PARTITION
+        // Undo vector patch in bottom page so verify passes
+        if (address == 0)       ch=rstVect & 0xff;
+        else if (address == 1)  ch=rstVect >> 8;
+        else if (address == 8)  ch=wdtVect & 0xff;
+        else if (address == 9) ch=wdtVect >> 8;
+        else ch = pgm_read_byte_near(address);
+        address++;
+#elif defined(RAMPZ)
+        // Since RAMPZ should already be set, we need to use EPLM directly.
+        // Also, we can use the autoincrement version of lpm to update "address"
+        //      do putch(pgm_read_byte_near(address++));
+        //      while (--length);
+        // read a Flash and increment the address (may increment RAMPZ)
+        __asm__ ("elpm %0,Z+\n" : "=r" (ch), "=z" (address): "1" (address));
+#else
+        // read a Flash byte and increment the address
+        __asm__ ("lpm %0,Z+\n" : "=r" (ch), "=z" (address): "1" (address));
+#endif
+        putch(ch);
+      } while (--length);
+    }
+
+    /* Get device signature bytes  */
+    else if(ch == STK_READ_SIGN) {
+      // READ SIGN - return what Avrdude wants to hear
+      verifySpace();
+      putch(SIGNATURE_0);
+      putch(SIGNATURE_1);
+      putch(SIGNATURE_2);
+    }
+    else if (ch == STK_LEAVE_PROGMODE) { /* 'Q' */
+      // Adaboot no-wait mod
+      // MOG TURN OFF WATCHDOG
+      //           watchdogConfig(WATCHDOG_64MS);
+      verifySpace();
+    }
+    else {
+      // This covers the response to commands like STK_ENTER_PROGMODE
+      verifySpace();
+    }
+    putch(STK_OK);
+  }
 }
-
-
-//void u_main()
-//{
-//    uint8_t ch,ch2;
-//    uint16_t w;
-//    uint8_t firstchar = 0; // make sure we dont start bootloader by accident
-//
-//#ifdef WATCHDOG_MODS
-//    ch = MCUSR;
-//    MCUSR = 0;
-//
-//    WDTCSR |= _BV(WDCE) | _BV(WDE);
-//    WDTCSR = 0;
-//
-//    // Check if the WDT was used to reset, in which case we dont bootload and skip straight to the code. woot.
-//    if (! (ch &  _BV(EXTRF))) // if its a not an external reset...
-//      app_start();  // skip bootloader
-//#else
-//    asm volatile("nop\n\t");
-//#endif
-//
-//
-//
-//
-//    /* check if flash is programmed already, if not start bootloader anyway */
-//    if(pgm_read_byte_near(0x0000) != 0xFF) {
-//
-//
-//    }
-//
-//
-//
-//    UBRR0L = (uint8_t)(F_CPU/(BAUD_RATE*16L)-1);
-//    //UBRR0H = (F_CPU/(BAUD_RATE*16L)-1) >> 8;     // always 0
-//    UCSR0B = (1<<RXEN0) | (1<<TXEN0);
-//    UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
-//
-//    /* Enable internal pull-up resistor on pin D0 (RX), in order
-//    to supress line noise that prevents the bootloader from
-//    timing out (DAM: 20070509) */
-//    DDRD &= ~_BV(PIND0);
-//    PORTD |= _BV(PIND0);
-//
-//    /* set LED pin as output */
-//    LED_DDR |= _BV(LED);
-//
-//
-//    /* flash onboard LED to signal entering of bootloader */
-//
-//    flash_led(NUM_LED_FLASHES);
-//
-//    
-//    /* 20050803: by DojoCorp, this is one of the parts provoking the
-//                 system to stop listening, cancelled from the original */
-//    //putch('\0');
-//
-//
-//    /* forever loop */
-//    for (;;) {
-//
-//	/* get character from UART */
-//	ch = getch();
-//
-//	/* A bunch of if...else if... gives smaller code than switch...case ! */
-//
-//	/* Hello is anyone home ? */ 
-//	if(ch=='0') {
-//	  firstchar = 1; // we got an appropriate bootloader instruction
-//	  nothing_response();
-//	} else if (firstchar == 0) {
-//	  // the first character we got is not '0', lets bail!
-//	  // autoreset via watchdog (sneaky!)
-//	  WDTCSR = _BV(WDE);
-//	  while (1); // 16 ms
-//	}
-//
-//	/* Request programmer ID */
-//	/* Not using PROGMEM string due to boot block in m128 being beyond 64kB boundry  */
-//	/* Would need to selectively manipulate RAMPZ, and it's only 9 characters anyway so who cares.  */
-//	else if(ch=='1') {
-//	    if (getch() == ' ') {
-//		putch(0x14);
-//		putch('A');
-//		putch('V');
-//		putch('R');
-//		putch(' ');
-//		putch('I');
-//		putch('S');
-//		putch('P');
-//		putch(0x10);
-//	    } else {
-//		if (++error_count == MAX_ERROR_COUNT)
-//		    app_start();
-//	    }
-//	}
-//
-//
-//	/* AVR ISP/STK500 board commands  DON'T CARE so default nothing_response */
-//	else if(ch=='@') {
-//	    ch2 = getch();
-//	    if (ch2>0x85) getch();
-//	    nothing_response();
-//	}
-//
-//
-//	/* AVR ISP/STK500 board requests */
-//	else if(ch=='A') {
-//	    ch2 = getch();
-//	    if(ch2==0x80) byte_response(HW_VER);		// Hardware version
-//	    else if(ch2==0x81) byte_response(SW_MAJOR);	// Software major version
-//	    else if(ch2==0x82) byte_response(SW_MINOR);	// Software minor version
-//	    else if(ch2==0x98) byte_response(0x03);		// Unknown but seems to be required by avr studio 3.56
-//	    else byte_response(0x00);				// Covers various unnecessary responses we don't care about
-//	}
-//
-//
-//	/* Device Parameters  DON'T CARE, DEVICE IS FIXED  */
-//	else if(ch=='B') {
-//	    getNch(20);
-//	    nothing_response();
-//	}
-//
-//
-//	/* Parallel programming stuff  DON'T CARE  */
-//	else if(ch=='E') {
-//	    getNch(5);
-//	    nothing_response();
-//	}
-//
-//
-//	/* Enter programming mode  */
-///* Erase device, don't care as we will erase one page at a time anyway.  */
-//	else if(ch=='P' || ch == 'R') {
-//	    nothing_response();
-//	}
-//
-//
-//	/* Leave programming mode  */
-//	else if(ch=='Q') {
-//	    nothing_response();
-//#ifdef WATCHDOG_MODS
-//	    // autoreset via watchdog (sneaky!)
-//	    WDTCSR = _BV(WDE);
-//	    while (1); // 16 ms
-//#endif
-//	}
-//	
-//
-//	/* Set address, little endian. EEPROM in bytes, FLASH in words  */
-//	/* Perhaps extra address bytes may be added in future to support > 128kB FLASH.  */
-//	/* This might explain why little endian was used here, big endian used everywhere else.  */
-//	else if(ch=='U') {
-//	    address.byte[0] = getch();
-//	    address.byte[1] = getch();
-//	    nothing_response();
-//	}
-//
-//
-//	/* Universal SPI programming command, disabled.  Would be used for fuses and lock bits.  */
-//	else if(ch=='V') {
-//	  if (getch() == 0x30) {
-//	    getch();
-//	    ch = getch();
-//	    getch();
-//	    if (ch == 0) {
-//	      byte_response(SIG1);
-//	    } else if (ch == 1) {
-//	      byte_response(SIG2); 
-//	    } else {
-//	      byte_response(SIG3);
-//	    } 
-//	  } else {
-//	    getNch(3);
-//	    byte_response(0x00);
-//	  }
-//	}
-//
-//
-//	/* Write memory, length is big endian and is in bytes  */
-//	else if(ch=='d') {
-//	    length.byte[1] = getch();
-//	    length.byte[0] = getch();
-//	    flags.eeprom = 0;
-//	    if (getch() == 'E') flags.eeprom = 1;
-//	    for (w=0;w<length.word;w++) {
-//		buff[w] = getch();	                        // Store data in buffer, can't keep up with serial data stream whilst programming pages
-//	    }
-//	    if (getch() == ' ') {
-//		if (flags.eeprom) {		                //Write to EEPROM one byte at a time
-//		  address.word <<= 1;
-//		  for(w=0;w<length.word;w++) {
-//		    while(EECR & (1<<EEPE));
-//		    EEAR = (uint16_t)(void *)address.word;
-//		    EEDR = buff[w];
-//		    EECR |= (1<<EEMPE);
-//		    EECR |= (1<<EEPE);
-//
-//		    address.word++;
-//		  }			
-//		}
-//		else {					        //Write to FLASH one page at a time
-//		    if (address.byte[1]>127) address_high = 0x01;	//Only possible with m128, m256 will need 3rd address byte. FIXME
-//		    else address_high = 0x00;
-//
-//		    address.word = address.word << 1;	        //address * 2 -> byte location
-//		    /* if ((length.byte[0] & 0x01) == 0x01) length.word++;	//Even up an odd number of bytes */
-//		    if ((length.byte[0] & 0x01)) length.word++;	//Even up an odd number of bytes
-//		    cli();					//Disable interrupts, just to be sure
-//			// HACKME: EEPE used to be EEWE
-//		    while(bit_is_set(EECR,EEPE));			//Wait for previous EEPROM writes to complete
-//		    asm volatile(
-//				 "clr	r17		\n\t"	//page_word_count
-//				 "lds	r30,address	\n\t"	//Address of FLASH location (in bytes)
-//				 "lds	r31,address+1	\n\t"
-//				 "ldi	r28,lo8(buff)	\n\t"	//Start of buffer array in RAM
-//				 "ldi	r29,hi8(buff)	\n\t"
-//				 "lds	r24,length	\n\t"	//Length of data to be written (in bytes)
-//				 "lds	r25,length+1	\n\t"
-//				 "length_loop:		\n\t"	//Main loop, repeat for number of words in block							 							 
-//				 "cpi	r17,0x00	\n\t"	//If page_word_count=0 then erase page
-//				 "brne	no_page_erase	\n\t"						 
-//				 "wait_spm1:		\n\t"
-//				 "lds	r16,%0		\n\t"	//Wait for previous spm to complete
-//				 "andi	r16,1           \n\t"
-//				 "cpi	r16,1           \n\t"
-//				 "breq	wait_spm1       \n\t"
-//				 "ldi	r16,0x03	\n\t"	//Erase page pointed to by Z
-//				 "sts	%0,r16		\n\t"
-//				 "spm			\n\t"							 
-//
-//				 "wait_spm2:		\n\t"
-//				 "lds	r16,%0		\n\t"	//Wait for previous spm to complete
-//				 "andi	r16,1           \n\t"
-//				 "cpi	r16,1           \n\t"
-//				 "breq	wait_spm2       \n\t"									 
-//
-//				 "ldi	r16,0x11	\n\t"	//Re-enable RWW section
-//				 "sts	%0,r16		\n\t"						 			 
-//				 "spm			\n\t"
-//
-//				 "no_page_erase:		\n\t"							 
-//				 "ld	r0,Y+		\n\t"	//Write 2 bytes into page buffer
-//				 "ld	r1,Y+		\n\t"							 
-//							 
-//				 "wait_spm3:		\n\t"
-//				 "lds	r16,%0		\n\t"	//Wait for previous spm to complete
-//				 "andi	r16,1           \n\t"
-//				 "cpi	r16,1           \n\t"
-//				 "breq	wait_spm3       \n\t"
-//				 "ldi	r16,0x01	\n\t"	//Load r0,r1 into FLASH page buffer
-//				 "sts	%0,r16		\n\t"
-//				 "spm			\n\t"
-//							 
-//				 "inc	r17		\n\t"	//page_word_count++
-//				 "cpi r17,%1	        \n\t"
-//				 "brlo	same_page	\n\t"	//Still same page in FLASH
-//				 "write_page:		\n\t"
-//				 "clr	r17		\n\t"	//New page, write current one first
-//				 "wait_spm4:		\n\t"
-//				 "lds	r16,%0		\n\t"	//Wait for previous spm to complete
-//				 "andi	r16,1           \n\t"
-//				 "cpi	r16,1           \n\t"
-//				 "breq	wait_spm4       \n\t"
-//				 							 
-//				 "ldi	r16,0x05	\n\t"	//Write page pointed to by Z
-//				 "sts	%0,r16		\n\t"
-//				 "spm			\n\t"
-//
-//				 "wait_spm5:		\n\t"
-//				 "lds	r16,%0		\n\t"	//Wait for previous spm to complete
-//				 "andi	r16,1           \n\t"
-//				 "cpi	r16,1           \n\t"
-//				 "breq	wait_spm5       \n\t"									 
-//				 "ldi	r16,0x11	\n\t"	//Re-enable RWW section
-//				 "sts	%0,r16		\n\t"						 			 
-//				 "spm			\n\t"					 		 
-//
-//				 "same_page:		\n\t"							 
-//				 "adiw	r30,2		\n\t"	//Next word in FLASH
-//				 "sbiw	r24,2		\n\t"	//length-2
-//				 "breq	final_write	\n\t"	//Finished
-//				 "rjmp	length_loop	\n\t"
-//				 "final_write:		\n\t"
-//				 "cpi	r17,0		\n\t"
-//				 "breq	block_done	\n\t"
-//				 "adiw	r24,2		\n\t"	//length+2, fool above check on length after short page write
-//				 "rjmp	write_page	\n\t"
-//				 "block_done:		\n\t"
-//				 "clr	__zero_reg__	\n\t"	//restore zero register
-//				 : "=m" (SPMCSR) : "M" (PAGE_SIZE) : "r0","r16","r17","r24","r25","r28","r29","r30","r31"
-//
-//				 );
-//		    /* Should really add a wait for RWW section to be enabled, don't actually need it since we never */
-//		    /* exit the bootloader without a power cycle anyhow */
-//		}
-//		putch(0x14);
-//		putch(0x10);
-//	    } else {
-//		if (++error_count == MAX_ERROR_COUNT)
-//		    app_start();
-//	    }		
-//	}
-//    
-//
-//        /* Read memory block mode, length is big endian.  */
-//        else if(ch=='t') {
-//	    length.byte[1] = getch();
-//	    length.byte[0] = getch();
-//
-//	    address.word = address.word << 1;	        // address * 2 -> byte location
-//	    if (getch() == 'E') 
-//	      flags.eeprom = 1;
-//	    else
-//	      flags.eeprom = 0;
-//	    if (getch() == ' ') {		                // Command terminator
-//		putch(0x14);
-//		for (w=0;w < length.word;w++) {		        // Can handle odd and even lengths okay
-//		    if (flags.eeprom) {	                        // Byte access EEPROM read
-//			while(EECR & (1<<EEPE));
-//			EEAR = (uint16_t)(void *)address.word;
-//			EECR |= (1<<EERE);
-//			putch(EEDR);
-//
-//			address.word++;
-//		    }
-//		    else {
-//
-//			if (!flags.rampz) putch(pgm_read_byte_near(address.word));
-//
-//			address.word++;
-//		    }
-//		}
-//		putch(0x10);
-//	    }
-//	}
-//
-//
-//        /* Get device signature bytes  */
-//        else if(ch=='u') {
-//	    if (getch() == ' ') {
-//		putch(0x14);
-//		putch(SIG1);
-//		putch(SIG2);
-//		putch(SIG3);
-//		putch(0x10);
-//	    } else {
-//		if (++error_count == MAX_ERROR_COUNT)
-//		    app_start();
-//	    }
-//	}
-//
-//
-//        /* Read oscillator calibration byte */
-//        else if(ch=='v') {
-//	    byte_response(0x00);
-//	}
-//
-//
-//#ifdef MONITOR
-//
-//	/* here come the extended monitor commands by Erik Lins */
-//
-//	/* check for three times exclamation mark pressed */
-//	else if(ch=='!') {
-//	    ch = getch();
-//	    if(ch=='!') {
-//		ch = getch();
-//		if(ch=='!') {
-//
-//
-//		    uint8_t addrl, addrh;
-//
-//
-//		    /* turn on LED */
-//		    LED_DDR |= _BV(LED);
-//		    LED_PORT &= ~_BV(LED);
-//
-//		    /* print a welcome message and command overview */
-//		    for(i=0; welcome[i] != '\0'; ++i) {
-//			putch(welcome[i]);
-//		    }
-//
-//		    /* test for valid commands */
-//		    for(;;) {
-//			putch('\n');
-//			putch('\r');
-//			putch(':');
-//			putch(' ');
-//
-//			ch = getch();
-//			putch(ch);
-//
-//			/* toggle LED */
-//			if(ch == 't') {
-//			    if(bit_is_set(LED_PIN,LED)) {
-//				LED_PORT &= ~_BV(LED);
-//				putch('1');
-//			    } else {
-//				LED_PORT |= _BV(LED);
-//				putch('0');
-//			    }
-//
-//			} 
-//
-//			/* read byte from address */
-//			else if(ch == 'r') {
-//			    ch = getch(); putch(ch);
-//			    addrh = gethex();
-//			    addrl = gethex();
-//			    putch('=');
-//			    ch = *(uint8_t *)((addrh << 8) + addrl);
-//			    puthex(ch);
-//			}
-//
-//			/* write a byte to address  */
-//			else if(ch == 'w') {
-//			    ch = getch(); putch(ch);
-//			    addrh = gethex();
-//			    addrl = gethex();
-//			    ch = getch(); putch(ch);
-//			    ch = gethex();
-//			    *(uint8_t *)((addrh << 8) + addrl) = ch;
-//
-//			}
-//
-//			/* read from uart and echo back */
-//			else if(ch == 'u') {
-//			    for(;;) {
-//				putch(getch());
-//			    }
-//			}
-//
-//			else if(ch == 'j') {
-//			    app_start();
-//			}
-//
-//		    }
-//		    /* end of monitor functions */
-//
-//		}
-//	    }
-//	}
-//	/* end of monitor */
-//#endif
-//	else if (++error_count == MAX_ERROR_COUNT) {
-//	    app_start();
-//	}
-//    }
-//    /* end of forever loop */
-//
-//}
-
 
 //***************************************************************************************
 // receiveFrame()
@@ -856,127 +748,167 @@ void a_main()
     }
   }
 }
+//AUDIOBOOT
+
+//optiboot
+
+void putch(char ch) {
+#ifndef SOFT_UART
+  while (!(UART_SRA & _BV(UDRE0)));
+  UART_UDR = ch;
+#else
+  __asm__ __volatile__ (
+    "   com %[ch]\n" // ones complement, carry set
+    "   sec\n"
+    "1: brcc 2f\n"
+    "   cbi %[uartPort],%[uartBit]\n"
+    "   rjmp 3f\n"
+    "2: sbi %[uartPort],%[uartBit]\n"
+    "   nop\n"
+    "3: rcall uartDelay\n"
+    "   rcall uartDelay\n"
+    "   lsr %[ch]\n"
+    "   dec %[bitcnt]\n"
+    "   brne 1b\n"
+    :
+    :
+      [bitcnt] "d" (10),
+      [ch] "r" (ch),
+      [uartPort] "I" (_SFR_IO_ADDR(UART_PORT)),
+      [uartBit] "I" (UART_TX_BIT)
+    :
+      "r25"
+  );
+#endif
+}
+
+uint8_t getch(void) {
+  uint8_t ch;
+
+#ifdef LED_DATA_FLASH
+#if defined(__AVR_ATmega8__) || defined (__AVR_ATmega32__)
+  LED_PORT ^= _BV(LED);
+#else
+  LED_PIN |= _BV(LED);
+#endif
+#endif
 
 
-//char gethexnib(void) {
-//  char a;
-//  a = getch(); putch(a);
-//  if(a >= 'a') {
-//    return (a - 'a' + 0x0a);
-//  } else if(a >= '0') {
-//    return(a - '0');
-//  }
-//  //MOG
-//  return 0;
-//  //MOG
-//}
-//
-//char gethex(void) {
-//  return (gethexnib() << 4) + gethexnib();
-//}
-//
-//void puthex(char ch) {
-//    char ah;
-//
-//    ah = ch >> 4;
-//    if(ah >= 0x0a) {
-//	ah = ah - 0x0a + 'a';
-//    } else {
-//	ah += '0';
-//    }
-//    ch &= 0x0f;
-//    if(ch >= 0x0a) {
-//	ch = ch - 0x0a + 'a';
-//    } else {
-//	ch += '0';
-//    }
-//    putch(ah);
-//    putch(ch);
-//}
-//
-//
-//void putch(char ch)
-//{
-//
-//    while (!(UCSR0A & _BV(UDRE0)));
-//    UDR0 = ch;
-//}
-//
-//
-//char getch(void)
-//{
-//
-//    uint32_t count = 0;
-//
-//    LED_PORT &= ~_BV(LED);
-//
-//    while(!(UCSR0A & _BV(RXC0))){
-//    	/* 20060803 DojoCorp:: Addon coming from the previous Bootloader*/               
-//    	/* HACKME:: here is a good place to count times*/
-//    	count++;
-//    	if (count > MAX_TIME_COUNT)
-//    		app_start();
-//     }
-//
-//    LED_PORT |= _BV(LED);          // turn on the LED to indicate receiving data
-//    return UDR0;
-//}
-//
-//
-//void getNch(uint8_t count)
-//{
-//  while (count--) {
-//
-//	while(!(UCSR0A & _BV(RXC0)));
-//	UDR0;
-//    }
-//}
-//
-//
-//void byte_response(uint8_t val)
-//{
-//    if (getch() == ' ') {
-//	putch(0x14);
-//	putch(val);
-//	putch(0x10);
-//    } else {
-//	if (++error_count == MAX_ERROR_COUNT)
-//	    app_start();
-//    }
-//}
-//
-//
-//void nothing_response(void)
-//{
-//    if (getch() == ' ') {
-//	putch(0x14);
-//	putch(0x10);
-//    } else {
-//	if (++error_count == MAX_ERROR_COUNT)
-//	    app_start();
-//    }
-//}
-//
-//void flash_led(uint8_t count)
-//{
-//  /* flash onboard LED three times to signal entering of bootloader */
-//  /* l needs to be volatile or the delay loops below might get
-//     optimized away if compiling with optimizations (DAM). */
-//  //volatile uint32_t l;
-//
-//    if (count == 0) {
-//      count = 3;
-//    }
-//    
-//    while (count--) {
-//	LED_PORT |= _BV(LED);
-//	//for(l = 0; l < (F_CPU / 1000); ++l);
-//	_delay_ms(100);
-//	LED_PORT &= ~_BV(LED);
-//	//for(l = 0; l < (F_CPU / 1000); ++l);
-//	_delay_ms(100);
-//    }
-//}
-//
-//
-/* end of file ATmegaBOOT.c */
+  while(!(UART_SRA & _BV(RXC0))) {
+    ;
+  }
+  if (!(UART_SRA & _BV(FE0))) {
+      /*
+       * A Framing Error indicates (probably) that something is talking
+       * to us at the wrong bit rate.  Assume that this is because it
+       * expects to be talking to the application, and DON'T reset the
+       * watchdog.  This should cause the bootloader to abort and run
+       * the application "soon", if it keeps happening.  (Note that we
+       * don't care that an invalid char is returned...)
+       */
+    watchdogReset();
+  }
+  
+  ch = UART_UDR;
+
+#ifdef LED_DATA_FLASH
+#if defined(__AVR_ATmega8__) || defined (__AVR_ATmega32__)
+  LED_PORT ^= _BV(LED);
+#else
+  LED_PIN |= _BV(LED);
+#endif
+#endif
+
+  return ch;
+}
+
+#ifdef SOFT_UART
+// AVR305 equation: #define UART_B_VALUE (((F_CPU/BAUD_RATE)-23)/6)
+// Adding 3 to numerator simulates nearest rounding for more accurate baud rates
+#define UART_B_VALUE (((F_CPU/BAUD_RATE)-20)/6)
+#if UART_B_VALUE > 255
+#error Baud rate too slow for soft UART
+#endif
+
+void uartDelay() {
+  __asm__ __volatile__ (
+    "ldi r25,%[count]\n"
+    "1:dec r25\n"
+    "brne 1b\n"
+    "ret\n"
+    ::[count] "M" (UART_B_VALUE)
+  );
+}
+#endif
+
+void getNch(uint8_t count) {
+  do getch(); while (--count);
+  verifySpace();
+}
+
+void wait_timeout(void) {
+
+  DDRD|=(1<<PD4);
+  PORTD |= (1<<PD4);          // turn on the LED to indicate receiving data
+  //  watchdogConfig(WATCHDOG_64MS);    // shorten WD timeout
+  while (1)			      // and busy-loop so that WD causes
+    ;				      //  a reset and app start.
+}
+
+void verifySpace() {
+  if (getch() != CRC_EOP) {
+    wait_timeout();
+  }
+  putch(STK_INSYNC);
+}
+
+#if LED_START_FLASHES > 0
+void flash_led(uint8_t count) {
+  do {
+    TCNT1 = -(F_CPU/(1024*16));
+    TIFR1 = _BV(TOV1);
+    while(!(TIFR1 & _BV(TOV1)));
+#if defined(__AVR_ATmega8__)  || defined (__AVR_ATmega32__)
+    LED_PORT ^= _BV(LED);
+#else
+    LED_PIN |= _BV(LED);
+#endif
+    watchdogReset();
+  } while (--count);
+}
+#endif
+
+// Watchdog functions. These are only safe with interrupts turned off.
+void watchdogReset() {
+  __asm__ __volatile__ (
+    "wdr\n"
+  );
+}
+
+void watchdogConfig(uint8_t x) {
+  WDTCSR = _BV(WDCE) | _BV(WDE);
+  WDTCSR = x;
+}
+
+void appStart(uint8_t rstFlags) {
+  // save the reset flags in the designated register
+  //  This can be saved in a main program by putting code in .init0 (which
+  //  executes before normal c init code) to save R2 to a global variable.
+  __asm__ __volatile__ ("mov r2, %0\n" :: "r" (rstFlags));
+
+  watchdogConfig(WATCHDOG_OFF);
+  __asm__ __volatile__ (
+#ifdef VIRTUAL_BOOT_PARTITION
+    // Jump to WDT vector
+    "ldi r30,4\n"
+    "clr r31\n"
+#else
+    // Jump to RST vector
+    "clr r30\n"
+    "clr r31\n"
+#endif
+    "ijmp\n"
+  );
+}
+
+//optiboot

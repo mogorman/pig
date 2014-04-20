@@ -27,8 +27,8 @@ compile_boot:
 	md5sum bootloader/bootloader.c | cmp -s build/bootloader.md5 -; \
 	 if test $$? -ne 0; then \
 	   md5sum bootloader/bootloader.c > build/bootloader.md5; \
-	$(AVR-GCC) -g -Wall -O2 -mmcu=atmega328p -DF_CPU=8000000L  '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=5'   -c -o ./build/bootloader.o ./bootloader/bootloader.c; \
-	$(AVR-GCC) -g -Wall -O2 -mmcu=atmega328p -DF_CPU=8000000L  '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=5' -Wl,--section-start=.text=0x7800 -o ./build/bootloader.elf ./build/bootloader.o; \
+	$(AVR-GCC) -g -Wall -O2 -mmcu=atmega328p -DF_CPU=8000000L  '-DMAX_TIME_COUNT=F_CPU>>4' -c -o ./build/bootloader.o ./bootloader/bootloader.c; \
+	$(AVR-GCC) -g -Wall -O2 -mmcu=atmega328p -DF_CPU=8000000L  '-DMAX_TIME_COUNT=F_CPU>>4' -Wl,--section-start=.text=0x7800 -o ./build/bootloader.elf ./build/bootloader.o; \
 	$(AVR-OBJCOPY) -j .text -j .data -O ihex ./build/bootloader.elf ./build/bootloader.hex; \
 	fi
 	cp ./build/bootloader.hex ./bin/bootloader.hex
@@ -42,14 +42,7 @@ bootloader: compile_boot
 	 -U  flash:w:./bin/bootloader.hex -U lock:w:0x0F:m
 
 app: compile_app
-	stty -F $(ARDUINO_PORT) hupcl 
-	sleep 2
-	$(AVRDUDE) -pm328p -c stk500v1 -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/application.hex; \
-	if test $$? -ne 0; then \
-	  stty -F /dev/arduino hupcl; \
-	  sleep 2; \
-	  $(AVRDUDE) -pm328p -c stk500v1 -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/application.hex; \
-	fi
+	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/application.hex
 clean:
 	rm -f build/*
 	rm -f bin/*
