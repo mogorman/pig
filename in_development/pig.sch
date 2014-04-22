@@ -398,11 +398,11 @@ refdes=C2
 T 60500 55500 5 10 0 0 0 0 1
 symversion=0.1
 T 60900 55100 5 10 1 1 0 0 1
-value=100uF
+value=0.1uF
 T 60300 54600 5 10 0 1 0 0 1
-footprint=5mm_EL_Cap
+footprint=0805
 T 60300 54600 5 10 0 1 0 0 1
-manufacturer-part=140-VZS101M0JTR0506
+manufacturer-part=80-C0805C104Z5V
 }
 N 62300 54800 61200 54800 4
 C 51100 49300 1 0 0 resistor-1.sym
