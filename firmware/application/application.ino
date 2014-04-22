@@ -4,22 +4,6 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 
-// AVR SPI interface
-// AVR pin 19 (SCK)
-// AVR pin 18 (MISO)
-// AVR pin 17 (MOSI)
-// AVR pin 16 (SS_)
-// AVR pin 15 (OC1A)
-
-#define OLED_CS 	7   // AVR pin 19 (SCK)
-#define OLED_MOSI 	12  // AVR pin 18 (MISO)
-#define OLED_CLK 	11  // AVR pin 17 (MOSI)
-#define OLED_DC 	10  // AVR pin 16 (SS_)
-#define OLED_RESET 	9   // AVR pin 15 (OC1A)
-
-#define VDD_DISABLE	8   // signal to control base of transistor gating OLED's VDD
-
-
 #define OLED_CS 	10    // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
