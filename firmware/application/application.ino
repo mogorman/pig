@@ -1,8 +1,12 @@
 #include <Wire.h>
+#include <EEPROM.h>
+
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
+#include <avr/wdt.h>
+
 
 #define OLED_CS 	10    // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
@@ -20,14 +24,58 @@
   #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 #endif 
 int counter = 1;
+
+
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+
+int Count;
+
+void reboot();
  
 void setup(){
-    pinMode(4, OUTPUT);      
-
+  pinMode(4, OUTPUT);      
+  Serial.begin(9600);
   digitalWrite(4, HIGH);
   delay(4000);
   digitalWrite(4, LOW);
+  Count = 0;
+}
+
+void loop(){
+  //  delay(3000);
+  //  sleep_now();
+  int value = 0;
+  Serial.print("hello there ");
+  Serial.print(Count);
+  Serial.print(" configured ");
+  Serial.print(first_boot());
+  value = EEPROM.read(0);
+  Serial.print(" 0x00 ");
+  Serial.print(value);
+  value = EEPROM.read(1);
+  Serial.print(" 0x01 ");
+  Serial.print(value);
+  value = EEPROM.read(2);
+  Serial.print(" 0x02 ");
+  Serial.print(value);
+  value = EEPROM.read(3);
+  Serial.print(" 0x03 ");
+  Serial.print(value);
+  value = EEPROM.read(4);
+  Serial.print(" 0x04 ");
+  Serial.print(value);
+  Serial.println("");
+  delay(300);
+  if (Count == 10) {
+    configured();
+    delay(300);
+    reboot();
+  }
+  Count++;
+}
+
+void display_init()
+{
   pinMode(VDD_DISABLE, OUTPUT);
   digitalWrite(VDD_DISABLE, LOW);  
   // by default, generate the high voltage from the 3.3v line internally! (neat!)
@@ -55,13 +103,7 @@ void setup(){
   display.clearDisplay();  
 }
 
-void loop(){
-  delay(3000);
-  sleepNow();
-  delay(300);
-}
-
-void sleepNow() {
+void sleep_now() {
   display.clearDisplay();
   display.display();
   display.ssd1306_command(SSD1306_DISPLAYOFF);	// put the OLED display in sleep mode
@@ -135,3 +177,39 @@ void sleepNow() {
   //display.clearDisplay();
   display.display();
 } // void sleepNow()
+
+
+void reboot() {
+  cli();                  // Clear interrupts
+  wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
+  while(1);            // Enter an infinite loop
+}
+
+
+int first_boot() {
+  byte value[5] = {0,0,0,0,0};
+   value[0] = EEPROM.read(0);
+   value[1] = EEPROM.read(1);
+   value[2] = EEPROM.read(2);
+   value[3] = EEPROM.read(3);
+   value[4] = EEPROM.read(4);
+   if (value[0] == 0x42 && 
+       value[1] == 0xFF && 
+       value[2] == 0xFF && 
+       value[3] == 0xFF &&
+       value[4] == 0xFF) {
+     return 1;
+   } else {
+     return 0;
+   }
+ }
+
+ void configured() {
+   if(!first_boot()) {
+   EEPROM.write(0,0x42);
+   EEPROM.write(1,0xFF);
+   EEPROM.write(2,0xFF);
+   EEPROM.write(3,0xFF);
+   EEPROM.write(4,0xFF);
+   }
+ }
