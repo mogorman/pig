@@ -44,5 +44,5 @@ bootloader: compile_boot
 app: compile_app
 	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/application.hex
 clean:
-	rm -f build/*
-	rm -f bin/*
+	rm -rf build/*
+	rm -rf bin/*
