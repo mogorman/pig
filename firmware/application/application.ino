@@ -30,14 +30,23 @@ Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 int Count;
 
+byte secret[33] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
+		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
+		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
+		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
+const unsigned long Time = 1399348238;
+volatile int state = LOW;
+
 void reboot();
  
 void setup(){
   pinMode(4, OUTPUT);      
   Serial.begin(9600);
   digitalWrite(4, HIGH);
+  attachInterrupt(0, blink, CHANGE);
   delay(4000);
   digitalWrite(4, LOW);
+  display_init();
   Count = 0;
 }
 
@@ -45,7 +54,22 @@ void loop(){
   //  delay(3000);
   //  sleep_now();
   int value = 0;
+  byte Time_array[4] = {0,0,0,0};
+
+  Time_array[0] = (int)((Time >> 24) & 0xFF) ;
+  Time_array[1] = (int)((Time >> 16) & 0xFF) ;
+  Time_array[2] = (int)((Time >> 8) & 0XFF);
+  Time_array[3] = (int)((Time & 0XFF));
+  digitalWrite(4, state);
+
   Serial.print("hello there ");
+  Serial.print(Time, HEX);
+  Serial.print(" ");
+  Serial.print(Time_array[0], HEX);
+  Serial.print(Time_array[1], HEX);
+  Serial.print(Time_array[2], HEX);
+  Serial.print(Time_array[3], HEX);
+  Serial.print(" ");
   Serial.print(Count);
   Serial.print(" configured ");
   Serial.print(first_boot());
@@ -66,10 +90,11 @@ void loop(){
   Serial.print(value);
   Serial.println("");
   delay(300);
-  if (Count == 10) {
+  if (Count == 8) {
     configured();
     delay(300);
-    reboot();
+    reboot(); 
+    Serial.println("THIS IS IMPOSSIBLE");
   }
   Count++;
 }
@@ -182,17 +207,15 @@ void sleep_now() {
 void reboot() {
   cli();                  // Clear interrupts
   wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
-  while(1);            // Enter an infinite loop
+  while(1){
+    asm("nop");
+  }            // Enter an infinite loop
 }
 
 
 int first_boot() {
   byte value[5] = {0,0,0,0,0};
    value[0] = EEPROM.read(0);
-   value[1] = EEPROM.read(1);
-   value[2] = EEPROM.read(2);
-   value[3] = EEPROM.read(3);
-   value[4] = EEPROM.read(4);
    if (value[0] == 0x42 && 
        value[1] == 0xFF && 
        value[2] == 0xFF && 
@@ -206,10 +229,23 @@ int first_boot() {
 
  void configured() {
    if(!first_boot()) {
-   EEPROM.write(0,0x42);
-   EEPROM.write(1,0xFF);
-   EEPROM.write(2,0xFF);
-   EEPROM.write(3,0xFF);
-   EEPROM.write(4,0xFF);
+     Serial.println("writing to eeprom");
+   /* EEPROM.write(0,0x42); */
+   /* EEPROM.write(1,0xFF); */
+   /* EEPROM.write(2,0xFF); */
+   /* EEPROM.write(3,0xFF); */
+   /* EEPROM.write(4,0xFF); */
    }
  }
+
+/*
+boot.  check first boot flag. if ! 42 we know its first boot 
+we write the time to next 4 bytes. run normally.
+ if it is 42 we know its a reboot check if key is all 0x42
+
+ */
+
+void blink()
+{
+  state = !state;
+}
