@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include <SPI.h>
 #include <EEPROM.h>
 
 #include <Adafruit_GFX.h>
