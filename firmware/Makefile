@@ -6,7 +6,18 @@ PROGRAMMER=buspirate
 PROGRAMMER_PORT=/dev/buspirate
 ARDUINO_PORT=/dev/arduino
 
-all:  compile_app compile_boot
+all: check_submodule compile_app compile_boot
+
+
+check_submodule:
+	@echo ""
+ifeq "$(wildcard ./libraries/adafruit_gfx/license.txt )" ""
+	@echo "I didn't have libraries i need to compile cloned."
+	@echo "I will get it for you now."
+	../update_submodule.sh
+	@echo "I got my dependencies I am ready to go"
+	@make
+endif
 
 compile_app:
 	@md5sum application/application.ino | cmp -s build/app.md5 -; \
