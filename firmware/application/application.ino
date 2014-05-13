@@ -2,6 +2,8 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
+#include <sha1.h>
+
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <avr/sleep.h>
@@ -9,11 +11,11 @@
 #include <avr/wdt.h>
 
 
-#define OLED_CS 	10    // AVR pin 19 (SCK)
+#define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
 #define OLED_DC 	12  // AVR pin 16 (SS_)
-#define OLED_RESET 	9  // AVR pin 15 (OC1A)
+#define OLED_RESET 	9   // AVR pin 15 (OC1A)
 #define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
 
 
@@ -31,17 +33,22 @@ Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 int Count;
 
-byte secret[33] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
-		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
-		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
-		    0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
+byte secret[10] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
 const unsigned long Time = 1399348238;
 volatile int state = LOW;
 
 void reboot();
- 
+void setup_mode();
+bool first_boot();
+
 void setup(){
-  pinMode(4, OUTPUT);      
+  if(first_boot()) {
+    setup_mode();
+  } // else we run like normal.
+  pinMode(4, OUTPUT);
+
+  Sha1.init();
+
   Serial.begin(9600);
   digitalWrite(4, HIGH);
   attachInterrupt(0, blink, CHANGE);
@@ -214,31 +221,6 @@ void reboot() {
 }
 
 
-int first_boot() {
-  byte value[5] = {0,0,0,0,0};
-   value[0] = EEPROM.read(0);
-   if (value[0] == 0x42 && 
-       value[1] == 0xFF && 
-       value[2] == 0xFF && 
-       value[3] == 0xFF &&
-       value[4] == 0xFF) {
-     return 1;
-   } else {
-     return 0;
-   }
- }
-
- void configured() {
-   if(!first_boot()) {
-     Serial.println("writing to eeprom");
-   /* EEPROM.write(0,0x42); */
-   /* EEPROM.write(1,0xFF); */
-   /* EEPROM.write(2,0xFF); */
-   /* EEPROM.write(3,0xFF); */
-   /* EEPROM.write(4,0xFF); */
-   }
- }
-
 /*
 boot.  check first boot flag. if ! 42 we know its first boot 
 we write the time to next 4 bytes. run normally.
@@ -249,4 +231,16 @@ we write the time to next 4 bytes. run normally.
 void blink()
 {
   state = !state;
+}
+
+
+
+/* functions of token display, catch audio reboot, verify that i should be in clock mode or setup mode. */
+
+bool first_boot() {
+  return false;
+}
+
+void setup_mode()  {
+  return;
 }
