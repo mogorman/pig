@@ -4,20 +4,22 @@
 
 #include <sha1.h>
 
-//#include <Adafruit_GFX.h>
-//#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
 
-//#define OLED_CS 	10  // AVR pin 19 (SCK)
-//#define OLED_MOSI 	11  // AVR pin 18 (MISO)
-//#define OLED_CLK 	13  // AVR pin 17 (MOSI)
-//#define OLED_DC 	12  // AVR pin 16 (SS_)
-//#define OLED_RESET 	9   // AVR pin 15 (OC1A)
-//#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
+#define OLED_CS 	10  // AVR pin 19 (SCK)
+#define OLED_MOSI 	11  // AVR pin 18 (MISO)
+#define OLED_CLK 	13  // AVR pin 17 (MOSI)
+#define OLED_DC 	12  // AVR pin 16 (SS_)
+#define OLED_RESET 	9   // AVR pin 15 (OC1A)
+#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
+
+Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 
 /* this is the default secret that gets flashed to all tokens */
@@ -35,6 +37,9 @@ void setup_mode();
 bool first_boot();
 void google_totp();
 void init_token();
+void display_init();
+void display_reinit();
+void display_off();
 
 void setup(){
   Serial.begin(9600);
@@ -46,12 +51,17 @@ void setup(){
 
 void loop(){
   if(state == LOW) {
-    Serial.println("going to sleep");
-    delay(1000);
+    display_off();
+    delay(100);
     sleep_mode();
   }
-  Serial.print("time = ");
-  Serial.println(Time);
+  display_reinit();
+  display.clearDisplay();
+  display.print("out of sleep");
+  display.println(Time);
+  display.display();
+  delay(1000);
+  google_totp();
   state = LOW;
 }
 
@@ -215,7 +225,7 @@ void init_token() {
 
   Serial.println("BigTime Testing:");
   sei(); //Enable global interrupts
-
+  display_init();
 }
 
 
@@ -227,4 +237,83 @@ SIGNAL(INT0_vect){
   //When you hit the button, we will need to display the time
   //if(show_the_time == false) 
   state = HIGH;
+}
+
+
+
+
+void display_init()
+{
+  pinMode(VDD_DISABLE, OUTPUT);
+  digitalWrite(VDD_DISABLE, LOW);  
+  // by default, generate the high voltage from the 3.3v line internally! (neat!)
+  display.begin(SSD1306_SWITCHCAPVCC);
+  //display.begin(SSD1306_EXTERNALVCC);
+
+  display.display();  // show splash screen
+  delay(4000);
+  // init done
+  display.clearDisplay();	// clear the splash screen
+  display.display();
+
+  // print some characters
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.clearDisplay();  
+}
+
+void display_reinit()
+{
+    digitalWrite(VDD_DISABLE, LOW);
+  delay(200);
+  digitalWrite(OLED_RESET, HIGH);
+  //VDD (3.3V) goes high at start, lets just chill for a ms
+  delay(10);
+  // bring reset low
+  digitalWrite(OLED_RESET, LOW);
+  // wait 10ms
+  delay(10);
+  // bring out of reset
+  digitalWrite(OLED_RESET, HIGH);
+  // turn on VCC (9V?)
+
+    // Init sequence for 128x32 OLED module
+    display.ssd1306_command(SSD1306_DISPLAYOFF);                    // 0xAE
+    display.ssd1306_command(SSD1306_SETDISPLAYCLOCKDIV);            // 0xD5
+    display.ssd1306_command(0x80);                                  // the suggested ratio 0x80
+    display.ssd1306_command(SSD1306_SETMULTIPLEX);                  // 0xA8
+    display.ssd1306_command(0x1F);
+    display.ssd1306_command(SSD1306_SETDISPLAYOFFSET);              // 0xD3
+    display.ssd1306_command(0x0);                                   // no offset
+    display.ssd1306_command(SSD1306_SETSTARTLINE | 0x0);            // line #0
+    display.ssd1306_command(SSD1306_CHARGEPUMP);                    // 0x8D
+    display.ssd1306_command(0x14);
+    display.ssd1306_command(SSD1306_MEMORYMODE);                    // 0x20
+    display.ssd1306_command(0x00);                                  // 0x0 act like ks0108
+    display.ssd1306_command(SSD1306_SEGREMAP | 0x1);
+    display.ssd1306_command(SSD1306_COMSCANDEC);
+    display.ssd1306_command(SSD1306_SETCOMPINS);                    // 0xDA
+    display.ssd1306_command(0x02);
+    display.ssd1306_command(SSD1306_SETCONTRAST);                   // 0x81
+    display.ssd1306_command(0x8F);
+    display.ssd1306_command(SSD1306_SETPRECHARGE);                  // 0xd9
+    display.ssd1306_command(0xF1);
+    display.ssd1306_command(SSD1306_SETVCOMDETECT);                 // 0xDB
+    display.ssd1306_command(0x40);
+    display.ssd1306_command(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
+    display.ssd1306_command(SSD1306_NORMALDISPLAY);                 // 0xA6
+    display.ssd1306_command(SSD1306_DISPLAYON);	
+}
+
+void display_off()
+{
+  display.clearDisplay();
+  display.display();
+  display.ssd1306_command(SSD1306_DISPLAYOFF);	// put the OLED display in sleep mode
+  display.ssd1306_command(0x8D);  // disable charge pump
+  display.ssd1306_data(0x10);  // disable charge pump
+
+  delay(10);
+  digitalWrite(VDD_DISABLE, HIGH);
 }
