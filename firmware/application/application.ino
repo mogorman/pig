@@ -20,14 +20,17 @@
 
 
 int Count;
-
-byte secret[10] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
-const unsigned long Time = 1399348238;
+/* this is the default secret that gets flashed to all tokens */
+//byte secret[10] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
+/*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
+byte secret[10] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef };
+const unsigned long Time = 1399966933;
 volatile int state = LOW;
 
 void reboot();
 void setup_mode();
 bool first_boot();
+void google_totp();
 
 void setup(){
   Serial.begin(9600);
@@ -157,6 +160,36 @@ void setup_mode()  {
      to take to initialize their token */
 
   Serial.println("i am not gonna take another step.");
+  google_totp();
   while ( 1 );
   return;
+}
+
+void google_totp() {
+  byte *Big_hash;
+  int Offset;
+  long Truncated_hash;
+  unsigned long Google_time = Time / 30;
+  char Message[7];
+  byte Google_time_array[8] = { 0x00, 0x00, 0x00, 0x00,
+				(byte)((Google_time >> 24) & 0xFF),
+				(byte)((Google_time >> 16) & 0xFF),
+				(byte)((Google_time >> 8) & 0xFF),
+				(byte)(Google_time & 0xFF) };
+  Sha1.initHmac(secret, 10);
+  Sha1.write(Google_time_array, 8);
+  Big_hash = Sha1.resultHmac();
+  Offset = Big_hash[20-1] & 0x0F;
+  Truncated_hash = 0;
+  for ( int j =0; j < 4; ++j) {
+    Truncated_hash <<= 8;
+    Truncated_hash |= Big_hash[Offset + j];
+  }
+  Truncated_hash &= 0x7FFFFFFF;
+  Truncated_hash %= 1000000;
+  sprintf(Message, "%06ld", Truncated_hash);
+  Serial.print("Time: ");
+  Serial.println(Google_time, HEX);
+  Serial.print("Message: ");
+  Serial.println(Message);
 }
