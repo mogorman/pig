@@ -9,6 +9,7 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
+#include <avr/pgmspace.h>
 
 
 //#define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -19,82 +20,39 @@
 //#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
 
 
-int Count;
 /* this is the default secret that gets flashed to all tokens */
-//byte secret[10] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42 };
 /*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
-byte secret[10] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef };
-const unsigned long Time = 1399966933;
+PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
+   0x53, 0x71, 0xDF, 0x05 };
+/*PROGMEM const uint8_t secret_time [] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
+					 0x42, 0x42, 0x42, 0x42 };
+*/
+unsigned long Time = 0;
 volatile int state = LOW;
 
 void reboot();
 void setup_mode();
 bool first_boot();
 void google_totp();
+void init_token();
 
 void setup(){
   Serial.begin(9600);
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
-  pinMode(4, OUTPUT);
-
-  Sha1.init();
-
-
-  digitalWrite(4, HIGH);
-  attachInterrupt(0, blink, CHANGE);
-  delay(500);
-  digitalWrite(4, LOW);
-  Count = 0;
+  init_token();
 }
 
 void loop(){
-  //  delay(3000);
-  //  sleep_now();
-  int value = 0;
-  byte Time_array[4] = {0,0,0,0};
-
-  Time_array[0] = (int)((Time >> 24) & 0xFF) ;
-  Time_array[1] = (int)((Time >> 16) & 0xFF) ;
-  Time_array[2] = (int)((Time >> 8) & 0XFF);
-  Time_array[3] = (int)((Time & 0XFF));
-  digitalWrite(4, state);
-
-  Serial.print("hello there ");
-  Serial.print(Time, HEX);
-  Serial.print(" ");
-  Serial.print(Time_array[0], HEX);
-  Serial.print(Time_array[1], HEX);
-  Serial.print(Time_array[2], HEX);
-  Serial.print(Time_array[3], HEX);
-  Serial.print(" ");
-  Serial.print(Count);
-  Serial.print(" configured ");
-  Serial.print(first_boot());
-  value = EEPROM.read(0);
-  Serial.print(" 0x00 ");
-  Serial.print(value);
-  value = EEPROM.read(1);
-  Serial.print(" 0x01 ");
-  Serial.print(value);
-  value = EEPROM.read(2);
-  Serial.print(" 0x02 ");
-  Serial.print(value);
-  value = EEPROM.read(3);
-  Serial.print(" 0x03 ");
-  Serial.print(value);
-  value = EEPROM.read(4);
-  Serial.print(" 0x04 ");
-  Serial.print(value);
-  Serial.println("");
-  delay(300);
-  if (Count == 8) {
-    delay(300);
-    reboot(); 
-    Serial.println("THIS IS IMPOSSIBLE");
+  if(state == LOW) {
+    Serial.println("going to sleep");
+    delay(1000);
+    sleep_mode();
   }
-  Count++;
+  Serial.print("time = ");
+  Serial.println(Time);
+  state = LOW;
 }
 
 
@@ -125,16 +83,16 @@ void blink()
 
 bool first_boot() {
   /* if the secret is set to the default value put token in setup mode */
-  if(secret[0] == 0x42 &&
-     secret[1] == 0x42 &&
-     secret[2] == 0x42 &&
-     secret[3] == 0x42 &&
-     secret[4] == 0x42 &&
-     secret[5] == 0x42 &&
-     secret[6] == 0x42 &&
-     secret[7] == 0x42 &&
-     secret[8] == 0x42 &&
-     secret[9] == 0x42) {
+  if(pgm_read_byte(&secret_time[0]) == 0x42 &&
+    pgm_read_byte(&secret_time[1]) == 0x42 &&
+    pgm_read_byte(&secret_time[2]) == 0x42 &&
+    pgm_read_byte(&secret_time[3]) == 0x42 &&
+    pgm_read_byte(&secret_time[4]) == 0x42 &&
+    pgm_read_byte(&secret_time[5]) == 0x42 &&
+    pgm_read_byte(&secret_time[6]) == 0x42 &&
+    pgm_read_byte(&secret_time[7]) == 0x42 &&
+    pgm_read_byte(&secret_time[8]) == 0x42 &&
+    pgm_read_byte(&secret_time[9]) == 0x42) {
     return true;
   }
   /* if eeprom is set up by reset interrupt and hasn't been reset that means we got reflashed hopefully
@@ -152,7 +110,8 @@ bool first_boot() {
   }
   /* otherwise we probably have just changed batteries and we are gonna need a new secret
      because clocks are no longer synced */
-  return true;
+  //  return false; // not checkint to see reboot because we are testing.
+    return true;
 }
 
 void setup_mode()  {
@@ -161,7 +120,7 @@ void setup_mode()  {
 
   Serial.println("i am not gonna take another step.");
   google_totp();
-  while ( 1 );
+  //  while ( 1 );
   return;
 }
 
@@ -169,13 +128,19 @@ void google_totp() {
   byte *Big_hash;
   int Offset;
   long Truncated_hash;
-  unsigned long Google_time = Time / 30;
+  int i;
   char Message[7];
+  uint8_t secret[10] = {0};
+  unsigned long Google_time = Time / 30;
   byte Google_time_array[8] = { 0x00, 0x00, 0x00, 0x00,
 				(byte)((Google_time >> 24) & 0xFF),
 				(byte)((Google_time >> 16) & 0xFF),
 				(byte)((Google_time >> 8) & 0xFF),
 				(byte)(Google_time & 0xFF) };
+  //  strncpy_P((char *) secret, (char *) pgm_read_word( &(secret_time) ), 10);
+  for ( i = 0; i < 10; i++) {
+    secret[i] = pgm_read_byte(&secret_time[i]);
+  }
   Sha1.initHmac(secret, 10);
   Sha1.write(Google_time_array, 8);
   Big_hash = Sha1.resultHmac();
@@ -190,6 +155,76 @@ void google_totp() {
   sprintf(Message, "%06ld", Truncated_hash);
   Serial.print("Time: ");
   Serial.println(Google_time, HEX);
+  Serial.println(Time, HEX);
+  Serial.print("Secret: ");
+  Serial.print(secret[0], HEX);
+  Serial.print(":");
+  Serial.print(secret[1], HEX);
+  Serial.print(":");
+  Serial.print(secret[2], HEX);
+  Serial.print(":");
+  Serial.print(secret[3], HEX);
+  Serial.print(":");
+  Serial.print(secret[4], HEX);
+  Serial.print(":");
+  Serial.print(secret[5], HEX);
+  Serial.print(":");
+  Serial.print(secret[6], HEX);
+  Serial.print(":");
+  Serial.print(secret[7], HEX);
+  Serial.print(":");
+  Serial.print(secret[8], HEX);
+  Serial.print(":");
+  Serial.println(secret[9], HEX);
+
+
   Serial.print("Message: ");
   Serial.println(Message);
+}
+
+void init_token() {
+  int i;
+  for ( i = 0; i < 4; i++) {
+    Time <<= 8;
+    Time |= pgm_read_byte(&secret_time[ (10 + i) ]); //offset by the secret 
+  }
+  /* for(i = 1 ; i < 18 ; i++){ */
+  /*   pinMode(i, INPUT); */
+  /*   digitalWrite(i, LOW); */
+  /* } */
+  pinMode(2, INPUT); //This is the main button, tied to INT0
+  digitalWrite(2, HIGH); //Enable internal pull up on button
+  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+  sleep_enable();
+
+  ADCSRA &= ~(1<<ADEN); //Disable ADC
+  ACSR = (1<<ACD); //Disable the analog comparator
+  DIDR0 = 0x3F; //Disable digital input buffers on all ADC0-ADC5 pins
+  power_twi_disable();
+  //  power_timer1_disable();
+//Setup TIMER2
+  TCCR2A = 0x00;
+  //TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
+  TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
+  ASSR = (1<<AS2); //Enable asynchronous operation
+  TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
+
+  //Setup external INT0 interrupt
+  EICRA = (1<<ISC01); //Interrupt on falling edge
+  EIMSK = (1<<INT0); //Enable INT0 interrupt
+
+  Serial.println("BigTime Testing:");
+  sei(); //Enable global interrupts
+
+}
+
+
+SIGNAL(TIMER2_OVF_vect){
+  Time +=8;
+}
+
+SIGNAL(INT0_vect){
+  //When you hit the button, we will need to display the time
+  //if(show_the_time == false) 
+  state = HIGH;
 }
