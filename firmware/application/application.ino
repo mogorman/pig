@@ -42,7 +42,7 @@ void display_reinit();
 void display_off();
 
 void setup(){
-  Serial.begin(9600);
+//  Serial.begin(9600);
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
@@ -51,16 +51,17 @@ void setup(){
 
 void loop(){
   if(state == LOW) {
-    display_off();
     delay(100);
     sleep_mode();
   }
   display_reinit();
   display.clearDisplay();
+  display.setCursor(0,0);
   display.print("out of sleep");
   display.println(Time);
   display.display();
   delay(1000);
+    display_off();
   google_totp();
   state = LOW;
 }
@@ -128,7 +129,7 @@ void setup_mode()  {
   /* to implement.... i need to have the display explain to the user what steps they need
      to take to initialize their token */
 
-  Serial.println("i am not gonna take another step.");
+//  Serial.println("i am not gonna take another step.");
   google_totp();
   //  while ( 1 );
   return;
@@ -163,33 +164,33 @@ void google_totp() {
   Truncated_hash &= 0x7FFFFFFF;
   Truncated_hash %= 1000000;
   sprintf(Message, "%06ld", Truncated_hash);
-  Serial.print("Time: ");
-  Serial.println(Google_time, HEX);
-  Serial.println(Time, HEX);
-  Serial.print("Secret: ");
-  Serial.print(secret[0], HEX);
-  Serial.print(":");
-  Serial.print(secret[1], HEX);
-  Serial.print(":");
-  Serial.print(secret[2], HEX);
-  Serial.print(":");
-  Serial.print(secret[3], HEX);
-  Serial.print(":");
-  Serial.print(secret[4], HEX);
-  Serial.print(":");
-  Serial.print(secret[5], HEX);
-  Serial.print(":");
-  Serial.print(secret[6], HEX);
-  Serial.print(":");
-  Serial.print(secret[7], HEX);
-  Serial.print(":");
-  Serial.print(secret[8], HEX);
-  Serial.print(":");
-  Serial.println(secret[9], HEX);
-
-
-  Serial.print("Message: ");
-  Serial.println(Message);
+//  Serial.print("Time: ");
+//  Serial.println(Google_time, HEX);
+//  Serial.println(Time, HEX);
+//  Serial.print("Secret: ");
+//  Serial.print(secret[0], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[1], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[2], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[3], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[4], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[5], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[6], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[7], HEX);
+//  Serial.print(":");
+//  Serial.print(secret[8], HEX);
+//  Serial.print(":");
+//  Serial.println(secret[9], HEX);
+//
+//
+//  Serial.print("Message: ");
+//  Serial.println(Message);
 }
 
 void init_token() {
@@ -223,7 +224,7 @@ void init_token() {
   EICRA = (1<<ISC01); //Interrupt on falling edge
   EIMSK = (1<<INT0); //Enable INT0 interrupt
 
-  Serial.println("BigTime Testing:");
+//  Serial.println("BigTime Testing:");
   sei(); //Enable global interrupts
   display_init();
 }
