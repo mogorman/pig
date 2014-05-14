@@ -7,3 +7,6 @@
 [submodule "firmware/libraries/adafruit_ssd1306"]
 	path = firmware/libraries/adafruit_ssd1306
 	url = http://dev.meatstand.com/mirrors/adafruit_ssd1306.git
+[submodule "firmware/audioboot-writer"]
+	path = firmware/audioboot-writer
+	url = http://dev.meatstand.com/meatstand/audioboot-writer.git
