@@ -55,14 +55,16 @@ void loop(){
     sleep_mode();
   }
   display_reinit();
+  display.dim(true);
   display.clearDisplay();
   display.setCursor(0,0);
   display.print("out of sleep");
   display.println(Time);
   display.display();
-  delay(1000);
-    display_off();
+  delay(2000);
   google_totp();
+  delay(2000);
+  display_off();
   state = LOW;
 }
 
@@ -189,8 +191,12 @@ void google_totp() {
 //  Serial.println(secret[9], HEX);
 //
 //
-//  Serial.print("Message: ");
-//  Serial.println(Message);
+  display.clearDisplay();
+  display.display();
+  display.setCursor(0,0);
+ display.print("Message: ");
+ display.println(Message);
+ display.display();
 }
 
 void init_token() {
