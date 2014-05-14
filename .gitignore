@@ -1,6 +1,7 @@
 *.sch~
 *.pcb-
 *.hex
+*.wav
 hardware/*.png
 hardware/bom
 hardware/gerbers
