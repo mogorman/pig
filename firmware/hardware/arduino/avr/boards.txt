@@ -1,0 +1,34 @@
+# See: http://code.google.com/p/arduino/wiki/Platforms
+
+menu.cpu=Processor
+
+##############################################################
+##############################################################
+## Pig by meatstand (3.3V, 8 MHz) w/ ATmega328p
+## --------------------------------------------------
+pig.name=Pig
+
+pig.upload.tool=avrdude
+pig.upload.protocol=arduino
+pig.upload.maximum_size=28672
+pig.upload.maximum_data_size=2048
+pig.upload.speed=9600
+
+
+pig.bootloader.tool=avrdude
+pig.bootloader.low_fuses=0xE2
+pig.bootloader.high_fuses=0xDA
+pig.bootloader.extended_fuses=0x07
+pig.bootloader.file=bootloader.hex
+pig.bootloader.unlock_bits=0x3F
+pig.bootloader.lock_bits=0x0F
+
+pig.build.mcu=atmega328p
+pig.build.f_cpu=8000000L
+pig.build.board=AVR_PIG
+pig.build.core=arduino
+pig.build.variant=standard
+
+
+##############################################################
+

@@ -37,11 +37,14 @@ endif
 endif
 
 compile_app:
+ifeq ("$(wildcard ./bin/application.hex )", "")
+	@rm -f ./build/app.md5
+endif
 	@md5sum application/application.ino | cmp -s build/app.md5 -; \
 	 if test $$? -ne 0; then \
 	  $(ARDUINO) \
 	   --verbose-build \
-	   --board arduino:avr:fio \
+	   --board arduino:avr:pig \
 	   --pref build.path=`pwd`/build \
 	   --pref sketchbook.path=`pwd` \
 	   --verify `pwd`/application/application.ino; \
