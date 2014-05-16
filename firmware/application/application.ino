@@ -24,11 +24,11 @@ Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 /* this is the default secret that gets flashed to all tokens */
 /*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
-PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
-   0x53, 0x71, 0xDF, 0x05 };
-/*PROGMEM const uint8_t secret_time [] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
+//PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
+//   0x53, 0x71, 0xDF, 0x05 };
+PROGMEM const uint8_t secret_time [] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
 					 0x42, 0x42, 0x42, 0x42 };
-*/
+
 unsigned long Time = 0;
 volatile int state = LOW;
 
@@ -58,7 +58,7 @@ void loop(){
   display.dim(true);
   display.clearDisplay();
   display.setCursor(0,0);
-  display.print("out of sleep");
+  display.print("awake");
   display.println(Time);
   display.display();
   delay(2000);
