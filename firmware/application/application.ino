@@ -166,31 +166,7 @@ void google_totp() {
   Truncated_hash &= 0x7FFFFFFF;
   Truncated_hash %= 1000000;
   sprintf(Message, "%06ld", Truncated_hash);
-//  Serial.print("Time: ");
-//  Serial.println(Google_time, HEX);
-//  Serial.println(Time, HEX);
-//  Serial.print("Secret: ");
-//  Serial.print(secret[0], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[1], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[2], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[3], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[4], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[5], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[6], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[7], HEX);
-//  Serial.print(":");
-//  Serial.print(secret[8], HEX);
-//  Serial.print(":");
-//  Serial.println(secret[9], HEX);
-//
-//
+
   display.clearDisplay();
   display.display();
   display.setCursor(0,0);
