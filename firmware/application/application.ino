@@ -26,6 +26,7 @@ Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 /*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
 //PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
 //   0x53, 0x71, 0xDF, 0x05 };
+// 10 byte secret, 4 byte unix time stamp.
 PROGMEM const uint8_t secret_time [] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42,
 					 0x42, 0x42, 0x42, 0x42 };
 
@@ -42,7 +43,6 @@ void display_reinit();
 void display_off();
 
 void setup(){
-//  Serial.begin(9600);
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
@@ -131,7 +131,6 @@ void setup_mode()  {
   /* to implement.... i need to have the display explain to the user what steps they need
      to take to initialize their token */
 
-//  Serial.println("i am not gonna take another step.");
   google_totp();
   //  while ( 1 );
   return;
@@ -206,7 +205,6 @@ void init_token() {
   EICRA = (1<<ISC01); //Interrupt on falling edge
   EIMSK = (1<<INT0); //Enable INT0 interrupt
 
-//  Serial.println("BigTime Testing:");
   sei(); //Enable global interrupts
   display_init();
 }
