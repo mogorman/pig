@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
-#include <sha1.h>
+//#include <sha1.h>
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -153,9 +153,9 @@ void google_totp() {
   for ( i = 0; i < 10; i++) {
     secret[i] = pgm_read_byte(&secret_time[i]);
   }
-  Sha1.initHmac(secret, 10);
-  Sha1.write(Google_time_array, 8);
-  Big_hash = Sha1.resultHmac();
+  //  Sha1.initHmac(secret, 10);
+  //  Sha1.write(Google_time_array, 8);
+  //  Big_hash = Sha1.resultHmac();
   Offset = Big_hash[20-1] & 0x0F;
   Truncated_hash = 0;
   for ( int j =0; j < 4; ++j) {
@@ -298,3 +298,7 @@ void display_off()
   delay(10);
   digitalWrite(VDD_DISABLE, HIGH);
 }
+
+
+
+//SHA example code.
