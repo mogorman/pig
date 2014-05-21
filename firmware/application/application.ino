@@ -62,19 +62,20 @@ void loop(){
   if(state == LOW) {
     delay(100);
     sleep_mode();
+  } else { 
+    display_reinit();
+    display.dim(true);
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.print("awake");
+    display.println(Time);
+    display.display();
+    delay(2000);
+    google_totp();
+    delay(2000);
+    display_off();
+    state = LOW;
   }
-  display_reinit();
-  display.dim(true);
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.print("awake");
-  display.println(Time);
-  display.display();
-  delay(2000);
-  google_totp();
-  delay(2000);
-  display_off();
-  state = LOW;
 }
 
 
@@ -93,12 +94,6 @@ we write the time to next 4 bytes. run normally.
  if it is 42 we know its a reboot check if key is all 0x42
 
  */
-
-void blink()
-{
-  state = !state;
-}
-
 
 
 /* functions of token display, catch audio reboot, verify that i should be in clock mode or setup mode. */
