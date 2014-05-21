@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
-//#include <sha1.h>
+#include <sha1.h> 
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -16,8 +16,8 @@
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
 #define OLED_DC 	12  // AVR pin 16 (SS_)
-#define OLED_RESET 	9   // AVR pin 15 (OC1A)
-#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
+#define OLED_RESET 	A2   // AVR pin 15 (OC1A)
+#define VDD_DISABLE	4   // signal to control base of transistor gating OLED's VDD
 
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
@@ -43,6 +43,15 @@ void display_reinit();
 void display_off();
 
 void setup(){
+
+  /* pinMode(5,OUTPUT); */
+  /* digitalWrite(5, HIGH); */
+
+  /* pinMode(A1,OUTPUT); */
+  /* digitalWrite(A1, HIGH); */
+
+  /* pinMode(4,OUTPUT); */
+  /* digitalWrite(4, HIGH); */
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
@@ -79,7 +88,7 @@ void reboot() {
 
 
 /*
-boot.  check first boot flag. if ! 42 we know its first boot 
+boot.  check first boot flag. if ! 42 we know its first boot
 we write the time to next 4 bytes. run normally.
  if it is 42 we know its a reboot check if key is all 0x42
 
@@ -178,7 +187,7 @@ void init_token() {
   int i;
   for ( i = 0; i < 4; i++) {
     Time <<= 8;
-    Time |= pgm_read_byte(&secret_time[ (10 + i) ]); //offset by the secret 
+    Time |= pgm_read_byte(&secret_time[ (10 + i) ]); //offset by the secret
   }
   /* for(i = 1 ; i < 18 ; i++){ */
   /*   pinMode(i, INPUT); */
@@ -216,7 +225,7 @@ SIGNAL(TIMER2_OVF_vect){
 
 SIGNAL(INT0_vect){
   //When you hit the button, we will need to display the time
-  //if(show_the_time == false) 
+  //if(show_the_time == false)
   state = HIGH;
 }
 
@@ -226,7 +235,7 @@ SIGNAL(INT0_vect){
 void display_init()
 {
   pinMode(VDD_DISABLE, OUTPUT);
-  digitalWrite(VDD_DISABLE, LOW);  
+  digitalWrite(VDD_DISABLE, LOW);
   // by default, generate the high voltage from the 3.3v line internally! (neat!)
   display.begin(SSD1306_SWITCHCAPVCC);
   //display.begin(SSD1306_EXTERNALVCC);
@@ -241,7 +250,7 @@ void display_init()
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.clearDisplay();  
+  display.clearDisplay();
 }
 
 void display_reinit()
@@ -284,7 +293,7 @@ void display_reinit()
     display.ssd1306_command(0x40);
     display.ssd1306_command(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
     display.ssd1306_command(SSD1306_NORMALDISPLAY);                 // 0xA6
-    display.ssd1306_command(SSD1306_DISPLAYON);	
+    display.ssd1306_command(SSD1306_DISPLAYON);
 }
 
 void display_off()
@@ -301,4 +310,4 @@ void display_off()
 
 
 
-//SHA example code.
+/* //SHA example code. */
