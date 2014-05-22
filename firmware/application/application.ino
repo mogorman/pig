@@ -145,7 +145,7 @@ void google_totp() {
   int Offset;
   long Truncated_hash;
   int i;
-  char Message[7];
+  char Message[7] ={0,0,0,0,0,0,0};
   uint8_t secret[10] = {0};
   unsigned long Google_time = Time / 30;
   byte Google_time_array[8] = { 0x00, 0x00, 0x00, 0x00,
