@@ -153,13 +153,13 @@ void google_totp() {
 				(byte)((Google_time >> 16) & 0xFF),
 				(byte)((Google_time >> 8) & 0xFF),
 				(byte)(Google_time & 0xFF) };
-  //  strncpy_P((char *) secret, (char *) pgm_read_word( &(secret_time) ), 10);
+
   for ( i = 0; i < 10; i++) {
     secret[i] = pgm_read_byte(&secret_time[i]);
   }
-  //  Sha1.initHmac(secret, 10);
-  //  Sha1.write(Google_time_array, 8);
-  //  Big_hash = Sha1.resultHmac();
+  Sha1.initHmac(secret, 10);
+  Sha1.write(Google_time_array, 8);
+  Big_hash = Sha1.resultHmac();
   Offset = Big_hash[20-1] & 0x0F;
   Truncated_hash = 0;
   for ( int j =0; j < 4; ++j) {
