@@ -11,7 +11,7 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
-//#define OLD
+#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10    // AVR pin 19 (SCK)
@@ -46,6 +46,7 @@ PROGMEM const uint8_t secret_time [] = { 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x4
 
 unsigned long Time = 0;
 volatile int state = LOW;
+volatile unsigned long sound_check = 0;
 
 void reboot();
 void setup_mode();
@@ -122,6 +123,13 @@ void loop()
     display.setCursor(0,0);
     display.print("awake");
     display.println(Time);
+    display.display();
+    delay(2000);
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.println("interrupt");
+    display.println(sound_check);
+    sound_check=0;
     display.display();
     delay(2000);
     google_totp();
@@ -245,8 +253,8 @@ void init_token() {
   /*   pinMode(i, INPUT); */
   /*   digitalWrite(i, LOW); */
   /* } */
-  pinMode(2, INPUT); //This is the main button, tied to INT0
-  digitalWrite(2, HIGH); //Enable internal pull up on button
+  pinMode(BUTTON, INPUT); //This is the main button, tied to INT0
+  digitalWrite(BUTTON, HIGH); //Enable internal pull up on button
   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
   sleep_enable();
 
@@ -266,6 +274,9 @@ void init_token() {
   EICRA = (1<<ISC01); //Interrupt on falling edge
   EIMSK = (1<<INT0); //Enable INT0 interrupt
 
+  EICRA |= (1<<ISC11); //Interrupt on falling edge
+  EIMSK |= (1<<INT1); //Enable INT0 interrupt
+
   sei(); //Enable global interrupts
   display_init();
 }
@@ -282,6 +293,15 @@ SIGNAL(INT0_vect){
 }
 
 
+
+SIGNAL(INT1_vect){
+  //When you hit the button, we will need to display the time
+  //if(show_the_time == false)
+  sound_check++;
+  if(sound_check == 1000) {
+    reboot();
+  }
+}
 
 
 void display_init()
