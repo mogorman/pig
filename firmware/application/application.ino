@@ -11,13 +11,27 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
+#define OLD
 
+#ifdef OLD
+#define OLED_CS 	10    // AVR pin 19 (SCK)
+#define OLED_MOSI 	11  // AVR pin 18 (MISO)
+#define OLED_CLK 	13  // AVR pin 17 (MOSI)
+#define OLED_DC 	12  // AVR pin 16 (SS_)
+#define OLED_RESET 	9  // AVR pin 15 (OC1A)
+#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
+#define LED             A1
+#define BUTTON           2
+#else
 #define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
 #define OLED_DC 	12  // AVR pin 16 (SS_)
 #define OLED_RESET 	A2   // AVR pin 15 (OC1A)
-#define VDD_DISABLE	4   // signal to control base of transistor gating OLED's VDD
+#define VDD_DISABLE	 4   // signal to control base of transistor gating OLED's VDD
+#define LED             A1
+#define BUTTON           2
+#endif
 
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
@@ -88,23 +102,16 @@ uint8_t* sha1_resultHmac(struct sha1nfo *s);
 
 
 
-void setup(){
-
-  /* pinMode(5,OUTPUT); */
-  /* digitalWrite(5, HIGH); */
-
-  /* pinMode(A1,OUTPUT); */
-  /* digitalWrite(A1, HIGH); */
-
-  /* pinMode(4,OUTPUT); */
-  /* digitalWrite(4, HIGH); */
+void setup()
+{
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
   init_token();
 }
 
-void loop(){
+void loop()
+{
   if(state == LOW) {
     delay(100);
     sleep_mode();
