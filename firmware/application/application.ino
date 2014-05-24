@@ -11,7 +11,7 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10    // AVR pin 19 (SCK)
@@ -346,6 +346,11 @@ void display_reinit()
     display.ssd1306_command(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
     display.ssd1306_command(SSD1306_NORMALDISPLAY);                 // 0xA6
     display.ssd1306_command(SSD1306_DISPLAYON);
+
+    //ssd1306_command(SSD1306_SEGREMAP | 0x1);
+    display.ssd1306_command(SSD1306_SEGREMAP);
+    //ssd1306_command(SSD1306_COMSCANDEC);
+    display.ssd1306_command(SSD1306_COMSCANINC);
 }
 
 void display_off()
@@ -359,6 +364,8 @@ void display_off()
   delay(10);
   digitalWrite(VDD_DISABLE, HIGH);
 }
+
+
 
 
 
