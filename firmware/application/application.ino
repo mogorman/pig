@@ -2,7 +2,6 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
-//#include <sha1.h>
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -11,7 +10,7 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10    // AVR pin 19 (SCK)
@@ -113,6 +112,7 @@ void setup()
 
 void loop()
 {
+  sound_check=0;
   if(state == LOW) {
     delay(100);
     sleep_mode();
@@ -127,9 +127,6 @@ void loop()
     delay(2000);
     display.clearDisplay();
     display.setCursor(0,0);
-    display.println("interrupt");
-    display.println(sound_check);
-    sound_check=0;
     display.display();
     delay(2000);
     google_totp();
