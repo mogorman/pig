@@ -8,31 +8,93 @@ Secret=$4
 Time=$5
 First_line=""
 Second_line=""
-while read line; do 
-    if [ "${First_line}" = "" ]; then
-	First_line=`echo ${line} | tr -d " \t\n\r"`
-    else
-	Second_line=`echo ${line}| tr -d " \t\n\r"`
-    fi
-done < $Match_file
 
-Start=$((${First_line::1} - 1))
-Stop=$((${Second_line::1} +1))
+Lines=()
+Headers=()
+Datas=()
+Lengths=()
+Blob=""
+
+
+intel_hex ()
+{
+New_line=$1
+Length=${#New_line}
+Count=0
+Sum=0
+while [ $Count -lt $Length ]; do
+    Sum=`printf '%X' $((0x${Sum} + 0x${New_line:${Count}:2}))`
+    let Count=Count+2
+done
+let Length=Length+2
+
+if [ "${#Sum}" -gt 2 ]; then
+    Sum=${Sum: -2}
+fi
+
+if [ "${Sum}" = "0" ]; then
+    Invert=00
+elif [ "${Sum}" = "00" ]; then
+    Invert=00
+elif [ "${Sum}" = "01" ]; then
+    Invert=FF
+elif [ "${Sum}" = "1" ]; then
+    Invert=FF
+else
+    Invert=`printf "%X" $((0xFF-0x${Sum}+1))`
+fi
+
+if [ "${#Invert}" = "1" ]; then
+    Invert=0${Invert}
+fi
+
+echo ${Invert}
+}
+
+
+while read Line; do 
+    if [ "${First_line}" = "" ]; then
+	Start=$((${Line::1} - 1))
+	First_line="yes"
+    else
+	Stop=$((${Line::1} + 1))
+    fi
+
+    Length_1=`echo ${Line} | tr -d " \t\n\r" | cut -f2 -d':'`
+    Data=${Length_1:8}
+    Data=${Data:: -2}
+    Line_1=${Length_1}
+    Header=${Length_1::8}
+    Length_1=${Length_1::2}
+    Length=$((0x${Length_1} *2))
+
+    Lines+=("$Line")
+    Headers+=("$Header")
+    Blob="${Blob}${Data}"
+    Datas+=("$Data")
+    Lengths+=("$Length")
+
+done < $Match_file
 
 head -n${Start} $File > ${Deploy}
 
-M_first_line=${First_line:10}
-M_first_line=${M_first_line:: -2}
 
-M_second_line=${Second_line:10}
-M_second_line=${M_second_line:: -2}
+Count=0
+Byte_count=0
+Length=${#Lines[@]}
+#echo "start is ${Start} stop is ${Stop}"
+#echo "my blob is ${Blob}"
+New_blob=`echo ${Blob} | sed -e "s/4242424242424242424242424242/${Secret}${Time}/g"`
+#echo "my blob is ${New_blob}"
+while [ $Count -lt $Length ]; do
+#    echo ${Lines[$Count]}
+    Current_length=${Lengths[${Count}]}
+    Sum=`intel_hex "${Headers[$Count]}${Datas[$Count]}"`
+    New_sum=`intel_hex "${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"`
+#    echo "M:${Headers[$Count]}${Datas[$Count]}${Checksums[$Count]}${Sum}    ${Current_length} ${Byte_count}"
+    printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
+    let Count=Count+1
+    let Byte_count=Current_length+Byte_count
+done
 
-echo "abcd ${First_line} ef ${Second_line}"
-
-echo "abcd           ${M_first_line}   ef           ${M_second_line}"
-Double="${M_first_line}${M_second_line}"
-New_double=`echo ${Double} | sed -e "s/4242424242424242424242424242/${Secret}${Time}/g"`
-echo ${Double}
-echo ${New_double}
-
-tail -n+${Stop} $File >> ${Deploy}
+tail -n+${Stop} ${File} >> ${Deploy}
