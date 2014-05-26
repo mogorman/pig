@@ -1,5 +1,5 @@
 #!/bin/bash
-#4242424242424242424242424242
+Original_secret="4242424242424242424242424242"
 #AAAAAAAAAAAAAAAAAAAAAAAAAAAA
 File=$1
 Match_file=$2
@@ -82,16 +82,11 @@ head -n${Start} $File > ${Deploy}
 Count=0
 Byte_count=0
 Length=${#Lines[@]}
-#echo "start is ${Start} stop is ${Stop}"
-#echo "my blob is ${Blob}"
-New_blob=`echo ${Blob} | sed -e "s/4242424242424242424242424242/${Secret}${Time}/g"`
-#echo "my blob is ${New_blob}"
+New_blob=`echo ${Blob} | sed -e "s/${Original_secret}/${Secret}${Time}/g"`
 while [ $Count -lt $Length ]; do
-#    echo ${Lines[$Count]}
     Current_length=${Lengths[${Count}]}
     Sum=`intel_hex "${Headers[$Count]}${Datas[$Count]}"`
     New_sum=`intel_hex "${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"`
-#    echo "M:${Headers[$Count]}${Datas[$Count]}${Checksums[$Count]}${Sum}    ${Current_length} ${Byte_count}"
     printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
     let Count=Count+1
     let Byte_count=Current_length+Byte_count

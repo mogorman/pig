@@ -52,7 +52,10 @@ endif
 	fi
 	@touch build/.git_empty
 	@cp build/application.cpp.hex ./bin/application.hex
-	@java -jar audioboot-writer/bin/audioboot.jar ./bin/application.hex ./bin/application.wav
+	@scripts/fixchecksums.sh bin/application.hex bin/match.hex
+	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
+	 AAAAAAAAAAAAAAAAAAAA BBBBBBBB
+	@java -jar audioboot-writer/bin/audioboot.jar ./bin/deploy.hex ./bin/deploy.wav
 
 
 
