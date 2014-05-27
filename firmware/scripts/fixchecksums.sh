@@ -1,7 +1,7 @@
 #!/bin/bash
 File=$1
 Output_file=$2
-Match=4242424242424242424242424242
+Match=4141414141414141414141414141
 a=0
 #rm  new.hex
 #touch new.hex
