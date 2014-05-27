@@ -10,7 +10,7 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
-//#define OLD
+#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10    // AVR pin 19 (SCK)

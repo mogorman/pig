@@ -1,4 +1,4 @@
-#define LED C1
+//#define LED C1
 
 /*------------------------------------------------------------------------ */
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega88) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega88__)

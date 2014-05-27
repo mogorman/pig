@@ -14,6 +14,12 @@
 //AUDIOBOOT
 
 //OPTIBOOT
+#define OLD
+#ifdef OLD
+#define LED D4
+#else
+#define LED C1
+#endif
 #include "pin_defs.h"
 #include "stk500.h"
 
@@ -74,11 +80,19 @@ uint8_t FrameData[FRAMESIZE];
 //OPTIBOOT
 
 //AUDIOBOOT
+#ifdef OLD
+#define LEDPORT (1<<PD4);
+#define INITLED {DDRD|=LEDPORT;}
+#define LEDON {PORTD|=LEDPORT;}
+#define LEDOFF {PORTD&=~LEDPORT;}
+#define TOGGLELED {PORTD^=LEDPORT;}
+#else
 #define LEDPORT (1<<PC1);
 #define INITLED {DDRC|=LEDPORT;}
 #define LEDON {PORTC|=LEDPORT;}
 #define LEDOFF {PORTC&=~LEDPORT;}
 #define TOGGLELED {PORTC^=LEDPORT;}
+#endif
 
 // use TxD ( PD1 ) as audio input	
 #define INPUTAUDIOPIN (1<<PD3)
@@ -301,11 +315,15 @@ int main(void)
    DDRD &= ~(1 << PD2);        // see comment #1
    if (PIND & (1<<PD2))    // see comment #2
      {
-  DDRC|=(1<<PC1);
-  PORTC |= (1<<PC1);          // turn on the LED to indicate receiving data
-  a_main();
-  watchdogConfig(WATCHDOG_500MS);
-       
+#ifdef OLD
+       DDRD|=(1<<PD4);
+       PORTD |= (1<<PD4);          // turn on the LED to indicate receiving data
+#else
+       DDRC|=(1<<PC1);
+       PORTC |= (1<<PC1);          // turn on the LED to indicate receiving data
+#endif
+       a_main();
+       watchdogConfig(WATCHDOG_500MS);
      }
              watchdogConfig(WATCHDOG_500MS);
 
@@ -847,9 +865,13 @@ void getNch(uint8_t count) {
 }
 
 void wait_timeout(void) {
-
+#ifdef OLD
+  DDRD|=(1<<PD4);
+  PORTD |= (1<<PD4);          // turn on the LED to indicate receiving data
+#else
   DDRC|=(1<<PC1);
   PORTC |= (1<<PC1);          // turn on the LED to indicate receiving data
+#endif
   //  watchdogConfig(WATCHDOG_64MS);    // shorten WD timeout
   while (1)			      // and busy-loop so that WD causes
     ;				      //  a reset and app start.
