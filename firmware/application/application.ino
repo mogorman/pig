@@ -121,7 +121,7 @@ void loop()
     display.dim(true);
     display.clearDisplay();
     display.setCursor(0,0);
-    display.print("awake");
+    display.print(F("awake"));
     display.println(Time);
     display.display();
     delay(2000);
@@ -144,7 +144,7 @@ void reboot() {
   display.dim(true);
   display.clearDisplay();
   display.setCursor(0,0);
-  display.print("reboot");
+  display.print(F("reboot"));
   display.display();
   cli();                  // Clear interrupts
   wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
@@ -244,7 +244,7 @@ void google_totp() {
   display.clearDisplay();
   display.display();
   display.setCursor(0,0);
-  display.print("    ");
+  display.print(F("    "));
   display.println(Message);
   display.display();
 }
