@@ -13,21 +13,21 @@
 #define OLD
 
 #ifdef OLD
-#define OLED_CS 	10    // AVR pin 19 (SCK)
+#define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
 #define OLED_DC 	12  // AVR pin 16 (SS_)
-#define OLED_RESET 	9  // AVR pin 15 (OC1A)
-#define VDD_DISABLE	5   // signal to control base of transistor gating OLED's VDD
-#define LED             A1
+#define OLED_RESET 	 9  // AVR pin 15 (OC1A)
+#define VDD_DISABLE	 5  // signal to control base of transistor gating OLED's VDD
+#define LED              4
 #define BUTTON           2
 #else
 #define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
 #define OLED_CLK 	13  // AVR pin 17 (MOSI)
 #define OLED_DC 	12  // AVR pin 16 (SS_)
-#define OLED_RESET 	A2   // AVR pin 15 (OC1A)
-#define VDD_DISABLE	 4   // signal to control base of transistor gating OLED's VDD
+#define OLED_RESET 	A2  // AVR pin 15 (OC1A)
+#define VDD_DISABLE	 4  // signal to control base of transistor gating OLED's VDD
 #define LED             A1
 #define BUTTON           2
 #endif
