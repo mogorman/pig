@@ -236,6 +236,7 @@ void google_totp() {
   display.clearDisplay();
   display.display();
   display.setCursor(0,0);
+  display.print("    ");
   display.println(Message);
   display.display();
 }
