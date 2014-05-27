@@ -138,6 +138,14 @@ void loop()
 
 
 void reboot() {
+  display_off();
+  delay(100);
+  display_reinit();
+  display.dim(true);
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.print("reboot");
+  display.display();
   cli();                  // Clear interrupts
   wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
   while(1){
