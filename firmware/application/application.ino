@@ -34,8 +34,8 @@
 #define BUTTON           2
 #endif
 
-#define INVERT_SCREEN 0
-#define ORIENTATION 1
+#define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
+#define ORIENTATION 1    // 0 is normal 1 is inverted 180 degrees
 
 //Adafruit_SSD1306 display2(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
 //Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
@@ -127,23 +127,27 @@ void setup()
   digitalWrite(OLED_POWER, LOW);
   //  display2.begin(SSD1306_SWITCHCAPVCC);
   //  display2.display();
-  display.on();
-  //  display.invert();
-  display.update();
-  delay(100);
-  //  display.clear();
-  display.update();
+  /* display.on(); */
+  /* //  display.invert(); */
+  /* display.update(); */
+  /* delay(100); */
+  /* //  display.clear(); */
+  /* display.update(); */
   //    display.update();
    while (1) {
+     display.on();
+     display.update();
      Serial.println("Hi");
- display.invert();
-         display.update();
-	 display.clear();
+     display.invert();
+     display.update();
+	 //	 display.clear();
      //    	  display.display();
 		      //     display2.invertDisplay(flag);
-     	 if(flag) flag=0; else flag=1;
-       digitalWrite(LED, flag);
-       delay(100);
+     if(flag) flag=0; else flag=1;
+     digitalWrite(LED, flag);
+     delay(1000);
+     display.off();
+     delay(1000);
      }
   if(first_boot()) {
     setup_mode();

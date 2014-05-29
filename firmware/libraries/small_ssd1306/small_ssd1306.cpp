@@ -50,9 +50,7 @@ small_ssd1306::small_ssd1306(int8_t MOSI, int8_t CLOCK, int8_t DC, int8_t RESET,
   power = POWER;
   invert_screen = INVERT_SCREEN;
   orientation = ORIENTATION;
-}
 
-void small_ssd1306::on(void) {
   pinMode(dc, OUTPUT);
   pinMode(cs, OUTPUT);
   csport      = portOutputRegister(digitalPinToPort(cs));
@@ -67,13 +65,21 @@ void small_ssd1306::on(void) {
   mosiport    = portOutputRegister(digitalPinToPort(mosi));
   mosipinmask = digitalPinToBitMask(mosi);
 
-
   pinMode(power, OUTPUT);
+}
 
-  digitalWrite(power, LOW); // turn oled on
+void small_ssd1306::on(void) {
 
-  // Setup reset pin direction (used by both SPI and I2C)  
+  pinMode(mosi, OUTPUT);
+  pinMode(dc, OUTPUT);
+  pinMode(cs, OUTPUT);
+  pinMode(clock, OUTPUT);
   pinMode(reset, OUTPUT);
+ 
+  digitalWrite(power, LOW); // turn oled on
+  delay(20);
+  // Setup reset pin direction (used by both SPI and I2C)  
+
   digitalWrite(reset, HIGH);
   // VDD (3.3V) goes high at start, lets just chill for a ms
   delay(1);
@@ -102,15 +108,44 @@ void small_ssd1306::on(void) {
   spi_write_command(SSD1306_SETCOMPINS);                    // 0xDA
   spi_write_command(0x02);
   spi_write_command(SSD1306_SETCONTRAST);                   // 0x81
-  spi_write_command(0x8F);
+  spi_write_command(0xCF);
   spi_write_command(SSD1306_SETPRECHARGE);                  // 0xd9
   spi_write_command(0xF1); //switch cap
   spi_write_command(SSD1306_SETVCOMDETECT);                 // 0xDB
   spi_write_command(0x40);
   spi_write_command(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
-  spi_write_command(SSD1306_NORMALDISPLAY);                 // 0xA6
-
+  if(invert_screen) {
+    spi_write_command(SSD1306_INVERTDISPLAY);
+  } else {
+    spi_write_command(SSD1306_NORMALDISPLAY);
+  }
+  if(orientation) {
+    spi_write_command(SSD1306_SEGREMAP);
+    spi_write_command(SSD1306_COMSCANINC);
+  }
   spi_write_command(SSD1306_DISPLAYON); //--turn on oled panel
+
+  //yuck?
+}
+void small_ssd1306::off(void) {
+  spi_write_command(SSD1306_DISPLAYOFF);	// put the OLED display in sleep mode
+  spi_write_command(0x8D);  // disable charge pump
+  spi_write_command(0x10);  // disable charge pump
+
+  delay(10);
+  digitalWrite(power, HIGH);
+
+  pinMode(mosi, INPUT);
+  pinMode(dc, INPUT);
+  pinMode(cs, INPUT);
+  pinMode(clock, INPUT);
+  pinMode(reset, INPUT);
+
+  digitalWrite(reset, LOW);
+  digitalWrite(mosi, LOW);
+  digitalWrite(dc, LOW);
+  digitalWrite(cs, LOW);
+  digitalWrite(clock, LOW);
 }
 
 void small_ssd1306::invert(void) {
@@ -133,7 +168,6 @@ void small_ssd1306::update(void) {
   spi_write_command(SSD1306_PAGEADDR);
   spi_write_command(0); // Page start address (0 = reset)
   spi_write_command(3); // Page end address
-
 
   for (uint16_t i=0; i<(SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8); i++) {
     *csport |= cspinmask;
