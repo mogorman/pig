@@ -4,6 +4,9 @@
  #include "WProgram.h"
 #endif
 
+typedef volatile uint8_t PortReg;
+typedef uint8_t PortMask;
+
 #include <SPI.h>
 
 #define BLACK 0
@@ -32,9 +35,6 @@
     -----------------------------------------------------------------------*/
 #define SSD1306_128_32
 /*=========================================================================*/
-
-#define SSD1306_LCDWIDTH                  128
-#define SSD1306_LCDHEIGHT                 32
 
 #define SSD1306_SETCONTRAST 0x81
 #define SSD1306_DISPLAYALLON_RESUME 0xA4
@@ -73,6 +73,17 @@
 #define SSD1306_EXTERNALVCC 0x1
 #define SSD1306_SWITCHCAPVCC 0x2
 
+// Scrolling #defines
+#define SSD1306_ACTIVATE_SCROLL 0x2F
+#define SSD1306_DEACTIVATE_SCROLL 0x2E
+#define SSD1306_SET_VERTICAL_SCROLL_AREA 0xA3
+#define SSD1306_RIGHT_HORIZONTAL_SCROLL 0x26
+#define SSD1306_LEFT_HORIZONTAL_SCROLL 0x27
+#define SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL 0x29
+#define SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL 0x2A
+
+
+
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 
 class small_ssd1306 {
@@ -91,6 +102,9 @@ class small_ssd1306 {
 
  private:
   int8_t mosi, clock, dc, reset, cs, power, invert_screen, orientation;
+  PortReg *mosiport, *clkport, *csport, *dcport;
+  PortMask mosipinmask, clkpinmask, cspinmask, dcpinmask;
+
   void spi_write_command(uint8_t data);
   void spi_write_data(uint8_t data);
 };
