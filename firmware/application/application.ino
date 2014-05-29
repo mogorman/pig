@@ -3,8 +3,8 @@
 #include <EEPROM.h>
 
 
-//#include <Adafruit_GFX.h>
-//#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <small_ssd1306.h>
 
 #include <avr/sleep.h>
@@ -37,10 +37,9 @@
 #define INVERT_SCREEN 0
 #define ORIENTATION 1
 
-//Adafruit_SSD1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
+//Adafruit_SSD1306 display2(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
 //Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
-small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, OLED_POWER,
-		      		      INVERT_SCREEN, ORIENTATION);
+small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, OLED_POWER, INVERT_SCREEN, ORIENTATION);
 
 /* this is the default secret that gets flashed to all tokens */
 /*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
@@ -113,24 +112,37 @@ void setup()
 {
     uint8_t test = 0;
     uint8_t flag=0;
-
+    Serial.begin(9600);
     test = pgm_read_byte(&secret_time[0]);
     delay(test);
+//Setup TIMER2
+  TCCR2A = 0x00;
+  //TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
+  TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
+  ASSR = (1<<AS2); //Enable asynchronous operation
+  TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
    
-     /*    pinMode(OLED_POWER, OUTPUT); */
-     /*  digitalWrite(OLED_POWER, LOW); */
-     /*    display.begin(SSD1306_SWITCHCAPVCC); */
-     /* display.display(); */
-        display.on();
-    display.update();
-    
-  delay(1000);
+  pinMode(OLED_POWER, OUTPUT);
+  pinMode(LED, OUTPUT);
+  digitalWrite(OLED_POWER, LOW);
+  //  display2.begin(SSD1306_SWITCHCAPVCC);
+  //  display2.display();
+  display.on();
+  //  display.invert();
+  display.update();
+  delay(100);
+  //  display.clear();
+  display.update();
+  //    display.update();
    while (1) {
-              display.update();
-	      display.invert();
-     	 /*  display.display(); */
-         /* display.invertDisplay(flag); */
-	 /* if(flag) flag=0; else flag=1; */
+     Serial.println("Hi");
+ display.invert();
+         display.update();
+	 
+     //    	  display.display();
+		      //     display2.invertDisplay(flag);
+     	 if(flag) flag=0; else flag=1;
+       digitalWrite(LED, flag);
        delay(1000);
      }
   if(first_boot()) {
