@@ -138,12 +138,12 @@ void setup()
      Serial.println("Hi");
  display.invert();
          display.update();
-	 
+	 display.clear();
      //    	  display.display();
 		      //     display2.invertDisplay(flag);
      	 if(flag) flag=0; else flag=1;
        digitalWrite(LED, flag);
-       delay(1000);
+       delay(100);
      }
   if(first_boot()) {
     setup_mode();
