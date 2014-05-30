@@ -36,9 +36,28 @@
 #define OLED_POWER	 4  // signal to control base of transistor gating OLED's VDD
 #define LED             A1
 #define BUTTON           2
-#define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
-#define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
+#define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
+#define ORIENTATION 1   // 0 is normal 1 is inverted 180 degrees
 #endif
+
+static const unsigned char PROGMEM logo16_glcd_bmp[] =
+{ B00000000, B11000000,
+  B00000001, B11000000,
+  B00000001, B11000000,
+  B00000011, B11100000,
+  B11110011, B11100000,
+  B11111110, B11111000,
+  B01111110, B11111111,
+  B00110011, B10011111,
+  B00011111, B11111100,
+  B00001101, B01110000,
+  B00011011, B10100000,
+  B00111111, B11100000,
+  B00111111, B11110000,
+  B01111100, B11110000,
+  B01110000, B01110000,
+  B00000000, B00110000 };
+
 
 //Adafruit_SSD1306 display2(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
 //Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
@@ -139,9 +158,19 @@ void setup()
   //    display.update();
    while (1) {
      display.on();
+     display.clear();
+     display.set_cursor(10,3);
+     display.print("hello world");
      display.update();
+     delay(100);
      Serial.println("Hi");
-     display.invert();
+     //     display.invert();
+     for(int i =0; i < 20; i++) {
+       for(int j =0; j < 20 ; j++) {
+	 display.set_pixel(i,j,1);
+       }
+     }
+     display.draw_bitmap(30,16,logo16_glcd_bmp, 16, 16, 1);
      display.update();
 	 //	 display.clear();
      //    	  display.display();

@@ -1,5 +1,6 @@
 #if ARDUINO >= 100
  #include "Arduino.h"
+ #include "Print.h" 
 #else
  #include "WProgram.h"
 #endif
@@ -82,11 +83,7 @@ typedef uint8_t PortMask;
 #define SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL 0x29
 #define SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL 0x2A
 
-
-
-#define swap(a, b) { uint8_t t = a; a = b; b = t; }
-
-class small_ssd1306 {
+class small_ssd1306 : public Print {
 
  public:
   small_ssd1306(int8_t MOSI, int8_t CLOCK, int8_t DC, int8_t RESET,
@@ -95,13 +92,19 @@ class small_ssd1306 {
   void clear();
   void on();
   void off();
-  void set_pixel(uint8_t x, uint8_t y, uint8_t color);
-  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t color);
-  void print(uint8_t x, uint8_t y, char *string);
+  void set_pixel(uint8_t x, uint8_t y, uint8_t on);
+  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t on);
   void invert();
+void set_cursor(int8_t x, int8_t y);
+  void draw_char(int16_t x, int16_t y, unsigned char c, uint16_t color,
+		uint16_t bg, uint8_t size);
+
+  virtual size_t write(uint8_t); //connector to arduino print function
+
+
 
  private:
-  int8_t mosi, clock, dc, reset, cs, power, invert_screen, orientation;
+  int8_t mosi, clock, dc, reset, cs, power, invert_screen, orientation, cursor_x, cursor_y;
   PortReg *mosiport, *clkport, *csport, *dcport;
   PortMask mosipinmask, clkpinmask, cspinmask, dcpinmask;
 

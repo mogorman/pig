@@ -2,7 +2,7 @@
 #include <util/delay.h>
 #include <stdlib.h>
 
-
+#include "glcdfont.c"
 #include "small_ssd1306.h"
 
 static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
@@ -52,7 +52,8 @@ small_ssd1306::small_ssd1306(int8_t MOSI, int8_t CLOCK, int8_t DC, int8_t RESET,
   power = POWER;
   invert_screen = INVERT_SCREEN;
   orientation = ORIENTATION;
-
+  cursor_x = 0;
+  cursor_y = 0;
   pinMode(dc, OUTPUT);
   pinMode(cs, OUTPUT);
   csport      = portOutputRegister(digitalPinToPort(cs));
@@ -162,6 +163,87 @@ void small_ssd1306::invert(void) {
 void small_ssd1306::clear(void) {
   memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
 }
+
+void small_ssd1306::set_pixel(uint8_t x, uint8_t y, uint8_t on) {
+  if ((x < 0) || (x >= SSD1306_LCDWIDTH) || (y < 0) || (y >= SSD1306_LCDHEIGHT))
+    return;
+  // x is which column
+  if (on) 
+    buffer[x+ (y/8)*SSD1306_LCDWIDTH] |= (1 << (y&7));  
+  else
+    buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); 
+}
+
+void small_ssd1306::draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t on) {
+  int16_t i, j, byteWidth = (w + 7) / 8;
+
+  for(j=0; j<h; j++) {
+    for(i=0; i<w; i++ ) {
+      if(pgm_read_byte(bitmap + j * byteWidth + i / 8) & (128 >> (i & 7))) {
+	set_pixel(x+i, y+j, on);
+      }
+    }
+  }
+}
+
+
+// Draw a character
+void small_ssd1306::draw_char(int16_t x, int16_t y, unsigned char c,
+			    uint16_t color, uint16_t bg, uint8_t size) {
+
+  if((x >= SSD1306_LCDWIDTH)            || // Clip right
+     (y >= SSD1306_LCDHEIGHT)           || // Clip bottom
+     ((x + 6 * size - 1) < 0) || // Clip left
+     ((y + 8 * size - 1) < 0))   // Clip top
+    return;
+
+  for (int8_t i=0; i<6; i++ ) {
+    uint8_t line;
+    if (i == 5) 
+      line = 0x0;
+    else 
+      line = pgm_read_byte(font+(c*5)+i);
+    for (int8_t j = 0; j<8; j++) {
+      if (line & 0x1) {
+        if (size == 1) // default size
+          set_pixel(x+i, y+j, color);
+	//        else {  // big size
+	// fillRect(x+(i*size), y+(j*size), size, size, color);
+      } else if (bg != color) {
+        if (size == 1) // default size
+          set_pixel(x+i, y+j, bg);
+	//        else {  // big size
+	//          fillRect(x+i*size, y+j*size, size, size, bg);
+      }
+      line >>= 1;
+    }
+  }
+}
+
+
+size_t small_ssd1306::write(uint8_t c) {
+  if (c == '\n') {
+    cursor_y += 8;
+    cursor_x  = 0;
+  } else if (c == '\r') {
+    // skip em
+  } else {
+    draw_char(cursor_x, cursor_y, c, 1, 0, 1);
+    cursor_x += 6;
+    if ((cursor_x > (SSD1306_LCDWIDTH - 6))) {
+      cursor_y += 8;
+      cursor_x = 0;
+    }
+  }
+return 1;
+
+}
+
+void small_ssd1306::set_cursor(int8_t x, int8_t y) {
+  cursor_x = x;
+  cursor_y = y;
+}
+
 void small_ssd1306::update(void) {
   spi_write_command(SSD1306_COLUMNADDR);
   spi_write_command(0);   // Column start address (0 = reset)
