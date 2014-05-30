@@ -2,11 +2,6 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
-
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
-
 #include <small_ssd1306.h>
 
 #include <avr/sleep.h>
@@ -40,28 +35,8 @@
 #define ORIENTATION 1   // 0 is normal 1 is inverted 180 degrees
 #endif
 
-static const unsigned char PROGMEM logo16_glcd_bmp[] =
-{ B00000000, B11000000,
-  B00000001, B11000000,
-  B00000001, B11000000,
-  B00000011, B11100000,
-  B11110011, B11100000,
-  B11111110, B11111000,
-  B01111110, B11111111,
-  B00110011, B10011111,
-  B00011111, B11111100,
-  B00001101, B01110000,
-  B00011011, B10100000,
-  B00111111, B11100000,
-  B00111111, B11110000,
-  B01111100, B11110000,
-  B01110000, B01110000,
-  B00000000, B00110000 };
-
-
-//Adafruit_SSD1306 display2(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
-//Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
-small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, OLED_POWER, INVERT_SCREEN, ORIENTATION);
+small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, \
+		      OLED_POWER, INVERT_SCREEN, ORIENTATION);
 
 /* this is the default secret that gets flashed to all tokens */
 /*nice test site http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/ */
@@ -80,13 +55,8 @@ void setup_mode();
 bool first_boot();
 void google_totp();
 void init_token();
-//void display_init();
-//void display_reinit();
-//void display_off();
 
 /* //SHA example code. */
-
-
 /* This code is public-domain - it is based on libcrypt
  * placed in the public domain by Wei Dai and other contributors.
  */
@@ -106,25 +76,12 @@ typedef struct sha1nfo {
 	uint8_t innerHash[HASH_LENGTH];
 } sha1nfo;
 
-/* public API - prototypes - TODO: doxygen*/
 
-/**
- */
 void sha1_init(struct sha1nfo *s);
-/**
- */
 void sha1_writebyte(struct sha1nfo *s, uint8_t data);
-/**
- */
 void sha1_write(struct sha1nfo *s, const char *data, size_t len);
-/**
- */
 uint8_t* sha1_result(struct sha1nfo *s);
-/**
- */
 void sha1_initHmac(struct sha1nfo *s, const uint8_t* key, int keyLength);
-/**
- */
 uint8_t* sha1_resultHmac(struct sha1nfo *s);
 
 
@@ -132,55 +89,6 @@ uint8_t* sha1_resultHmac(struct sha1nfo *s);
 
 void setup()
 {
-    uint8_t test = 0;
-    uint8_t flag=0;
-    Serial.begin(9600);
-    test = pgm_read_byte(&secret_time[0]);
-    delay(test);
-//Setup TIMER2
-  TCCR2A = 0x00;
-  //TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
-  TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
-  ASSR = (1<<AS2); //Enable asynchronous operation
-  TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
-   
-  pinMode(OLED_POWER, OUTPUT);
-  pinMode(LED, OUTPUT);
-  digitalWrite(OLED_POWER, LOW);
-  //  display2.begin(SSD1306_SWITCHCAPVCC);
-  //  display2.display();
-  /* display.on(); */
-  /* //  display.invert(); */
-  /* display.update(); */
-  /* delay(100); */
-  /* //  display.clear(); */
-  /* display.update(); */
-  //    display.update();
-   while (1) {
-     display.on();
-     display.clear();
-     display.set_cursor(10,3);
-     display.print("hello world");
-     display.update();
-     delay(100);
-     Serial.println("Hi");
-     //     display.invert();
-     for(int i =0; i < 20; i++) {
-       for(int j =0; j < 20 ; j++) {
-	 display.set_pixel(i,j,1);
-       }
-     }
-     display.draw_bitmap(30,16,logo16_glcd_bmp, 16, 16, 1);
-     display.update();
-	 //	 display.clear();
-     //    	  display.display();
-		      //     display2.invertDisplay(flag);
-     if(flag) flag=0; else flag=1;
-     digitalWrite(LED, flag);
-     delay(1000);
-     display.off();
-     delay(1000);
-     }
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
@@ -189,45 +97,44 @@ void setup()
 
 void loop()
 {
+  char secret[7];
   sound_check=0;
   if(state == LOW) {
     delay(100);
     sleep_mode();
   } else { 
-    //    display_reinit();
-    //    display.dim(true);
-    //    display.clearDisplay();
-    //    display.setCursor(0,0);
-    //    display.print(F("awake"));
-    //    display.println(Time);
-    //    display.display();
-    //    delay(2000);
-    //    display.clearDisplay();
-    //    display.setCursor(0,0);
-    //    display.display();
-    //    delay(2000);
-    //    google_totp();
-    //    delay(2000);
-    //    display_off();
+       display.on();
+       display.clear();
+       display.set_cursor(0,0);
+       display.print(F("awake"));
+       display.println(Time);
+       display.update();
+       delay(2000);
+       display.clear();
+       google_totp(secret);
+       display.set_cursor(10,5);
+       display.print(secret);
+       display.update();
+       delay(2000);
+       display.off();
     state = LOW;
   }
 }
 
 
 void reboot() {
-  //  display_off();
-  //  delay(100);
-  //  display_reinit();
-  //  display.dim(true);
-  //  display.clearDisplay();
-  //  display.setCursor(0,0);
-  //  display.print(F("reboot"));
-  //  display.display();
-  //  cli();                  // Clear interrupts
-  //  wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
-  //  while(1){
-  //    asm("nop");
-  //  }            // Enter an infinite loop
+   display.off();
+   delay(100);
+   display.on();
+   display.clear();
+   display.set_cursor(0,0);
+   display.print(F("reboot"));
+   display.update();
+   cli();                  // Clear interrupts
+   wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
+   while(1){
+     asm("nop");
+   }            // Enter an infinite loop
 }
 
 
@@ -278,17 +185,17 @@ void setup_mode()  {
   /* to implement.... i need to have the display explain to the user what steps they need
      to take to initialize their token */
 
-  google_totp();
+  //  google_totp();
   //  while ( 1 );
   return;
 }
 
-void google_totp() {
+void google_totp(char *Message) {
   byte *Big_hash;
   int Offset;
   long Truncated_hash;
   int i;
-  char Message[7] ={0,0,0,0,0,0,0};
+  //  char Message[7] ={0,0,0,0,0,0,0};
   uint8_t secret[10] = {0};
   unsigned long Google_time = Time / 30;
   byte Google_time_array[8] = { 0x00, 0x00, 0x00, 0x00,
@@ -320,9 +227,6 @@ void google_totp() {
 
   //  display.clearDisplay();
   //  display.display();
-  //  display.setCursor(0,0);
-  //  display.print(F("    "));
-  //  display.println(Message);
   //  display.display();
 }
 
@@ -387,87 +291,6 @@ SIGNAL(INT1_vect){
 }
 
 
-void display_init()
-{
-  /* pinMode(OLED_POWER, OUTPUT); */
-  /* digitalWrite(OLED_POWER, LOW); */
-  /* // by default, generate the high voltage from the 3.3v line internally! (neat!) */
-  /* display.begin(SSD1306_SWITCHCAPVCC); */
-
-  /* display.display();  // show splash screen */
-  /* delay(4000); */
-
-  /* // init done */
-  /*  display.clearDisplay();	// clear the splash screen */
-  /*  display.display(); */
-
-  /*  //  print some characters */
-  /*  display.setTextSize(2); */
-  /*  display.setTextColor(WHITE); */
-  /*  display.setCursor(0,0); */
-  /*  display.clearDisplay(); */
-  /*  display.display(); */
-}
-
-void display_reinit()
-{
-  //    digitalWrite(OLED_POWER, LOW);
-  //  delay(200);
-  //  digitalWrite(OLED_RESET, HIGH);
-  //VDD (3.3V) goes high at start, lets just chill for a ms
-  //  delay(10);
-  // bring reset low
-  //  digitalWrite(OLED_RESET, LOW);
-  // wait 10ms
-  //  delay(10);
-  // bring out of reset
-  //  digitalWrite(OLED_RESET, HIGH);
-  // turn on VCC (9V?)
-
-    // Init sequence for 128x32 OLED module
-  //    display.ssd1306_command(SSD1306_DISPLAYOFF);                    // 0xAE
-  //    display.ssd1306_command(SSD1306_SETDISPLAYCLOCKDIV);            // 0xD5
-  //    display.ssd1306_command(0x80);                                  // the suggested ratio 0x80
-  //    display.ssd1306_command(SSD1306_SETMULTIPLEX);                  // 0xA8
-  //    display.ssd1306_command(0x1F);
-  //    display.ssd1306_command(SSD1306_SETDISPLAYOFFSET);              // 0xD3
-  //    display.ssd1306_command(0x0);                                   // no offset
-  //    display.ssd1306_command(SSD1306_SETSTARTLINE | 0x0);            // line #0
-  //    display.ssd1306_command(SSD1306_CHARGEPUMP);                    // 0x8D
-  //    display.ssd1306_command(0x14);
-  //    display.ssd1306_command(SSD1306_MEMORYMODE);                    // 0x20
-  //    display.ssd1306_command(0x00);                                  // 0x0 act like ks0108
-  //    display.ssd1306_command(SSD1306_SEGREMAP | 0x1);
-  //    display.ssd1306_command(SSD1306_COMSCANDEC);
-  //    display.ssd1306_command(SSD1306_SETCOMPINS);                    // 0xDA
-  //    display.ssd1306_command(0x02);
-  //    display.ssd1306_command(SSD1306_SETCONTRAST);                   // 0x81
-  //    display.ssd1306_command(0x8F);
-  //    display.ssd1306_command(SSD1306_SETPRECHARGE);                  // 0xd9
-  //    display.ssd1306_command(0xF1);
-  //    display.ssd1306_command(SSD1306_SETVCOMDETECT);                 // 0xDB
-  //    display.ssd1306_command(0x40);
-  //    display.ssd1306_command(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
-  //    display.ssd1306_command(SSD1306_NORMALDISPLAY);                 // 0xA6
-  //    display.ssd1306_command(SSD1306_DISPLAYON);
-
-    //ssd1306_command(SSD1306_SEGREMAP | 0x1);
-  //    display.ssd1306_command(SSD1306_SEGREMAP);
-    //ssd1306_command(SSD1306_COMSCANDEC);
-  //    display.ssd1306_command(SSD1306_COMSCANINC);
-}
-
-void display_off()
-{
-  //  display.clearDisplay();
-  //  display.display();
-  //  display.ssd1306_command(SSD1306_DISPLAYOFF);	// put the OLED display in sleep mode
-  //  display.ssd1306_command(0x8D);  // disable charge pump
-  //  display.ssd1306_data(0x10);  // disable charge pump
-
-  delay(10);
-  digitalWrite(OLED_POWER, HIGH);
-}
 
 
 
