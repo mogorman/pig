@@ -5,6 +5,8 @@
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+
+
 #include <small_ssd1306.h>
 
 #include <avr/sleep.h>
@@ -23,6 +25,8 @@
 #define OLED_POWER	 5  // signal to control base of transistor gating OLED's VDD
 #define LED              4
 #define BUTTON           2
+#define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
+#define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
 #else
 #define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
@@ -32,10 +36,9 @@
 #define OLED_POWER	 4  // signal to control base of transistor gating OLED's VDD
 #define LED             A1
 #define BUTTON           2
+#define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
+#define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
 #endif
-
-#define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
-#define ORIENTATION 1    // 0 is normal 1 is inverted 180 degrees
 
 //Adafruit_SSD1306 display2(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS);
 //Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
