@@ -11,20 +11,6 @@ all: check_submodule compile_app compile_boot
 
 check_submodule:
 	@echo ""
-ifeq "$(wildcard ./libraries/adafruit_gfx/license.txt )" ""
-	@echo "I didn't have libraries i need to compile cloned."
-	@echo "I will get it for you now."
-	../update_submodule.sh
-	@echo "I got my dependencies I am ready to go"
-	@make
-else
-ifeq "$(wildcard ./libraries/adafruit_ssd1306/license.txt )" ""
-	@echo "I didn't have libraries i need to compile cloned."
-	@echo "I will get it for you now."
-	../update_submodule.sh
-	@echo "I got my dependencies I am ready to go"
-	@make
-else
 ifeq ("$(wildcard ./audioboot-writer/COPYING )", "")
 
 	@echo "I didn't have libraries i need to compile cloned."
@@ -32,8 +18,6 @@ ifeq ("$(wildcard ./audioboot-writer/COPYING )", "")
 	../update_submodule.sh
 	@echo "I got my dependencies I am ready to go"
 	@make
-endif
-endif
 endif
 
 compile_app:
