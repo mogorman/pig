@@ -59,37 +59,6 @@ bool first_boot();
 void google_totp();
 void init_token();
 
-/* //SHA example code. */
-/* This code is public-domain - it is based on libcrypt
- * placed in the public domain by Wei Dai and other contributors.
- */
-// gcc -Wall -DSHA1TEST -o sha1test sha1.c && ./sha1test
-
-
-
-#define HASH_LENGTH 20
-#define BLOCK_LENGTH 64
-
-typedef struct sha1nfo {
-	uint32_t buffer[BLOCK_LENGTH/4];
-	uint32_t state[HASH_LENGTH/4];
-	uint32_t byteCount;
-	uint8_t bufferOffset;
-	uint8_t keyBuffer[BLOCK_LENGTH];
-	uint8_t innerHash[HASH_LENGTH];
-} sha1nfo;
-
-
-void sha1_init(struct sha1nfo *s);
-void sha1_writebyte(struct sha1nfo *s, uint8_t data);
-void sha1_write(struct sha1nfo *s, const char *data, size_t len);
-uint8_t* sha1_result(struct sha1nfo *s);
-void sha1_initHmac(struct sha1nfo *s, const uint8_t* key, int keyLength);
-uint8_t* sha1_resultHmac(struct sha1nfo *s);
-
-
-
-
 void setup()
 {
   if(first_boot()) {
@@ -263,6 +232,3 @@ SIGNAL(INT1_vect){
     reboot();
   }
 }
-
-
-
