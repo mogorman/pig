@@ -23,6 +23,35 @@
 #define BUTTON           2
 #define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
 #define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
+#define DISABLE_UNUSED_PINS \
+  pinMode(0, INPUT); \
+  digitalWrite(0, LOW); \
+  pinMode(1, INPUT); \
+  digitalWrite(1, LOW); \
+  pinMode(3, INPUT); \
+  digitalWrite(3, LOW); \
+  pinMode(6, INPUT); \
+  digitalWrite(6, LOW); \
+  pinMode(7, INPUT); \
+  digitalWrite(7, LOW); \
+  pinMode(8, INPUT); \
+  digitalWrite(8, LOW); \
+  pinMode(A0, INPUT); \
+  digitalWrite(A0, LOW); \
+  pinMode(A1, INPUT); \
+  digitalWrite(A1, LOW); \
+  pinMode(A2, INPUT); \
+  digitalWrite(A2, LOW); \
+  pinMode(A3, INPUT); \
+  digitalWrite(A3, LOW); \
+  pinMode(A4, INPUT); \
+  digitalWrite(A4, LOW); \
+  pinMode(A5, INPUT); \
+  digitalWrite(A5, LOW); \
+  pinMode(A6, INPUT); \
+  digitalWrite(A6, LOW); \
+  pinMode(A7, INPUT); \
+  digitalWrite(A7, LOW);
 #else
 #define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
@@ -34,6 +63,35 @@
 #define BUTTON           2
 #define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
 #define ORIENTATION 1   // 0 is normal 1 is inverted 180 degrees
+#define DISABLE_UNUSED_PINS \
+  pinMode(0, INPUT); \
+  digitalWrite(0, LOW); \
+  pinMode(1, INPUT); \
+  digitalWrite(1, LOW); \
+  pinMode(3, INPUT); \
+  digitalWrite(3, LOW); \
+  pinMode(5, INPUT); \
+  digitalWrite(5, LOW); \
+  pinMode(6, INPUT); \
+  digitalWrite(6, LOW); \
+  pinMode(7, INPUT); \
+  digitalWrite(7, LOW); \
+  pinMode(8, INPUT); \
+  digitalWrite(8, LOW); \
+  pinMode(9, INPUT); \
+  digitalWrite(9, LOW); \
+  pinMode(A0, INPUT); \
+  digitalWrite(A0, LOW); \
+  pinMode(A3, INPUT); \
+  digitalWrite(A3, LOW); \
+  pinMode(A4, INPUT); \
+  digitalWrite(A4, LOW); \
+  pinMode(A5, INPUT); \
+  digitalWrite(A5, LOW); \
+  pinMode(A6, INPUT); \
+  digitalWrite(A6, LOW); \
+  pinMode(A7, INPUT); \
+  digitalWrite(A7, LOW);
 #endif
 
 small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS,
@@ -50,8 +108,8 @@ const uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
 small_totp totp(secret_time, 10);
 
 uint32_t Time = 0;
-volatile int state = LOW;
-volatile unsigned long sound_check = 0;
+volatile boolean state = LOW;
+volatile uint16_t sound_check = 0;
 
 void reboot();
 void setup_mode();
@@ -73,8 +131,6 @@ void setup()
 
 void loop()
 {
-  uint32_t code=0;
-
   if(sound_check == 1000) {
     reboot();
   }
@@ -85,15 +141,13 @@ void loop()
   } else { 
     display.on();
     display.clear();
-    display.set_cursor(0,0);
-    display.print(F("awake"));
-    display.println(Time);
+    display.set_cursor(0,5);
+    display.print(Time);
     display.update();
     delay(2000);
     display.clear();
-    code = totp.code(Time);
     display.set_cursor(10,5);
-    pad_print(code);
+    pad_print(totp.code(Time));
     display.update();
     delay(2000);
     display.off();
@@ -104,7 +158,8 @@ void loop()
 
 void pad_print( uint32_t number) {
   uint32_t currentMax = 10;
-  for (byte i=1; i<6; i++){
+  byte i;
+  for (i = 1; i < 6; i++){
     if (number < currentMax) {
       display.print(0);
     }
@@ -123,7 +178,7 @@ void reboot() {
    display.print(F("reboot"));
    display.update();
    cli();                  // Clear interrupts
-   wdt_enable(WDTO_1S);      // Set the Watchdog to 1 second
+   wdt_enable(WDTO_2S);      // Set the Watchdog to 1 second
    while(1){
      asm("nop");
    }            // Enter an infinite loop
@@ -176,12 +231,10 @@ void init_token() {
     Time <<= 8;
     Time |= secret_time[(10 + i)]; //offset by the secret
   }
-  /* for(i = 1 ; i < 18 ; i++){ */
-  /*   pinMode(i, INPUT); */
-  /*   digitalWrite(i, LOW); */
-  /* } */
+
   pinMode(BUTTON, INPUT); //This is the main button, tied to INT0
   digitalWrite(BUTTON, HIGH); //Enable internal pull up on button
+  DISABLE_UNUSED_PINS
   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
   sleep_enable();
 
@@ -189,7 +242,7 @@ void init_token() {
   ACSR = (1<<ACD); //Disable the analog comparator
   DIDR0 = 0x3F; //Disable digital input buffers on all ADC0-ADC5 pins
   power_twi_disable();
-  //  power_timer1_disable();
+  power_timer1_disable();
 //Setup TIMER2
   TCCR2A = 0x00;
   TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
@@ -208,7 +261,6 @@ void init_token() {
   //  display_init();
 }
 
-
 SIGNAL(TIMER2_OVF_vect){
   Time ++; // +=8 if other timer set
 }
@@ -218,8 +270,6 @@ SIGNAL(INT0_vect){
   //if(show_the_time == false)
   state = HIGH;
 }
-
-
 
 SIGNAL(INT1_vect){
   //When you hit the button, we will need to display the time
