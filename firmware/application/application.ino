@@ -134,11 +134,12 @@ void loop()
   if(sound_check == 1000) {
     reboot();
   }
-  sound_check=0;
   if(state == LOW) {
     delay(100);
     sleep_mode();
-  } else { 
+  } else {
+    sound_check=0;
+    EIMSK |= (1<<INT1); //Enable sound interrupt
     display.on();
     display.clear();
     display.set_cursor(0,5);
@@ -152,6 +153,7 @@ void loop()
     delay(2000);
     display.off();
     state = LOW;
+    EIMSK &= ~(1<<INT1); //Disable sound interrupt
   }
 }
 
@@ -175,6 +177,7 @@ void reboot() {
    display.on();
    display.clear();
    display.set_cursor(0,0);
+   //   display.invert();
    display.print(F("reboot"));
    display.update();
    cli();                  // Clear interrupts
@@ -220,8 +223,6 @@ void setup_mode()  {
   /* to implement.... i need to have the display explain to the user what steps they need
      to take to initialize their token */
 
-  //  google_totp();
-  //  while ( 1 );
   return;
 }
 
@@ -250,15 +251,12 @@ void init_token() {
   ASSR = (1<<AS2); //Enable asynchronous operation
   TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
 
-  //Setup external INT0 interrupt
   EICRA = (1<<ISC01); //Interrupt on falling edge
   EIMSK = (1<<INT0); //Enable INT0 interrupt
 
   EICRA |= (1<<ISC11); //Interrupt on falling edge
-  EIMSK |= (1<<INT1); //Enable INT0 interrupt
-
+  //  EIMSK |= (1<<INT1); //Enable INT0 interrupt
   sei(); //Enable global interrupts
-  //  display_init();
 }
 
 SIGNAL(TIMER2_OVF_vect){
@@ -266,13 +264,9 @@ SIGNAL(TIMER2_OVF_vect){
 }
 
 SIGNAL(INT0_vect){
-  //When you hit the button, we will need to display the time
-  //if(show_the_time == false)
-  state = HIGH;
+  state = HIGH; //button pressed
 }
 
 SIGNAL(INT1_vect){
-  //When you hit the button, we will need to display the time
-  //if(show_the_time == false)
-  sound_check++;
+  sound_check++; //sound detected
 }
