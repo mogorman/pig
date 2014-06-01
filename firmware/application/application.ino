@@ -74,6 +74,10 @@ void setup()
 void loop()
 {
   uint32_t code=0;
+
+  if(sound_check == 1000) {
+    reboot();
+  }
   sound_check=0;
   if(state == LOW) {
     delay(100);
@@ -138,34 +142,22 @@ we write the time to next 4 bytes. run normally.
 
 bool first_boot() {
   /* if the secret is set to the default value put token in setup mode */
-  if(secret_time[0] == 0x42 &&
-     secret_time[1] == 0x42 &&
-     secret_time[2] == 0x42 &&
-     secret_time[3] == 0x42 &&
-     secret_time[4] == 0x42 &&
-     secret_time[5] == 0x42 &&
-     secret_time[6] == 0x42 &&
-     secret_time[7] == 0x42 &&
-     secret_time[8] == 0x42 &&
-     secret_time[9] == 0x42) {
-    return true;
+  int i, ret = 0;
+  for( i = 0; i < 10; i++) {
+    if(secret_time[i] != 0x42) {
+      break;
+    }
+    if(i == 9) //we got to end and all results where 0x42
+      return true;
   }
-  /* if eeprom is set up by reset interrupt and hasn't been reset that means we got reflashed hopefully
-     and should run normally.
-   */
-  if (EEPROM.read(0) == 0x42 &&
-      EEPROM.read(1) == 0x42 &&
-      EEPROM.read(2) == 0x42 &&
-      EEPROM.read(3) == 0x42) {
-    EEPROM.write(0,0);
-    EEPROM.write(1,0);
-    EEPROM.write(2,0);
-    EEPROM.write(3,0);
-    return false;
+  for(i = 0; i < 4; i++) {
+    if(EEPROM.read(i) != 0x42) {
+      break;
+    }
+    if(i == 3) {
+      return false;
+    }
   }
-  /* otherwise we probably have just changed batteries and we are gonna need a new secret
-     because clocks are no longer synced */
-  //  return false; // not checkint to see reboot because we are testing.
     return true;
 }
 
@@ -233,7 +225,4 @@ SIGNAL(INT1_vect){
   //When you hit the button, we will need to display the time
   //if(show_the_time == false)
   sound_check++;
-  if(sound_check == 1000) {
-    reboot();
-  }
 }
