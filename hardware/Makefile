@@ -1,9 +1,10 @@
 PCBNAME=pig
 AUTHOR="Matthew O'Gorman <mog@rldn.net>  , Tim Heath <crashcartpro@gmail.com>"
-REV=0x0E
+REV=20
 STACK=-
 SOLDERMASK=red
 SILKSCREEN=white
+THICKNESS="1.2mm"
 CUSTOMPCB=/home/mog/nonapt/pcb/src/pcb
 CUSTOMPCB_ARGS=--photo-mask-colour $(SOLDERMASK) \
 	       --photo-silk-colour $(SILKSCREEN)  --photo-plating  tinned
