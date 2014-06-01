@@ -29,20 +29,21 @@ typedef struct sha1nfo {
 class small_totp {
 
  public:
-  small_totp(const uint8_t *secret, const uint8_t length);
+  small_totp(const uint8_t *text_secret, const uint8_t length);
   uint32_t code(uint32_t time);
  
  private:
-  sha1nfo s;
+  sha1nfo secret;
 
-  void sha1_init();
+  void sha1_init(sha1nfo *s);
   uint32_t sha1_rol32(uint32_t number, uint8_t bits);
-  void sha1_hashBlock();
-  void sha1_initHmac(const uint8_t* key, int keyLength);
-  void sha1_writebyte(uint8_t data);
-  void sha1_addUncounted(uint8_t data);
-  uint8_t* sha1_result();
-  void sha1_pad();
-  void sha1_write(const byte *data, size_t len);
-  uint8_t* sha1_resultHmac();
+  void sha1_hashBlock(sha1nfo *s);
+  void sha1_initHmac(sha1nfo *s, const uint8_t* key, int keyLength);
+  void sha1_writebyte(sha1nfo *s, uint8_t data);
+  void sha1_addUncounted(sha1nfo *s, uint8_t data);
+  uint8_t* sha1_result(sha1nfo *s);
+  void sha1_pad(sha1nfo *s);
+  void sha1_write(sha1nfo *s, const byte *data, size_t len);
+  uint8_t* sha1_resultHmac(sha1nfo *s);
+  void copy_sha1_object(sha1nfo *s, sha1nfo *t);
 };
