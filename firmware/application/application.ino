@@ -3,6 +3,7 @@
 #include <EEPROM.h>
 
 #include <small_ssd1306.h>
+//#include <small_totp.h>
 
 #include <avr/sleep.h>
 #include <avr/power.h>
@@ -43,8 +44,8 @@ small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, \
 //PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
 //   0x53, 0x71, 0xDF, 0x05 };
 // 10 byte secret, 4 byte unix time stamp.
-PROGMEM const uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
-					 0x41, 0x41, 0x41, 0x41 };
+const uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
+				 0x41, 0x41, 0x41, 0x41 };
 
 unsigned long Time = 0;
 volatile int state = LOW;
@@ -150,16 +151,16 @@ we write the time to next 4 bytes. run normally.
 
 bool first_boot() {
   /* if the secret is set to the default value put token in setup mode */
-  if(pgm_read_byte(&secret_time[0]) == 0x42 &&
-    pgm_read_byte(&secret_time[1]) == 0x42 &&
-    pgm_read_byte(&secret_time[2]) == 0x42 &&
-    pgm_read_byte(&secret_time[3]) == 0x42 &&
-    pgm_read_byte(&secret_time[4]) == 0x42 &&
-    pgm_read_byte(&secret_time[5]) == 0x42 &&
-    pgm_read_byte(&secret_time[6]) == 0x42 &&
-    pgm_read_byte(&secret_time[7]) == 0x42 &&
-    pgm_read_byte(&secret_time[8]) == 0x42 &&
-    pgm_read_byte(&secret_time[9]) == 0x42) {
+  if(secret_time[0] == 0x42 &&
+     secret_time[1] == 0x42 &&
+     secret_time[2] == 0x42 &&
+     secret_time[3] == 0x42 &&
+     secret_time[4] == 0x42 &&
+     secret_time[5] == 0x42 &&
+     secret_time[6] == 0x42 &&
+     secret_time[7] == 0x42 &&
+     secret_time[8] == 0x42 &&
+     secret_time[9] == 0x42) {
     return true;
   }
   /* if eeprom is set up by reset interrupt and hasn't been reset that means we got reflashed hopefully
@@ -196,7 +197,6 @@ void google_totp(char *Message) {
   long Truncated_hash;
   int i;
   //  char Message[7] ={0,0,0,0,0,0,0};
-  uint8_t secret[10] = {0};
   unsigned long Google_time = Time / 30;
   byte Google_time_array[8] = { 0x00, 0x00, 0x00, 0x00,
 				(byte)((Google_time >> 24) & 0xFF),
@@ -205,10 +205,8 @@ void google_totp(char *Message) {
 				(byte)(Google_time & 0xFF) };
   sha1nfo s;
 
-  for ( i = 0; i < 10; i++) {
-    secret[i] = pgm_read_byte(&secret_time[i]);
-  }
-  sha1_initHmac(&s, secret, 10);
+
+  sha1_initHmac(&s, secret_time, 10);
   sha1_write(&s, Google_time_array,8);
   Big_hash = sha1_resultHmac(&s);
 
@@ -217,9 +215,9 @@ void google_totp(char *Message) {
   //  Big_hash = Sha1.resultHmac();
   Offset = Big_hash[20-1] & 0x0F;
   Truncated_hash = 0;
-  for ( int j =0; j < 4; ++j) {
+  for (i=0; i < 4; ++i) {
     Truncated_hash <<= 8;
-    Truncated_hash |= Big_hash[Offset + j];
+    Truncated_hash |= Big_hash[Offset + i];
   }
   Truncated_hash &= 0x7FFFFFFF;
   Truncated_hash %= 1000000;
@@ -234,7 +232,7 @@ void init_token() {
   int i;
   for ( i = 0; i < 4; i++) {
     Time <<= 8;
-    Time |= pgm_read_byte(&secret_time[ (10 + i) ]); //offset by the secret
+    Time |= secret_time[(10 + i)]; //offset by the secret
   }
   /* for(i = 1 ; i < 18 ; i++){ */
   /*   pinMode(i, INPUT); */
