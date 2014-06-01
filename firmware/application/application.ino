@@ -36,7 +36,7 @@
 #define ORIENTATION 1   // 0 is normal 1 is inverted 180 degrees
 #endif
 
-small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS, \
+small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS,
 		      OLED_POWER, INVERT_SCREEN, ORIENTATION);
 
 /* this is the default secret that gets flashed to all tokens */
@@ -65,6 +65,10 @@ void setup()
     setup_mode();
   } // else we run like normal.
   init_token();
+  display.on();
+  display.update();
+  delay(2000);
+  display.off();
 }
 
 void loop()
@@ -75,33 +79,34 @@ void loop()
     delay(100);
     sleep_mode();
   } else { 
-       display.on();
-       display.clear();
-       display.set_cursor(0,0);
-       display.print(F("awake"));
-       display.println(Time);
-       display.update();
-       delay(2000);
-       display.clear();
-       code = totp.code(Time);
-       display.set_cursor(10,5);
-       if(code < 10) {
-	 display.print(F("00000"));
-       } else if(code < 100) {
-	 display.print(F("0000"));
-       } else if(code < 1000) {
-	 display.print(F("000"));
-       } else if(code < 10000) {
-	 display.print(F("00"));
-       } else if(code < 10000) {
-	 display.print(F("0"));
-       }
-       display.print(code);
-       display.update();
-       delay(2000);
-       display.off();
-       state = LOW;
+    display.on();
+    display.clear();
+    display.set_cursor(0,0);
+    display.print(F("awake"));
+    display.println(Time);
+    display.update();
+    delay(2000);
+    display.clear();
+    code = totp.code(Time);
+    display.set_cursor(10,5);
+    pad_print(code);
+    display.update();
+    delay(2000);
+    display.off();
+    state = LOW;
   }
+}
+
+
+void pad_print( uint32_t number) {
+  uint32_t currentMax = 10;
+  for (byte i=1; i<6; i++){
+    if (number < currentMax) {
+      display.print(0);
+    }
+    currentMax *= 10;
+  } 
+  display.print(number);
 }
 
 
@@ -195,8 +200,8 @@ void init_token() {
   //  power_timer1_disable();
 //Setup TIMER2
   TCCR2A = 0x00;
-  //TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
-  TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
+  TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
+  //TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
   ASSR = (1<<AS2); //Enable asynchronous operation
   TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
 
@@ -213,7 +218,7 @@ void init_token() {
 
 
 SIGNAL(TIMER2_OVF_vect){
-  Time +=8;
+  Time ++; // +=8 if other timer set
 }
 
 SIGNAL(INT0_vect){
