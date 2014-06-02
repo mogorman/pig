@@ -21,7 +21,7 @@
 #define OLED_POWER	 5  // signal to control base of transistor gating OLED's VDD
 #define LED              4
 #define BUTTON           2
-#define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
+#define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
 #define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
 #define DISABLE_UNUSED_PINS \
   DDRD = B11111111; \
@@ -81,7 +81,7 @@ void setup()
   init_token();
   display.on();
   display.update();
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < 5; i++) {
     sleep_enable();
     sleep_mode();
     sleep_disable();
@@ -94,13 +94,12 @@ void loop()
   int i;
 
   if(state == LOW) {
-    EIMSK |= (1<<INT0); //Enable INT0 interrupt
     sleep_enable();
     sleep_mode();
     sleep_disable();
-    EIMSK &= ~(1<<INT0); //Disable sound interrupt
   } else {
     EIMSK |= (1<<INT1); //Enable sound interrupt
+    EIMSK &= ~(1<<INT0); //Disable button interrupt
     power_spi_enable();
     display.on();
     display.clear();
@@ -116,20 +115,22 @@ void loop()
     display.set_cursor(10,5);
     pad_print(totp.code(Time));
     display.update();
+    //    delay(30000);
     for(i = 0; i < 30; i++) {
-      sleep_enable();
-      sleep_mode();
-      sleep_disable();
+	sleep_enable();
+	sleep_mode();
+	sleep_disable();
     }
     display.off();
     power_spi_disable();
-    state = LOW;
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
+    EIMSK |= (1<<INT0); //Enable INT0 interrupt
     if(sound_check > 1000) {
       reboot();
     } else { 
       sound_check=0;
     }
+    state = LOW;
   }
 }
 
@@ -229,8 +230,7 @@ void init_token() {
   TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
 
   EICRA = (1<<ISC01); //Interrupt on falling edge
-  //  EIMSK = (1<<INT0); //Enable INT0 interrupt
-
+  EIMSK |= (1<<INT0); //Enable INT0 interrupt
   EICRA |= (1<<ISC11); //Interrupt on falling edge
   //  EIMSK |= (1<<INT1); //Enable INT0 interrupt
   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
