@@ -22,7 +22,7 @@
 #define LED              4
 #define BUTTON           2
 #define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
-#define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
+#define ORIENTATION 1    // 0 is normal 1 is inverted 180 degrees
 #define DISABLE_UNUSED_PINS \
   DDRD = B11111111; \
   DDRC = B11111111; \
@@ -75,8 +75,6 @@ void init_token();
 void setup()
 {
   init_token();
-  Serial.begin(9600);
-  Serial.println("hello world");
   int i;
   if(first_boot()) {
     setup_mode();
@@ -90,17 +88,7 @@ void setup()
     sleep_disable();
   }
   display.clear();
-  display.set_font(1);
-  display.print(0);
-  display.set_font(0); 
-  display.update();
-  for(i = 0; i < 100; i++) {
-    sleep_enable();
-    sleep_mode();
-    sleep_disable();
-  }
   display.off();
-  Serial.println("hello world2");
   delay(1000);
 }
 
@@ -127,7 +115,7 @@ void loop()
       sleep_disable();
     }
     display.clear();
-    display.set_cursor(0,0);
+    display.set_cursor(38,5);
     display.set_font(1);
     pad_print(totp.code(Time));
     display.set_font(0); 
