@@ -114,7 +114,6 @@ volatile uint16_t sound_check = 0;
 void reboot();
 void setup_mode();
 bool first_boot();
-void google_totp();
 void init_token();
 
 void setup()
@@ -136,7 +135,12 @@ void loop()
   }
   if(state == LOW) {
     delay(100);
+    EIMSK |= (1<<INT0); //Enable INT0 interrupt
+    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+    sleep_enable();
     sleep_mode();
+    sleep_disable();
+    EIMSK &= ~(1<<INT0); //Disable sound interrupt
   } else {
     sound_check=0;
     EIMSK |= (1<<INT1); //Enable sound interrupt
@@ -236,8 +240,6 @@ void init_token() {
   pinMode(BUTTON, INPUT); //This is the main button, tied to INT0
   digitalWrite(BUTTON, HIGH); //Enable internal pull up on button
   DISABLE_UNUSED_PINS
-  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
-  sleep_enable();
 
   ADCSRA &= ~(1<<ADEN); //Disable ADC
   ACSR = (1<<ACD); //Disable the analog comparator
@@ -252,7 +254,7 @@ void init_token() {
   TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
 
   EICRA = (1<<ISC01); //Interrupt on falling edge
-  EIMSK = (1<<INT0); //Enable INT0 interrupt
+  //  EIMSK = (1<<INT0); //Enable INT0 interrupt
 
   EICRA |= (1<<ISC11); //Interrupt on falling edge
   //  EIMSK |= (1<<INT1); //Enable INT0 interrupt
@@ -260,7 +262,7 @@ void init_token() {
 }
 
 SIGNAL(TIMER2_OVF_vect){
-  Time ++; // +=8 if other timer set
+  Time++; // +=8 if other timer set
 }
 
 SIGNAL(INT0_vect){
