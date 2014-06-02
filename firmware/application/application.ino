@@ -21,37 +21,15 @@
 #define OLED_POWER	 5  // signal to control base of transistor gating OLED's VDD
 #define LED              4
 #define BUTTON           2
-#define INVERT_SCREEN 1  // 0 is normal 1 is inverted color
+#define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
 #define ORIENTATION 0    // 0 is normal 1 is inverted 180 degrees
 #define DISABLE_UNUSED_PINS \
-  pinMode(0, INPUT); \
-  digitalWrite(0, LOW); \
-  pinMode(1, INPUT); \
-  digitalWrite(1, LOW); \
-  pinMode(3, INPUT); \
-  digitalWrite(3, LOW); \
-  pinMode(6, INPUT); \
-  digitalWrite(6, LOW); \
-  pinMode(7, INPUT); \
-  digitalWrite(7, LOW); \
-  pinMode(8, INPUT); \
-  digitalWrite(8, LOW); \
-  pinMode(A0, INPUT); \
-  digitalWrite(A0, LOW); \
-  pinMode(A1, INPUT); \
-  digitalWrite(A1, LOW); \
-  pinMode(A2, INPUT); \
-  digitalWrite(A2, LOW); \
-  pinMode(A3, INPUT); \
-  digitalWrite(A3, LOW); \
-  pinMode(A4, INPUT); \
-  digitalWrite(A4, LOW); \
-  pinMode(A5, INPUT); \
-  digitalWrite(A5, LOW); \
-  pinMode(A6, INPUT); \
-  digitalWrite(A6, LOW); \
-  pinMode(A7, INPUT); \
-  digitalWrite(A7, LOW);
+  DDRD = B11111111; \
+  DDRC = B11111111; \
+  DDRB = B11111111; \
+  PORTD = B11001011; \
+  PORTC = B11111111; \
+  PORTB = B11000001; 
 #else
 #define OLED_CS 	10  // AVR pin 19 (SCK)
 #define OLED_MOSI 	11  // AVR pin 18 (MISO)
@@ -64,34 +42,12 @@
 #define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
 #define ORIENTATION 1   // 0 is normal 1 is inverted 180 degrees
 #define DISABLE_UNUSED_PINS \
-  pinMode(0, INPUT); \
-  digitalWrite(0, LOW); \
-  pinMode(1, INPUT); \
-  digitalWrite(1, LOW); \
-  pinMode(3, INPUT); \
-  digitalWrite(3, LOW); \
-  pinMode(5, INPUT); \
-  digitalWrite(5, LOW); \
-  pinMode(6, INPUT); \
-  digitalWrite(6, LOW); \
-  pinMode(7, INPUT); \
-  digitalWrite(7, LOW); \
-  pinMode(8, INPUT); \
-  digitalWrite(8, LOW); \
-  pinMode(9, INPUT); \
-  digitalWrite(9, LOW); \
-  pinMode(A0, INPUT); \
-  digitalWrite(A0, LOW); \
-  pinMode(A3, INPUT); \
-  digitalWrite(A3, LOW); \
-  pinMode(A4, INPUT); \
-  digitalWrite(A4, LOW); \
-  pinMode(A5, INPUT); \
-  digitalWrite(A5, LOW); \
-  pinMode(A6, INPUT); \
-  digitalWrite(A6, LOW); \
-  pinMode(A7, INPUT); \
-  digitalWrite(A7, LOW);
+  DDRD = B11111111; \
+  DDRC = B11111111; \
+  DDRB = B11111111; \
+  PORTD = B11101011; \
+  PORTC = B11111101; \
+  PORTB = B11111111; 
 #endif
 
 small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS,
@@ -130,9 +86,6 @@ void setup()
 
 void loop()
 {
-  if(sound_check == 1000) {
-    reboot();
-  }
   if(state == LOW) {
     delay(100);
     EIMSK |= (1<<INT0); //Enable INT0 interrupt
@@ -142,7 +95,6 @@ void loop()
     sleep_disable();
     EIMSK &= ~(1<<INT0); //Disable sound interrupt
   } else {
-    sound_check=0;
     EIMSK |= (1<<INT1); //Enable sound interrupt
     display.on();
     display.clear();
@@ -158,6 +110,11 @@ void loop()
     display.off();
     state = LOW;
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
+    if(sound_check > 1000) {
+      reboot();
+    } else { 
+      sound_check=0;
+    }
   }
 }
 
@@ -236,10 +193,14 @@ void init_token() {
     Time <<= 8;
     Time |= secret_time[(10 + i)]; //offset by the secret
   }
+    DISABLE_UNUSED_PINS;
+  //DISABLE ALL THE PINS!
+
+  // DISABLE ALL THE PINS!
 
   pinMode(BUTTON, INPUT); //This is the main button, tied to INT0
   digitalWrite(BUTTON, HIGH); //Enable internal pull up on button
-  DISABLE_UNUSED_PINS
+
 
   ADCSRA &= ~(1<<ADEN); //Disable ADC
   ACSR = (1<<ACD); //Disable the analog comparator
