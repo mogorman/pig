@@ -46,8 +46,8 @@
   DDRC = B11111111; \
   DDRB = B11111111; \
   PORTD = B11101011; \
-  PORTC = B11111101; \
-  PORTB = B11111111; 
+  PORTC = B11111001; \
+  PORTB = B11000011;
 #endif
 
 small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS,
@@ -74,40 +74,55 @@ void init_token();
 
 void setup()
 {
+  int i;
   if(first_boot()) {
     setup_mode();
   } // else we run like normal.
   init_token();
   display.on();
   display.update();
-  delay(2000);
+  for(i = 0; i < 3; i++) {
+    sleep_enable();
+    sleep_mode();
+    sleep_disable();
+  }
   display.off();
 }
 
 void loop()
 {
+  int i;
+
   if(state == LOW) {
-    delay(100);
     EIMSK |= (1<<INT0); //Enable INT0 interrupt
-    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
     sleep_enable();
     sleep_mode();
     sleep_disable();
     EIMSK &= ~(1<<INT0); //Disable sound interrupt
   } else {
     EIMSK |= (1<<INT1); //Enable sound interrupt
+    power_spi_enable();
     display.on();
     display.clear();
     display.set_cursor(0,5);
     display.print(Time);
     display.update();
-    delay(2000);
+    for(i = 0; i < 3; i++) {
+      sleep_enable();
+      sleep_mode();
+      sleep_disable();
+    }
     display.clear();
     display.set_cursor(10,5);
     pad_print(totp.code(Time));
     display.update();
-    delay(2000);
+    for(i = 0; i < 30; i++) {
+      sleep_enable();
+      sleep_mode();
+      sleep_disable();
+    }
     display.off();
+    power_spi_disable();
     state = LOW;
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
     if(sound_check > 1000) {
@@ -134,7 +149,6 @@ void pad_print( uint32_t number) {
 
 void reboot() {
    display.off();
-   delay(100);
    display.on();
    display.clear();
    display.set_cursor(0,0);
@@ -219,6 +233,7 @@ void init_token() {
 
   EICRA |= (1<<ISC11); //Interrupt on falling edge
   //  EIMSK |= (1<<INT1); //Enable INT0 interrupt
+  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
   sei(); //Enable global interrupts
 }
 
