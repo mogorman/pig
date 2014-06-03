@@ -345,7 +345,7 @@ size_t small_ssd1306::write(uint8_t c) {
     if(c >= 0x30 && c < 0x40) {
       character = (c - 0x30)*13;
       draw_bitmap(cursor_x, cursor_y, terminus, character, 0, character+13, 20, 136, 20, 1);
-      cursor_x+=15;
+      cursor_x+=17;
       return 1;
     }
   } 
