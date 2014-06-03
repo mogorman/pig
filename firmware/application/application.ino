@@ -88,6 +88,14 @@ void setup()
     sleep_disable();
   }
   display.clear();
+  display.set_cursor(0,0);
+  display.print("!\" ~!");
+    display.update();
+    for(i = 0; i < 6; i++) {
+      sleep_enable();
+      sleep_mode();
+      sleep_disable();
+    }
   display.off();
 }
 

@@ -93,7 +93,9 @@ class small_ssd1306 : public Print {
   void on();
   void off();
   void set_pixel(uint8_t x, uint8_t y, uint8_t on);
-  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint16_t w, uint16_t h, uint16_t w2, uint16_t h2, uint16_t w_size, uint16_t h_size, uint8_t on);
+  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap,
+		   uint16_t w, uint16_t h, uint16_t w2, uint16_t h2,
+		   uint16_t w_size, uint16_t h_size, uint8_t on);
   void invert();
   void set_font(int8_t value);
   void set_cursor(int8_t x, int8_t y);
@@ -101,10 +103,9 @@ class small_ssd1306 : public Print {
   virtual size_t write(uint8_t); //connector to arduino print function
 
  private:
-  int8_t mosi, clock, dc, reset, cs, power, invert_screen, orientation, cursor_x, cursor_y, font_size;
+  int8_t mosi, clock, dc, reset, cs, power, invert_screen,
+         orientation, cursor_x, cursor_y, font_size;
   PortReg *mosiport, *clkport, *csport, *dcport;
   PortMask mosipinmask, clkpinmask, cspinmask, dcpinmask;
-
-  void spi_write_command(uint8_t data);
-  void spi_write_data(uint8_t data);
+  void spi_write(uint8_t data);
 };
