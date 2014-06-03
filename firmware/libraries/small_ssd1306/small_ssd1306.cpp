@@ -338,42 +338,6 @@ void small_ssd1306::draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap,
   }
 }
 
-
-// // Draw a character
-// void small_ssd1306::draw_char(int16_t x, int16_t y, unsigned char c,
-// 			    uint16_t color, uint16_t bg, uint8_t size) {
-
-//   if((x >= SSD1306_LCDWIDTH)            || // Clip right
-//      (y >= SSD1306_LCDHEIGHT)           || // Clip bottom
-//      ((x + 6 * size - 1) < 0) || // Clip left 
-//      ((y + 8 * size - 1) < 0))   // Clip top
-//     return;
-
-//   for (int8_t i=0; i<6; i++ ) {
-//     uint8_t line;
-//     if (i == 5) 
-//       line = 0x0;
-//     else 
-//       line = pgm_read_byte(font+(c*5)+i);
-//     for (int8_t j = 0; j<8; j++) {
-//       if (line & 0x1) {
-//         if (size == 1) // default size
-//           set_pixel(x+i, y+j, color);
-// 	//        else {  // big size
-// 	// fillRect(x+(i*size), y+(j*size), size, size, color);
-//       } else if (bg != color) {
-//         if (size == 1) // default size
-//           set_pixel(x+i, y+j, bg);
-// 	//        else {  // big size
-// 	//          fillRect(x+i*size, y+j*size, size, size, bg);
-//       }
-//       line >>= 1;
-//     }
-//   }
-// }
-
-
-
 size_t small_ssd1306::write(uint8_t c) {
   uint16_t digit;
   if(font_size == 1) {
@@ -394,8 +358,6 @@ size_t small_ssd1306::write(uint8_t c) {
       draw_bitmap(cursor_x, cursor_y, terminus_font, digit, 0, digit+10, 15, 944, 15, 1);
       cursor_x+=11;
 
-    //    draw_char(cursor_x, cursor_y, c, 1, 0, 1);
-    // cursor_x += 6;
     if ((cursor_x > (SSD1306_LCDWIDTH - 11))) {
       cursor_y += 16;
       cursor_x = 0;

@@ -97,8 +97,6 @@ class small_ssd1306 : public Print {
   void invert();
   void set_font(int8_t value);
   void set_cursor(int8_t x, int8_t y);
-  //  void draw_char(int16_t x, int16_t y, unsigned char c, uint16_t color,
-  //		uint16_t bg, uint8_t size);
 
   virtual size_t write(uint8_t); //connector to arduino print function
 
