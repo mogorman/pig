@@ -89,7 +89,6 @@ void setup()
   }
   display.clear();
   display.off();
-  delay(1000);
 }
 
 void loop()
@@ -106,10 +105,10 @@ void loop()
     power_spi_enable();
     display.on();
     display.clear();
-    display.set_cursor(0,5);
+    display.set_cursor(0,0);
     display.print(Time);
     display.update();
-    for(i = 0; i < 3; i++) {
+    for(i = 0; i < 6; i++) {
       sleep_enable();
       sleep_mode();
       sleep_disable();

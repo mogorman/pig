@@ -93,12 +93,12 @@ class small_ssd1306 : public Print {
   void on();
   void off();
   void set_pixel(uint8_t x, uint8_t y, uint8_t on);
-  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t w2, uint8_t h2, uint8_t w_size, uint8_t h_size, uint8_t on);
+  void draw_bitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint16_t w, uint16_t h, uint16_t w2, uint16_t h2, uint16_t w_size, uint16_t h_size, uint8_t on);
   void invert();
   void set_font(int8_t value);
   void set_cursor(int8_t x, int8_t y);
-  void draw_char(int16_t x, int16_t y, unsigned char c, uint16_t color,
-		uint16_t bg, uint8_t size);
+  //  void draw_char(int16_t x, int16_t y, unsigned char c, uint16_t color,
+  //		uint16_t bg, uint8_t size);
 
   virtual size_t write(uint8_t); //connector to arduino print function
 
