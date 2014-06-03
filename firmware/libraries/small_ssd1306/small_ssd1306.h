@@ -100,8 +100,6 @@ class small_ssd1306 : public Print {
 
   virtual size_t write(uint8_t); //connector to arduino print function
 
-
-
  private:
   int8_t mosi, clock, dc, reset, cs, power, invert_screen, orientation, cursor_x, cursor_y, font_size;
   PortReg *mosiport, *clkport, *csport, *dcport;

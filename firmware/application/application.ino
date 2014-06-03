@@ -119,7 +119,6 @@ void loop()
     pad_print(totp.code(Time));
     display.set_font(0); 
     display.update();
-    //    delay(30000);
     for(i = 0; i < 30; i++) {
 	sleep_enable();
 	sleep_mode();
