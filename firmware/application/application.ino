@@ -10,7 +10,7 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -71,6 +71,8 @@ void reboot();
 void setup_mode();
 bool first_boot();
 void init_token();
+void sleepy_delay(uint8_t time);
+
 
 void setup()
 {
@@ -82,11 +84,7 @@ void setup()
 
   display.on();
   display.update();
-  for(i = 0; i < 4; i++) {
-    sleep_enable();
-    sleep_mode();
-    sleep_disable();
-  }
+  sleepy_delay(4);
   display.off();
 }
 
@@ -107,22 +105,14 @@ void loop()
     display.set_cursor(0,0);
     display.print(Time);
     display.update();
-    for(i = 0; i < 6; i++) {
-      sleep_enable();
-      sleep_mode();
-      sleep_disable();
-    }
+    sleepy_delay(6);
     display.clear();
     display.set_cursor(38,5);
     display.set_font(1);
     pad_print(totp.code(Time));
     display.set_font(0); 
     display.update();
-    for(i = 0; i < 30; i++) {
-	sleep_enable();
-	sleep_mode();
-	sleep_disable();
-    }
+    sleepy_delay(30);
     display.off();
     power_spi_disable();
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
@@ -249,4 +239,14 @@ SIGNAL(INT0_vect){
 
 SIGNAL(INT1_vect){
   sound_check++; //sound detected
+}
+
+void sleepy_delay(uint8_t time)
+{ 
+  int i;
+  for(i = 0; i < time; i++) {
+    sleep_enable();
+    sleep_mode();
+    sleep_disable();
+  }
 }

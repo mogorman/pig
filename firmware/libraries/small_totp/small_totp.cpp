@@ -5,7 +5,6 @@
 // PUBLIC
 
 small_totp::small_totp(const uint8_t *text_secret, const uint8_t length) {
-  asm("nop");
   sha1_initHmac(&secret, text_secret, length);
 }
 
