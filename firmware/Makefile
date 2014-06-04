@@ -33,13 +33,10 @@ endif
 	   --pref sketchbook.path=`pwd` \
 	   --verify `pwd`/application/application.ino; \
 	  md5sum application/application.ino > build/app.md5; \
+	  cp build/application.cpp.hex ./bin/application.hex; \
+	  touch build/.git_empty; \
+	  scripts/fixchecksums.sh bin/application.hex bin/match.hex; \
 	fi
-	@touch build/.git_empty
-	@cp build/application.cpp.hex ./bin/application.hex
-	@scripts/fixchecksums.sh bin/application.hex bin/match.hex
-	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
-	 AAAAAAAAAAAAAAAAAAAA
-	@java -jar audioboot-writer/bin/audioboot.jar ./bin/deploy.hex ./bin/deploy.wav
 
 
 
@@ -62,8 +59,14 @@ bootloader: compile_boot
 	 -U  flash:w:./bin/bootloader.hex -U lock:w:0x0F:m
 
 app: compile_app
-	cp bin/deploy.hex bin/deploy2.hex
+	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
+	 48656c6c6f21deadbeef 32
 	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/deploy.hex
+audio_app: compile_app
+	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
+	 48656c6c6f21deadbeef 15
+	@java -jar audioboot-writer/bin/audioboot.jar ./bin/deploy.hex ./bin/deploy.wav
+	@mplayer bin/deploy.wav
 clean:
 	rm -rf build/*
 	rm -rf bin/*

@@ -92,30 +92,15 @@ void setup()
 void loop()
 {
   int i;
-  byte mcucr1, mcucr2;
+
   if(state == LOW) {
-    OCR2A = 0; //write to OCR2A, we're not using it, but no matter
-    while (ASSR & _BV(OCR2AUB)) {} //wait for OCR2A to be updated 
-    sleep_enable();
-    set_sleep_mode(SLEEP_MODE_PWR_SAVE);    
-    ATOMIC_BLOCK(ATOMIC_FORCEON) { //ATOMIC_FORCEON ensures interrupts are enabled so we can wake up again
-        mcucr1 = MCUCR | _BV(BODS) | _BV(BODSE); //turn off the brown-out detector
-        mcucr2 = mcucr1 & ~_BV(BODSE);
-        MCUCR = mcucr1; //timed sequence
-        MCUCR = mcucr2; //BODS stays active for 3 cycles, sleep instruction must be executed while it's active
-    }
-    sleep_cpu(); //go to sleep
-                                      //wake up here
-    sleep_disable();
-    /* sleep_enable(); */
-    /* sleep_mode(); */
-    /* sleep_disable(); */
+    sleepy_delay(1);
   } else {
     EIMSK |= (1<<INT1); //Enable sound interrupt
     EIMSK &= ~(1<<INT0); //Disable button interrupt
     power_spi_enable();
     display.on();
-    for(i=0; i < 6; i++) {
+    for(i=0; i < 4; i++) {
       calcDate();
       sleepy_delay(1);
     }
@@ -125,7 +110,7 @@ void loop()
     pad_print(totp.code(Time));
     display.set_font(0); 
     display.update();
-    sleepy_delay(30);
+    sleepy_delay(15);
     display.off();
     power_spi_disable();
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
@@ -255,20 +240,29 @@ SIGNAL(INT1_vect){
 }
 
 void sleepy_delay(uint8_t time)
-{ 
-  delay(1000*time);
-  /* int i; */
-  /* for(i = 0; i < time; i++) { */
-  /*   sleep_enable(); */
-  /*   sleep_mode(); */
-  /*   sleep_disable(); */
-  /* } */
+{
+  byte mcucr1, mcucr2;
+  int i;
+  for(i  = 0; i < time; i++) {
+    OCR2A = 0; //write to OCR2A, we're not using it, but no matter
+    while (ASSR & _BV(OCR2AUB)) {} //wait for OCR2A to be updated 
+    sleep_enable();
+    set_sleep_mode(SLEEP_MODE_PWR_SAVE);    
+    /* ATOMIC_BLOCK(ATOMIC_FORCEON) { //ATOMIC_FORCEON ensures interrupts are enabled so we can wake up again */
+    /*     mcucr1 = MCUCR | _BV(BODS) | _BV(BODSE); //turn off the brown-out detector */
+    /*     mcucr2 = mcucr1 & ~_BV(BODSE); */
+    /*     MCUCR = mcucr1; //timed sequence */
+    /*     MCUCR = mcucr2; //BODS stays active for 3 cycles, sleep instruction must be executed while it's active */
+    /* }  */
+    sleep_cpu(); //go to sleep                                   //wake up here
+    sleep_disable();
+  }
 }
 
 void calcDate(void)
 {
   uint32_t seconds, minutes, hours, days, year, month;
-  seconds = Time;
+  seconds = Time-18000;
 
   /* calculate minutes */
   minutes  = seconds / 60;

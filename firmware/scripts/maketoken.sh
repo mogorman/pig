@@ -6,12 +6,21 @@ Match_file=$2
 Deploy=$3
 Secret=$4
 if [ -z "$5" ]; then
+Offset=0
+else
+Offset=$5
+fi
+echo LOOK $Offset
+if [ -z "$6" ]; then
 	Date=`date +%s`
 #180000 for tz offset
-	let Date=Date+25-18000
+	echo$Date
+	let Date=Date+Offset
+	echo $Date
+#-18000 your killing me 
 	Time=$(printf '%2X' ${Date})
 else
-	Time=$5
+	Time=$6
 fi
 First_line=""
 Second_line=""
