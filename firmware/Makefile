@@ -38,7 +38,7 @@ endif
 	@cp build/application.cpp.hex ./bin/application.hex
 	@scripts/fixchecksums.sh bin/application.hex bin/match.hex
 	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
-	 AAAAAAAAAAAAAAAAAAAA BBBBBBBB
+	 AAAAAAAAAAAAAAAAAAAA
 	@java -jar audioboot-writer/bin/audioboot.jar ./bin/deploy.hex ./bin/deploy.wav
 
 
@@ -62,7 +62,8 @@ bootloader: compile_boot
 	 -U  flash:w:./bin/bootloader.hex -U lock:w:0x0F:m
 
 app: compile_app
-	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/application.hex
+	cp bin/deploy.hex bin/deploy2.hex
+	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/deploy.hex
 clean:
 	rm -rf build/*
 	rm -rf bin/*

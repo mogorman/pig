@@ -1,6 +1,6 @@
 Dependencies
 
-sudo apt-get install geda-utils coreutils sed grep bash geda-gschem ghostscript poppler-utils pcb imagemagick zip bc make git
+sudo apt-get install geda-utils coreutils sed grep bash geda-gschem ghostscript poppler-utils pcb imagemagick zip bc make git srecord
 
 
 arduino 1.5 or higher http://arduino.cc/en/main/software

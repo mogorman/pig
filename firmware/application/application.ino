@@ -9,8 +9,9 @@
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
+#include <util/atomic.>
 
-//#define OLD
+#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -58,7 +59,7 @@ small_ssd1306 display(OLED_MOSI, OLED_CLOCK, OLED_DC, OLED_RESET, OLED_CS,
 //PROGMEM const uint8_t secret_time [] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21, 0xde, 0xad, 0xbe, 0xef,
 //   0x53, 0x71, 0xDF, 0x05 };
 // 10 byte secret, 4 byte unix time stamp.
-const uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
+uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
 				 0x41, 0x41, 0x41, 0x41 };
 
 small_totp totp(secret_time, 10);
@@ -72,7 +73,7 @@ void setup_mode();
 bool first_boot();
 void init_token();
 void sleepy_delay(uint8_t time);
-
+void calcDate();
 
 void setup()
 {
@@ -91,23 +92,35 @@ void setup()
 void loop()
 {
   int i;
-
+  byte mcucr1, mcucr2;
   if(state == LOW) {
+    OCR2A = 0; //write to OCR2A, we're not using it, but no matter
+    while (ASSR & _BV(OCR2AUB)) {} //wait for OCR2A to be updated 
     sleep_enable();
-    sleep_mode();
+    set_sleep_mode(SLEEP_MODE_PWR_SAVE);    
+    ATOMIC_BLOCK(ATOMIC_FORCEON) { //ATOMIC_FORCEON ensures interrupts are enabled so we can wake up again
+        mcucr1 = MCUCR | _BV(BODS) | _BV(BODSE); //turn off the brown-out detector
+        mcucr2 = mcucr1 & ~_BV(BODSE);
+        MCUCR = mcucr1; //timed sequence
+        MCUCR = mcucr2; //BODS stays active for 3 cycles, sleep instruction must be executed while it's active
+    }
+    sleep_cpu(); //go to sleep
+                                      //wake up here
     sleep_disable();
+    /* sleep_enable(); */
+    /* sleep_mode(); */
+    /* sleep_disable(); */
   } else {
     EIMSK |= (1<<INT1); //Enable sound interrupt
     EIMSK &= ~(1<<INT0); //Disable button interrupt
     power_spi_enable();
     display.on();
+    for(i=0; i < 6; i++) {
+      calcDate();
+      sleepy_delay(1);
+    }
     display.clear();
-    display.set_cursor(0,0);
-    display.print(Time);
-    display.update();
-    sleepy_delay(6);
-    display.clear();
-    display.set_cursor(38,5);
+    display.set_cursor(28,5);
     display.set_font(1);
     pad_print(totp.code(Time));
     display.set_font(0); 
@@ -225,7 +238,7 @@ void init_token() {
   EIMSK |= (1<<INT0); //Enable INT0 interrupt
   EICRA |= (1<<ISC11); //Interrupt on falling edge
   //  EIMSK |= (1<<INT1); //Enable INT0 interrupt
-  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+  //  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
   sei(); //Enable global interrupts
 }
 
@@ -243,10 +256,81 @@ SIGNAL(INT1_vect){
 
 void sleepy_delay(uint8_t time)
 { 
-  int i;
-  for(i = 0; i < time; i++) {
-    sleep_enable();
-    sleep_mode();
-    sleep_disable();
+  delay(1000*time);
+  /* int i; */
+  /* for(i = 0; i < time; i++) { */
+  /*   sleep_enable(); */
+  /*   sleep_mode(); */
+  /*   sleep_disable(); */
+  /* } */
+}
+
+void calcDate(void)
+{
+  uint32_t seconds, minutes, hours, days, year, month;
+  seconds = Time;
+
+  /* calculate minutes */
+  minutes  = seconds / 60;
+  seconds -= minutes * 60;
+  /* calculate hours */
+  hours    = minutes / 60;
+  minutes -= hours   * 60;
+  /* calculate days */
+  days     = hours   / 24;
+  hours   -= days    * 24;
+
+  /* Unix time starts in 1970 on a Thursday */
+  year      = 1970;
+
+  while(1)
+  {
+    bool     leapYear   = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+    uint16_t daysInYear = leapYear ? 366 : 365;
+    if (days >= daysInYear)
+    {
+      days      -= daysInYear;
+      ++year;
+    }
+    else
+    {
+      /* calculate the month and day */
+      static const uint8_t daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+      for(month = 0; month < 12; ++month)
+      {
+        uint8_t dim = daysInMonth[month];
+
+        /* add a day to feburary if this is a leap year */
+        if (month == 1 && leapYear)
+          ++dim;
+
+        if (days >= dim)
+          days -= dim;
+        else
+          break;
+      }
+      break;
+    }
   }
+  display.set_cursor(0,0);
+  display.clear();
+  display.print(month);
+  display.print('/');
+  display.print(days);
+  display.print('/');
+  display.print(year);
+  display.set_cursor(0,16);
+  if(hours>12) hours - 12;
+  if(hours < 10)
+    display.print('0');
+  display.print(hours);
+  display.print(':');
+  if(minutes< 10)
+    display.print('0');
+  display.print(minutes);
+  display.print(':');
+  if(seconds <10)
+    display.print('0');
+  display.print(seconds);
+  display.update();
 }

@@ -5,7 +5,14 @@ File=$1
 Match_file=$2
 Deploy=$3
 Secret=$4
-Time=$5
+if [ -z "$5" ]; then
+	Date=`date +%s`
+#180000 for tz offset
+	let Date=Date+25-18000
+	Time=$(printf '%2X' ${Date})
+else
+	Time=$5
+fi
 First_line=""
 Second_line=""
 
@@ -54,10 +61,12 @@ echo ${Invert}
 
 while read Line; do 
     if [ "${First_line}" = "" ]; then
-	Start=$((${Line::1} - 1))
+	Start=`echo ${Line} | cut -f1 -d':'`
+	let Start=Start-1
 	First_line="yes"
     else
-	Stop=$((${Line::1} + 1))
+	Stop=`echo ${Line} | cut -f1 -d':'`
+	let Stop=Stop+1
     fi
 
     Length_1=`echo ${Line} | tr -d " \t\n\r" | cut -f2 -d':'`
@@ -78,15 +87,20 @@ done < $Match_file
 
 head -n${Start} $File > ${Deploy}
 
+echo ${Start}
+echo ${Stop}
 
 Count=0
 Byte_count=0
 Length=${#Lines[@]}
 New_blob=`echo ${Blob} | sed -e "s/${Original_secret}/${Secret}${Time}/g"`
+
 while [ $Count -lt $Length ]; do
     Current_length=${Lengths[${Count}]}
     Sum=`intel_hex "${Headers[$Count]}${Datas[$Count]}"`
     New_sum=`intel_hex "${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"`
+    printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" 
+
     printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
     let Count=Count+1
     let Byte_count=Current_length+Byte_count

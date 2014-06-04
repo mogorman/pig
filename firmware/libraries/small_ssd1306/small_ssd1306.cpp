@@ -2,7 +2,6 @@
 #include <util/delay.h>
 #include <stdlib.h>
 
-//#include "glcdfont.c"
 #include "small_ssd1306.h"
 
 static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {//start up screen
