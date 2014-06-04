@@ -1,3 +1,8 @@
+/*
+ *
+ * Battery discharge formula
+ * equivalent_current_mA = (percent_monthly_discharge_rate / 100) * capacity_maH / (24 * 30) 
+ */
 #include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
@@ -11,7 +16,7 @@
 #include <avr/pgmspace.h>
 #include <util/atomic.>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -65,7 +70,7 @@ uint8_t secret_time [] = { 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41,
 small_totp totp(secret_time, 10);
 
 uint32_t Time = 0;
-volatile boolean state = LOW;
+volatile boolean wake_up = LOW;
 volatile uint16_t sound_check = 0;
 
 void reboot();
@@ -93,7 +98,7 @@ void loop()
 {
   int i;
 
-  if(state == LOW) {
+  if(wake_up == LOW) {
     sleepy_delay(1);
   } else {
     EIMSK |= (1<<INT1); //Enable sound interrupt
@@ -111,6 +116,8 @@ void loop()
     display.set_font(0); 
     display.update();
     sleepy_delay(15);
+    display.clear();
+    display.update();
     display.off();
     power_spi_disable();
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
@@ -120,7 +127,7 @@ void loop()
     } else { 
       sound_check=0;
     }
-    state = LOW;
+    wake_up = LOW;
   }
 }
 
@@ -232,7 +239,7 @@ SIGNAL(TIMER2_OVF_vect){
 }
 
 SIGNAL(INT0_vect){
-  state = HIGH; //button pressed
+  wake_up = HIGH; //button pressed
 }
 
 SIGNAL(INT1_vect){
