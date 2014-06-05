@@ -62,6 +62,7 @@ app: compile_app
 	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
 	 48656c6c6f21deadbeef 32
 	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/deploy.hex
+
 audio_app: compile_app
 	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
 	 48656c6c6f21deadbeef 15

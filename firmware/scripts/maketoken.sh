@@ -10,7 +10,6 @@ Offset=0
 else
 Offset=$5
 fi
-echo LOOK $Offset
 if [ -z "$6" ]; then
 	Date=`date +%s`
 #180000 for tz offset
@@ -62,7 +61,6 @@ if [ "${#Invert}" = "1" ]; then
     Invert=0${Invert}
 fi
 
-echo ${Invert}
 }
 
 
@@ -94,9 +92,6 @@ done < $Match_file
 
 head -n${Start} $File > ${Deploy}
 
-echo ${Start}
-echo ${Stop}
-
 Count=0
 Byte_count=0
 Length=${#Lines[@]}
@@ -106,8 +101,6 @@ while [ $Count -lt $Length ]; do
     Current_length=${Lengths[${Count}]}
     Sum=`intel_hex "${Headers[$Count]}${Datas[$Count]}"`
     New_sum=`intel_hex "${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"`
-    printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" 
-
     printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
     let Count=Count+1
     let Byte_count=Current_length+Byte_count
