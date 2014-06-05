@@ -16,7 +16,7 @@
 #include <avr/pgmspace.h>
 #include <util/atomic.>
 
-//#define OLD
+#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -78,7 +78,7 @@ void setup_mode();
 bool first_boot();
 void init_token();
 void sleepy_delay(uint8_t time);
-void calcDate();
+void calc_date();
 
 void setup()
 {
@@ -90,7 +90,7 @@ void setup()
 
   display.on();
   display.update();
-  sleepy_delay(4);
+  sleepy_delay(3);
   display.off();
 }
 
@@ -106,7 +106,7 @@ void loop()
     power_spi_enable();
     display.on();
     for(i=0; i < 4; i++) {
-      calcDate();
+      calc_date();
       sleepy_delay(1);
     }
     display.clear();
@@ -266,7 +266,7 @@ void sleepy_delay(uint8_t time)
   }
 }
 
-void calcDate(void)
+void calc_date(void)
 {
   uint32_t seconds, minutes, hours, days, year, month;
   seconds = Time-18000;

@@ -14,9 +14,7 @@ echo LOOK $Offset
 if [ -z "$6" ]; then
 	Date=`date +%s`
 #180000 for tz offset
-	echo$Date
 	let Date=Date+Offset
-	echo $Date
 #-18000 your killing me 
 	Time=$(printf '%2X' ${Date})
 else

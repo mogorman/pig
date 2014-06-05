@@ -5,9 +5,6 @@
  #include "WProgram.h"
 #endif
 
-typedef volatile uint8_t PortReg;
-typedef uint8_t PortMask;
-
 #include <SPI.h>
 
 #define BLACK 0
@@ -105,7 +102,5 @@ class small_ssd1306 : public Print {
  private:
   int8_t mosi, clock, dc, reset, cs, power, invert_screen,
          orientation, cursor_x, cursor_y, font_size;
-  PortReg *mosiport, *clkport, *csport, *dcport;
-  PortMask mosipinmask, clkpinmask, cspinmask, dcpinmask;
   void spi_write(uint8_t data);
 };
