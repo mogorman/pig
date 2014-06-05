@@ -425,7 +425,6 @@ void small_ssd1306::update(void) {
 }
 
 void small_ssd1306::spi_write(uint8_t data) {
-  digitalWrite(cs, HIGH);
   digitalWrite(dc, LOW);
   digitalWrite(cs, LOW);
   shiftOut(mosi, clock, MSBFIRST, data);
