@@ -22,3 +22,6 @@ Binaries of latest builds.
 [![the board](http://artifacts.meatstand.com/pig/board.png)](http://artifacts.meatstand.com/pig/board.png)
 
 [![build status](http://ci.meatstand.com/projects/1/status.png?ref=master)](http://ci.meatstand.com/projects/1?ref=master)
+
+
+[Old tarballs](http://artifacts.meatstand.com/pig/old_pig)
