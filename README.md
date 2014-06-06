@@ -17,7 +17,7 @@ Binaries of latest builds.
 
 [gerbers](http://artifacts.meatstand.com/pig/gerbers.zip)
 
-[schematics](http://artifacts.meatstand.com/pig/schematics.png)
+[schematic](http://artifacts.meatstand.com/pig/schematic.png)
 
 [![the board](http://artifacts.meatstand.com/pig/board.png)](http://artifacts.meatstand.com/pig/board.png)
 
