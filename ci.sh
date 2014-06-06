@@ -9,9 +9,16 @@ make CUSTOMPCB="/usr/src/pcb/src/pcb" \
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
-cd ..
-cp hardware/schematic.png ~/artifacts/pig/schematic.png
-cp hardware/schematic.png ~/artifacts/pig/`git rev-parse --short HEAD`_schematic.png
+cp schematic.png ~/artifacts/pig/schematic.png
+cp schematic.png ~/artifacts/pig/`git rev-parse --short HEAD`_schematic.png
 
-cp hardware/board.png ~/artifacts/pig/board.png
-cp hardware/board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
+cp board.png ~/artifacts/pig/board.png
+cp board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
+
+cd ..
+cd firmware
+make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
+cp bin/bootloader.hex ~/artifacts/pig/
+cp bin/match.hex ~/artifacts/pig/
+cp bin/application.hex ~/artifacts/pig/
+cd ..
