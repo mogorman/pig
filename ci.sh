@@ -10,19 +10,13 @@ copy_files() {
     else
 	echo File changed make copies.
 	cp "$1" "$2"
-	cp "$1" "~/artifacts/pig/"`git rev-parse --short HEAD`_"$1"
+	cp "$1" "/home/gitlab_ci_runner/artifacts/pig/build/"`git rev-parse --short HEAD`_"$1"
     fi    
 }
 
 git submodule update --init
 ls -la
 cd hardware
-
-if diff file1 file2 2>/dev/null ; then
-  echo Same
-else
-  echo Different
-fi
 
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
@@ -31,12 +25,6 @@ make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
 
-
-if diff file2 2>/dev/null ; then
-  echo Same
-else
-  echo Different
-fi
 
 copy_files schematic.png ~/artifacts/pig/schematic.png
 
