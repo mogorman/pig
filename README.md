@@ -5,7 +5,8 @@ sudo apt-get install geda-utils coreutils sed grep bash geda-gschem ghostscript 
 arduino 1.5 or higher http://arduino.cc/en/main/software
 java for audio generator
 
-![build status](http://artifacts.meatstand.com/pig/board.png)
+
+[![the board](http://artifacts.meatstand.com/pig/board.png)](http://artifacts.meatstand.com/pig/board.png)
 
 [![build status](http://ci.meatstand.com/projects/1/status.png?ref=master)](http://ci.meatstand.com/projects/1?ref=master)
 
