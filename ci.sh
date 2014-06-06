@@ -10,8 +10,8 @@ make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
 cd ..
-cp hardware/schematic.png ~/pig/artifacts/schematic.png
-cp hardware/schematic.png ~/pig/artifacts/`git rev-parse --short HEAD`_schematic.png
+cp hardware/schematic.png ~/artifacts/pig/schematic.png
+cp hardware/schematic.png ~/artifacts/pig/`git rev-parse --short HEAD`_schematic.png
 
-cp hardware/board.png ~/pig/artifacts/board.png
-cp hardware/board.png ~/pig/artifacts/`git rev-parse --short HEAD`.png
+cp hardware/board.png ~/artifacts/pig/board.png
+cp hardware/board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
