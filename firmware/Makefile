@@ -26,7 +26,7 @@ ifeq ("$(wildcard ./bin/application.hex )", "")
 endif
 	@md5sum application/application.ino | cmp -s build/app.md5 -; \
 	 if test $$? -ne 0; then \
-	  $(ARDUINO) \
+	  xvfb-run $(ARDUINO) \
 	   --verbose-build \
 	   --board arduino:avr:pig \
 	   --pref build.path=`pwd`/build \
