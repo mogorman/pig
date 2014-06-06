@@ -3,7 +3,7 @@
  * Battery discharge formula
  * equivalent_current_mA = (percent_monthly_discharge_rate / 100) * capacity_maH / (24 * 30) 
  */
-intentional error#include <Wire.h>
+#include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
 
