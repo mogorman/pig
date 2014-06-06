@@ -3,6 +3,7 @@
 git submodule update --init
 ls -la
 cd hardware
+
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white --photo-plating  tinned"
@@ -16,9 +17,11 @@ cp board.png ~/artifacts/pig/board.png
 cp board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
 
 cd ..
+
 cd firmware
 make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
 cp bin/bootloader.hex ~/artifacts/pig/
 cp bin/match.hex ~/artifacts/pig/
 cp bin/application.hex ~/artifacts/pig/
+
 cd ..
