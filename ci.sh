@@ -16,6 +16,8 @@ cp schematic.png ~/artifacts/pig/`git rev-parse --short HEAD`_schematic.png
 cp board.png ~/artifacts/pig/board.png
 cp board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
 
+cp *.zip ~/artifacts/pig/gerbers.zip
+
 cd ..
 
 cd firmware
