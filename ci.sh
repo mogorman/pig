@@ -25,15 +25,22 @@ make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
 
+New_pig=`git diff HEAD^ HEAD -- pig.pcb|wc -l`
+New_schematic=`git diff HEAD^ HEAD -- pig.sch|wc -l`
 
-copy_files schematic.png ~/artifacts/pig/schematic.png
+if [ "$New_pig" == "0" ]; then
+    echo "No changes to pig don't bother saving image."
+else
+    copy_files board.png ~/artifacts/pig/board.png
+    cp *.zip gerbers.zip
+    copy_files gerbers.zip ~/artifacts/pig/gerbers.zip
+fi
 
-copy_files board.png ~/artifacts/pig/board.png
-
-cp *.zip gerbers.zip
-
-copy_files gerbers.zip ~/artifacts/pig/gerbers.zip
-
+if [ "$New_schematic" == "0" ]; then
+    echo "No changes to schematic don't bother saving the image"
+else
+    copy_files schematic.png ~/artifacts/pig/schematic.png
+fi
 cd ..
 
 cd firmware
