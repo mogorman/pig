@@ -37,7 +37,7 @@ else
 fi
 
 if [ "$New_schematic" == "0" ]; then
-    echo "No changes to schematic don't bother saving the image"
+    echo "No changes to schematic don't bother saving the image."
 else
     copy_files schematic.png ~/artifacts/pig/schematic.png
 fi
