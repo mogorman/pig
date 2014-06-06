@@ -9,6 +9,6 @@ java for audio generator
 
 [![build status](http://ci.meatstand.com/projects/1/status.png?ref=master)](http://ci.meatstand.com/projects/1?ref=master)
 
-[[http://artifacts.meatstand.com/pig/application.hex][application.hex]]
-
-[[http://artifacts.meatstand.com/pig/botloader.hex][bootloader.hex]]
+[application.hex](http://artifacts.meatstand.com/pig/application.hex)
+[match.hex](http://artifacts.meatstand.com/pig/match.hex)
+[bootloader.hex](http://artifacts.meatstand.com/pig/botloader.hex)
