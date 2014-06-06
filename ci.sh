@@ -1,6 +1,5 @@
 #!/bin/bash
 #this is where continuous integration script will live
-
 copy_files() {
     local new_copy="$1"
     local old_copy="$2"
@@ -17,14 +16,18 @@ copy_files() {
 git submodule update --init
 ls -la
 cd hardware
-
+make clean
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white --photo-plating  tinned"
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
-
+ls black_board.png board.png bom order xy schematic.png schematic.pdf gerbers/pig_make.bottom.gbr > /dev/null 2>&1
+if [ "$?" != "0"]; then
+    echo "I failed to create all the files I should have. build failed"
+    exit 1
+fi
 New_pig=`git diff HEAD^ HEAD -- pig.pcb|wc -l`
 New_schematic=`git diff HEAD^ HEAD -- pig.sch|wc -l`
 
@@ -44,9 +47,13 @@ fi
 cd ..
 
 cd firmware
-
+make clean
 make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
-
+ls bin/bootloader.hex bin/match.hex bin/application.hex
+if [ "$?" != "0"]; then
+    echo "I failed to create all the files I should have. build failed"
+    exit 1
+fi
 cd bin
 
 copy_files bootloader.hex ~/artifacts/pig/bootloader.hex
