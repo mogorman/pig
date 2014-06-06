@@ -16,7 +16,7 @@
 #include <avr/pgmspace.h>
 #include <util/atomic.>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)

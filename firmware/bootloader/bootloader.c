@@ -14,7 +14,7 @@
 //AUDIOBOOT
 
 //OPTIBOOT
-#define OLD
+//#define OLD
 #ifdef OLD
 #define LED D4
 #else
