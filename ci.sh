@@ -19,6 +19,7 @@ cp board.png ~/artifacts/pig/`git rev-parse --short HEAD`.png
 cd ..
 
 cd firmware
+
 make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
 cp bin/bootloader.hex ~/artifacts/pig/
 cp bin/match.hex ~/artifacts/pig/
