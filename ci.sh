@@ -24,7 +24,7 @@ make CUSTOMPCB="/usr/src/pcb/src/pcb" \
      CUSTOMPCB_ARGS="--photo-mask-colour red \
      --photo-silk-colour white  --photo-plating  tinned" photos
 ls black_board.png board.png bom order xy schematic.png schematic.pdf gerbers/pig_make.bottom.gbr > /dev/null 2>&1
-if [ "$?" != "0"]; then
+if [ "$?" != "0" ]; then
     echo "I failed to create all the files I should have. build failed"
     exit 1
 fi
@@ -50,7 +50,7 @@ cd firmware
 make clean
 make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
 ls bin/bootloader.hex bin/match.hex bin/application.hex
-if [ "$?" != "0"]; then
+if [ "$?" != "0" ]; then
     echo "I failed to create all the files I should have. build failed"
     exit 1
 fi
