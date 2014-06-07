@@ -71,7 +71,7 @@ small_totp totp(secret_time, 10);
 
 uint32_t Time = 0;
 volatile boolean wake_up = LOW;
-volatile uint16_t sound_check = 0;
+volatile uint8_t sound_check = 0;
 
 void reboot();
 void setup_mode();
@@ -122,7 +122,7 @@ void loop()
     power_spi_disable();
     EIMSK &= ~(1<<INT1); //Disable sound interrupt
     EIMSK |= (1<<INT0); //Enable INT0 interrupt
-    if(sound_check > 1000) {
+    if(sound_check > 100) {
       reboot();
     } else { 
       sound_check=0;
