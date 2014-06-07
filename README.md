@@ -2,7 +2,7 @@ Dependencies for pig.
 
 sudo apt-get install geda-utils coreutils sed grep bash geda-gschem ghostscript poppler-utils pcb imagemagick zip bc make git srecord geda-gnetlist gerbv xvfb
 
-arduino 1.5 or higher http://arduino.cc/en/main/software
+[arduino 1.5]( http://arduino.cc/en/main/software) or higher
 
 openjdk or sun java for audio generator program
 
