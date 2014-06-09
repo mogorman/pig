@@ -255,12 +255,6 @@ void sleepy_delay(uint8_t time)
     while (ASSR & _BV(OCR2AUB)) {} //wait for OCR2A to be updated 
     sleep_enable();
     set_sleep_mode(SLEEP_MODE_PWR_SAVE);    
-    /* ATOMIC_BLOCK(ATOMIC_FORCEON) { //ATOMIC_FORCEON ensures interrupts are enabled so we can wake up again */
-    /*     mcucr1 = MCUCR | _BV(BODS) | _BV(BODSE); //turn off the brown-out detector */
-    /*     mcucr2 = mcucr1 & ~_BV(BODSE); */
-    /*     MCUCR = mcucr1; //timed sequence */
-    /*     MCUCR = mcucr2; //BODS stays active for 3 cycles, sleep instruction must be executed while it's active */
-    /* }  */
     sleep_cpu(); //go to sleep                                   //wake up here
     sleep_disable();
   }
