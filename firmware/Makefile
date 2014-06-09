@@ -38,7 +38,22 @@ endif
 	  scripts/fixchecksums.sh bin/application.hex bin/match.hex; \
 	fi
 
-
+compile_test:
+ifeq ("$(wildcard ./bin/test.hex )", "")
+	@rm -f ./build/test.md5
+endif
+	@md5sum test/test.ino | cmp -s build/test.md5 -; \
+	 if test $$? -ne 0; then \
+	  xvfb-run $(ARDUINO) \
+	   --verbose-build \
+	   --board arduino:avr:pig \
+	   --pref build.path=`pwd`/build \
+	   --pref sketchbook.path=`pwd` \
+	   --verify `pwd`/test/test.ino; \
+	  md5sum test/test.ino > build/test.md5; \
+	  cp build/test.cpp.hex ./bin/test.hex; \
+	  touch build/.git_empty; \
+	fi
 
 compile_boot:
 	md5sum bootloader/bootloader.c | cmp -s build/bootloader.md5 -; \
@@ -62,6 +77,9 @@ app: compile_app
 	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
 	 48656c6c6f21deadbeef 32
 	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/deploy.hex
+
+test: compile_test
+	$(AVRDUDE) -pm328p -c arduino -P $(ARDUINO_PORT) -b9600 -U flash:w:./bin/test.hex
 
 audio_app: compile_app
 	@scripts/maketoken.sh bin/application.hex bin/match.hex bin/deploy.hex \
