@@ -60,7 +60,7 @@ fi
 if [ "${#Invert}" = "1" ]; then
     Invert=0${Invert}
 fi
-
+echo ${Invert}
 }
 
 
