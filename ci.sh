@@ -48,7 +48,7 @@ cd ..
 
 cd firmware
 make clean
-make ARDUINO=/usr/src/arduino-1.5.6-r2/arduino
+make ARDUINO_DIR=/usr/src/arduino-1.5.6-r2/
 ls bin/bootloader.hex bin/match.hex bin/application.hex
 if [ "$?" != "0" ]; then
     echo "I failed to create all the files I should have. build failed"

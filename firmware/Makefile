@@ -1,5 +1,5 @@
-ARDUINO=~/nonapt/arduino-1.5.6-r2/arduino
-ARDUINO_DIR=~/nonapt/arduino-1.5.6-r2/
+ARDUINO_DIR=~/nonapt/arduino-1.5.6-r2
+ARDUINO=$(ARDUINO_DIR)/arduino
 AVRDUDE=/usr/bin/avrdude
 AVR_GCC=/usr/bin/avr-gcc
 AVR_OBJCOPY=/usr/bin/avr-objcopy
