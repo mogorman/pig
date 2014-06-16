@@ -13,11 +13,11 @@ do a=$(($a+1));
     New_line=${line:1: -1}
     if [ "${First_line}" = "" ]; then
 	Complete_first_line=${line}
-	First_line=${New_line:8}
+	First_line=${New_line:7}
 	First_line=${First_line:: -2}
 	continue;
     fi
-    Second_line=${New_line:8}
+    Second_line=${New_line:7}
     Second_line=${Second_line:: -2}
     Complete_second_line=${line}
     Double=${First_line}${Second_line}

@@ -29,7 +29,7 @@ Lengths=()
 Blob=""
 
 
-intel_hex ()
+intel_checksum ()
 {
 New_line=$1
 Length=${#New_line}
@@ -54,7 +54,7 @@ elif [ "${Sum}" = "01" ]; then
 elif [ "${Sum}" = "1" ]; then
     Invert=FF
 else
-    Invert=`printf "%X" $((0xFF-0x${Sum}+1))`
+    Invert=`printf "%X" $((0xFF-0x${Sum}))`
 fi
 
 if [ "${#Invert}" = "1" ]; then
@@ -63,30 +63,35 @@ fi
 echo ${Invert}
 }
 
-
+#echo `intel_checksum "137AF00A0A0D00000000000000000000000000"`
+#exit 
 while read Line; do 
     if [ "${First_line}" = "" ]; then
-	Start=`echo ${Line} | cut -f1 -d':'`
+	Start=`echo ${Line} | cut -f1 -d'S'`
 	let Start=Start-1
 	First_line="yes"
     else
-	Stop=`echo ${Line} | cut -f1 -d':'`
+	Stop=`echo ${Line} | cut -f1 -d'S'`
 	let Stop=Stop+1
     fi
 
-    Length_1=`echo ${Line} | tr -d " \t\n\r" | cut -f2 -d':'`
-    Data=${Length_1:8}
+    Length_1=`echo ${Line} | tr -d " \t\n\r" | cut -f2 -d'S'`
+    Data=${Length_1:7}
     Data=${Data:: -2}
     Line_1=${Length_1}
-    Header=${Length_1::8}
-    Length_1=${Length_1::2}
-    Length=$((0x${Length_1} *2))
+    Header=${Length_1::7}
+    Length_1=${Length_1:1:2}
+    Length=$(((0x${Length_1} *2) -6))
 
     Lines+=("$Line")
     Headers+=("$Header")
     Blob="${Blob}${Data}"
     Datas+=("$Data")
     Lengths+=("$Length")
+
+#    echo Length ${Length}
+#    echo Header ${Header}
+#    echo Data ${Data}
 
 done < $Match_file
 
@@ -96,12 +101,16 @@ Count=0
 Byte_count=0
 Length=${#Lines[@]}
 New_blob=`echo ${Blob} | sed -e "s/${Original_secret}/${Secret}${Time}/g"`
-
+#echo X:${Blob}
+#echo Y:${New_blob}
 while [ $Count -lt $Length ]; do
     Current_length=${Lengths[${Count}]}
-    Sum=`intel_hex "${Headers[$Count]}${Datas[$Count]}"`
-    New_sum=`intel_hex "${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"`
-    printf ":${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
+#    Sum=`intel_checksum "${Headers[$Count]:1}${Datas[$Count]}"`
+    New_sum=`intel_checksum "${Headers[$Count]:1}${New_blob:${Byte_count}:${Current_length}}"`
+#    echo "S${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}"
+#    echo "Length=${Current_length}"
+#    echo "Bytecount=${Byte_count}"
+    printf "S${Headers[$Count]}${New_blob:${Byte_count}:${Current_length}}${Checksums[$Count]}${New_sum}\r\n" >> ${Deploy}
     let Count=Count+1
     let Byte_count=Current_length+Byte_count
 done
