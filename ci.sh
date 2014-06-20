@@ -35,7 +35,7 @@ if [ "$New_pig" == "0" ]; then
     echo "No changes to pig don't bother saving image."
 else
     copy_files board.png ~/artifacts/pig/board.png
-    cp *.zip gerbers.zip
+    zip -r gerbers.zip gerbers/
     copy_files gerbers.zip ~/artifacts/pig/gerbers.zip
 fi
 
