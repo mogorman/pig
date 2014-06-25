@@ -23,7 +23,7 @@
 #include <avr/eeprom.h>
 #include <util/delay.h>
 
-#define OLD
+//#define OLD
 
 #ifdef OLD
 #define OLED_CS 	10  // AVR pin 19 (SCK)
@@ -32,7 +32,7 @@
 #define OLED_DC 	12  // AVR pin 16 (SS_)
 #define OLED_RESET 	 9  // AVR pin 15 (OC1A)
 #define OLED_POWER	 5  // signal to control base of transistor gating OLED's VDD
-#define LED              4
+#define LED              A1
 #define BUTTON           2
 #define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
 #define ORIENTATION 1    // 0 is normal 1 is inverted 180 degrees
@@ -201,11 +201,17 @@ int the_main( void )
 
 void setup()
 {
-  the_main();
+    pinMode(LED, OUTPUT);
+
+  //  the_main();
 }
 
 void loop()
 {
+  digitalWrite(LED, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(500);               // wait for a second
+  digitalWrite(LED, LOW);    // turn the LED off by making the voltage LOW
+  delay(500);               //
 }
 
 
