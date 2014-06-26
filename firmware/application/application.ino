@@ -19,13 +19,13 @@
 //#define OLD
 
 #ifdef OLD
-#define OLED_CS 	10  // AVR pin 19 (SCK)
-#define OLED_MOSI 	11  // AVR pin 18 (MISO)
-#define OLED_CLOCK 	13  // AVR pin 17 (MOSI)
-#define OLED_DC 	12  // AVR pin 16 (SS_)
-#define OLED_RESET 	 9  // AVR pin 15 (OC1A)
-#define OLED_POWER	 5  // signal to control base of transistor gating OLED's VDD
-#define LED              4
+#define OLED_CS 	8  // AVR pin 19 (SCK)
+#define OLED_MOSI 	6  // AVR pin 18 (MISO)
+#define OLED_CLOCK 	7  // AVR pin 17 (MOSI)
+#define OLED_DC 	5  // AVR pin 16 (SS_)
+#define OLED_RESET 	 A2  // AVR pin 15 (OC1A)
+#define OLED_POWER	 4  // signal to control base of transistor gating OLED's VDD
+#define LED              A1
 #define BUTTON           2
 #define INVERT_SCREEN 0  // 0 is normal 1 is inverted color
 #define ORIENTATION 1    // 0 is normal 1 is inverted 180 degrees
