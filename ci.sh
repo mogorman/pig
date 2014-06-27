@@ -14,7 +14,6 @@ copy_files() {
 }
 
 git submodule update --init
-ls -la
 cd hardware
 make clean
 make CUSTOMPCB="/usr/src/pcb/src/pcb" \
