@@ -6,7 +6,7 @@ FileVersion[20070407]
 PCB["pig" 300000 250000]
 
 Grid[500.0 0 0 0]
-Cursor[221500 143000 0.000000]
+Cursor[169500 100000 0.000000]
 PolyArea[200000000.000000]
 Thermal[0.500000]
 DRC[600 600 600 600 1500 600]
@@ -1586,7 +1586,7 @@ Element["" "0805" "C10" "10uF" 73543 44500 -17107 -2650 0 100 ""]
 Element["hidename" "JUMPER2" "CONN6" "unknown" 214500 119500 -5000 5000 0 100 ""]
 (
 	Pin[0 0 6000 3000 6600 3800 "1" "1" "square,edge2"]
-	Pin[10000 0 6500 3000 7100 3800 "2" "2" "selected,edge2"]
+	Pin[10000 0 6500 3000 7100 3800 "2" "2" "edge2"]
 	ElementLine [-5000 5000 15000 5000 1000]
 	ElementLine [15000 -5000 15000 5000 1000]
 	ElementLine [-5000 -5000 15000 -5000 1000]
@@ -2322,7 +2322,7 @@ Layer(9 "silk")
 	Text[230500 95500 2 100 "9" "clearline,onsolder"]
 	Text[223500 89000 2 100 "8" "clearline,onsolder"]
 	Text[216500 89000 2 100 "7" "clearline,onsolder"]
-	Text[182500 97000 2 100 "Made with:" "clearline,onsolder"]
+	Text[186500 96500 2 100 "Made with:" "clearline,onsolder"]
 	Text[186411 102707 2 100 "GPL" "clearline,onsolder"]
 	Text[186000 115000 2 100 "EDA" "clearline,onsolder"]
 	Text[161225 104784 2 100 "gEDA" "clearline,onsolder"]
@@ -2477,7 +2477,7 @@ Layer(10 "silk")
 	Text[191259 27578 0 100 "L" "clearline"]
 	Text[129616 37488 0 100 "V" "clearline"]
 	Text[53000 96000 0 300 "Pig" "clearline"]
-	Text[83500 56500 0 100 "k5" "clearline"]
+	Text[81500 56000 0 125 "k5" "clearline"]
 	Text[51932 112729 0 85 "@v@" "clearline"]
 	Text[52500 117500 0 75 "git:@git@" "clearline"]
 	Text[150000 108500 0 100 "D7" "clearline"]
@@ -2572,90 +2572,98 @@ Layer(10 "silk")
 )
 NetList()
 (
-	Net("unnamed_net13" "(unknown)")
-	(
-		Connect("Q1-B")
-		Connect("R6-2")
-	)
-	Net("unnamed_net12" "(unknown)")
-	(
-		Connect("C7-1")
-		Connect("DISP1-15")
-	)
-	Net("unnamed_net11" "(unknown)")
-	(
-		Connect("C8-1")
-		Connect("DISP1-14")
-	)
-	Net("unnamed_net10" "(unknown)")
-	(
-		Connect("R7-2")
-		Connect("DISP1-13")
-	)
-	Net("unnamed_net9" "(unknown)")
-	(
-		Connect("DISP1-7")
-		Connect("C6-1")
-		Connect("Q1-C")
-		Connect("C5-2")
-		Connect("DISP1-5")
-	)
-	Net("unnamed_net8" "(unknown)")
-	(
-		Connect("C3-2")
-		Connect("DISP1-4")
-	)
-	Net("unnamed_net7" "(unknown)")
-	(
-		Connect("C3-1")
-		Connect("DISP1-3")
-	)
-	Net("unnamed_net6" "(unknown)")
-	(
-		Connect("C4-2")
-		Connect("DISP1-2")
-	)
-	Net("unnamed_net5" "(unknown)")
-	(
-		Connect("C4-1")
-		Connect("DISP1-1")
-	)
-	Net("unnamed_net4" "(unknown)")
-	(
-		Connect("CONN3-4")
-		Connect("C2-2")
-	)
-	Net("unnamed_net3" "(unknown)")
-	(
-		Connect("R5-2")
-		Connect("LED1-2")
-	)
-	Net("Serial_reset" "(unknown)")
-	(
-		Connect("CONN2-6")
-		Connect("C1-2")
-	)
 	Net("Button" "(unknown)")
 	(
-		Connect("S1-1")
 		Connect("R2-1")
+		Connect("S1-1")
 		Connect("U1-32")
 	)
-	Net("Uart_Tx" "(unknown)")
+	Net("CS" "(unknown)")
 	(
-		Connect("CONN2-5")
-		Connect("U1-31")
+		Connect("CONN7-2")
+		Connect("DISP1-8")
+		Connect("U1-12")
 	)
-	Net("Uart_Rx" "(unknown)")
+	Net("Disp_on" "(unknown)")
 	(
-		Connect("CONN2-4")
-		Connect("U1-30")
+		Connect("R6-1")
+		Connect("U1-2")
+	)
+	Net("Disp_reset" "(unknown)")
+	(
+		Connect("DISP1-9")
+		Connect("U1-25")
+	)
+	Net("GND" "(unknown)")
+	(
+		Connect("B1-2")
+		Connect("C5-1")
+		Connect("C6-2")
+		Connect("C7-2")
+		Connect("C8-2")
+		Connect("C10-2")
+		Connect("CONN2-1")
+		Connect("CONN2-2")
+		Connect("CONN3-5")
+		Connect("DISP1-6")
+		Connect("R2-2")
+		Connect("R3-2")
+		Connect("R5-1")
+		Connect("R7-1")
+		Connect("U1-3")
+		Connect("U1-5")
+		Connect("U1-21")
+	)
+	Net("Indicator" "(unknown)")
+	(
+		Connect("LED1-1")
+		Connect("U1-24")
+	)
+	Net("Miso" "(unknown)")
+	(
+		Connect("U1-16")
+	)
+	Net("Mosi" "(unknown)")
+	(
+		Connect("U1-15")
+	)
+	Net("PB1" "(unknown)")
+	(
+		Connect("CONN6-1")
+		Connect("U1-13")
+	)
+	Net("PB2" "(unknown)")
+	(
+		Connect("CONN6-2")
+		Connect("U1-14")
+	)
+	Net("PD5" "(unknown)")
+	(
+		Connect("CONN7-4")
+		Connect("DISP1-10")
+		Connect("U1-9")
+	)
+	Net("PD6" "(unknown)")
+	(
+		Connect("CONN7-3")
+		Connect("DISP1-12")
+		Connect("U1-10")
+	)
+	Net("PD7" "(unknown)")
+	(
+		Connect("CONN7-1")
+		Connect("DISP1-11")
+		Connect("U1-11")
 	)
 	Net("Reset" "(unknown)")
 	(
 		Connect("C1-1")
 		Connect("R1-1")
 		Connect("U1-29")
+	)
+	Net("Sck" "(unknown)")
+	(
+		Connect("U1-17")
 	)
 	Net("SCL" "(unknown)")
 	(
@@ -2667,116 +2675,108 @@ NetList()
 		Connect("CONN5-2")
 		Connect("U1-27")
 	)
-	Net("Disp_reset" "(unknown)")
+	Net("Serial_reset" "(unknown)")
 	(
-		Connect("DISP1-9")
-		Connect("U1-25")
-	)
-	Net("Indicator" "(unknown)")
-	(
-		Connect("LED1-1")
-		Connect("U1-24")
-	)
-	Net("Sck" "(unknown)")
-	(
-		Connect("U1-17")
-	)
-	Net("Miso" "(unknown)")
-	(
-		Connect("U1-16")
-	)
-	Net("Mosi" "(unknown)")
-	(
-		Connect("U1-15")
-	)
-	Net("PB2" "(unknown)")
-	(
-		Connect("CONN6-2")
-		Connect("U1-14")
-	)
-	Net("PB1" "(unknown)")
-	(
-		Connect("CONN6-1")
-		Connect("U1-13")
-	)
-	Net("CS" "(unknown)")
-	(
-		Connect("CONN7-2")
-		Connect("DISP1-8")
-		Connect("U1-12")
-	)
-	Net("PD7" "(unknown)")
-	(
-		Connect("CONN7-1")
-		Connect("DISP1-11")
-		Connect("U1-11")
-	)
-	Net("PD6" "(unknown)")
-	(
-		Connect("CONN7-3")
-		Connect("DISP1-12")
-		Connect("U1-10")
-	)
-	Net("PD5" "(unknown)")
-	(
-		Connect("CONN7-4")
-		Connect("DISP1-10")
-		Connect("U1-9")
-	)
-	Net("unnamed_net2" "(unknown)")
-	(
-		Connect("U2-2")
-		Connect("U1-8")
-	)
-	Net("unnamed_net1" "(unknown)")
-	(
-		Connect("U2-1")
-		Connect("U1-7")
-	)
-	Net("Vcc" "(unknown)")
-	(
-		Connect("C10-1")
-		Connect("S1-2")
-		Connect("Q1-E")
-		Connect("R4-1")
-		Connect("CONN2-3")
-		Connect("R1-2")
-		Connect("B1-1")
-		Connect("U1-20")
-		Connect("U1-18")
-		Connect("U1-6")
-		Connect("U1-4")
-	)
-	Net("GND" "(unknown)")
-	(
-		Connect("CONN3-5")
-		Connect("C10-2")
-		Connect("C8-2")
-		Connect("C7-2")
-		Connect("R7-1")
-		Connect("C6-2")
-		Connect("C5-1")
-		Connect("DISP1-6")
-		Connect("R5-1")
-		Connect("R3-2")
-		Connect("R2-2")
-		Connect("CONN2-1")
-		Connect("CONN2-2")
-		Connect("B1-2")
-		Connect("U1-5")
-		Connect("U1-21")
-		Connect("U1-3")
-	)
-	Net("Disp_on" "(unknown)")
-	(
-		Connect("R6-1")
-		Connect("U1-2")
+		Connect("C1-2")
+		Connect("CONN2-6")
 	)
 	Net("Tip" "(unknown)")
 	(
 		Connect("C2-1")
-		Connect("R4-2")
 		Connect("R3-1")
+		Connect("R4-2")
 		Connect("U1-1")
+	)
+	Net("Uart_Rx" "(unknown)")
+	(
+		Connect("CONN2-4")
+		Connect("U1-30")
+	)
+	Net("Uart_Tx" "(unknown)")
+	(
+		Connect("CONN2-5")
+		Connect("U1-31")
+	)
+	Net("unnamed_net1" "(unknown)")
+	(
+		Connect("U1-7")
+		Connect("U2-1")
+	)
+	Net("unnamed_net2" "(unknown)")
+	(
+		Connect("U1-8")
+		Connect("U2-2")
+	)
+	Net("unnamed_net3" "(unknown)")
+	(
+		Connect("LED1-2")
+		Connect("R5-2")
+	)
+	Net("unnamed_net4" "(unknown)")
+	(
+		Connect("C2-2")
+		Connect("CONN3-4")
+	)
+	Net("unnamed_net5" "(unknown)")
+	(
+		Connect("C4-1")
+		Connect("DISP1-1")
+	)
+	Net("unnamed_net6" "(unknown)")
+	(
+		Connect("C4-2")
+		Connect("DISP1-2")
+	)
+	Net("unnamed_net7" "(unknown)")
+	(
+		Connect("C3-1")
+		Connect("DISP1-3")
+	)
+	Net("unnamed_net8" "(unknown)")
+	(
+		Connect("C3-2")
+		Connect("DISP1-4")
+	)
+	Net("unnamed_net9" "(unknown)")
+	(
+		Connect("C5-2")
+		Connect("C6-1")
+		Connect("DISP1-5")
+		Connect("DISP1-7")
+		Connect("Q1-C")
+	)
+	Net("unnamed_net10" "(unknown)")
+	(
+		Connect("DISP1-13")
+		Connect("R7-2")
+	)
+	Net("unnamed_net11" "(unknown)")
+	(
+		Connect("C8-1")
+		Connect("DISP1-14")
+	)
+	Net("unnamed_net12" "(unknown)")
+	(
+		Connect("C7-1")
+		Connect("DISP1-15")
+	)
+	Net("unnamed_net13" "(unknown)")
+	(
+		Connect("Q1-B")
+		Connect("R6-2")
+	)
+	Net("Vcc" "(unknown)")
+	(
+		Connect("B1-1")
+		Connect("C10-1")
+		Connect("CONN2-3")
+		Connect("Q1-E")
+		Connect("R1-2")
+		Connect("R4-1")
+		Connect("S1-2")
+		Connect("U1-4")
+		Connect("U1-6")
+		Connect("U1-18")
+		Connect("U1-20")
 	)
 )
