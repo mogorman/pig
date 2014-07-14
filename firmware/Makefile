@@ -30,6 +30,8 @@ endif
 	  xvfb-run -a $(ARDUINO) \
 	   --verbose-build \
 	   --board arduino:avr:pig \
+	   --pref board=pig \
+	   --pref target_platform=avr \
 	   --pref build.path=`pwd`/build \
 	   --pref sketchbook.path=`pwd` \
 	   --verify `pwd`/application/application.ino; \
@@ -49,6 +51,8 @@ endif
 	  xvfb-run -a $(ARDUINO) \
 	   --verbose-build \
 	   --board arduino:avr:pig \
+	   --pref board=pig \
+	   --pref target_platform=avr \
 	   --pref build.path=`pwd`/build \
 	   --pref sketchbook.path=`pwd` \
 	   --verify `pwd`/test/test.ino; \
