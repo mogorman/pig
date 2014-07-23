@@ -165,8 +165,7 @@ void reboot() {
 boot.  check first boot flag. if ! 42 we know its first boot
 we write the time to next 4 bytes. run normally.
  if it is 42 we know its a reboot check if key is all 0x42
-
- */
+*/
 
 
 /* functions of token display, catch audio reboot, verify that i should be in clock mode or setup mode. */
