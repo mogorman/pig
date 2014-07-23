@@ -29,6 +29,7 @@ endif
 	 if test $$? -ne 0; then \
 	  xvfb-run -a $(ARDUINO) \
 	   --verbose-build \
+	   --preferences-file scripts/pig \
 	   --board arduino:avr:pig \
 	   --pref board=pig \
 	   --pref target_platform=avr \
@@ -50,6 +51,7 @@ endif
 	 if test $$? -ne 0; then \
 	  xvfb-run -a $(ARDUINO) \
 	   --verbose-build \
+	   --preferences-file scripts/pig \
 	   --board arduino:avr:pig \
 	   --pref board=pig \
 	   --pref target_platform=avr \
